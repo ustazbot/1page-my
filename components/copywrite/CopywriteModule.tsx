@@ -162,7 +162,7 @@ export default function CopywriteModule() {
   }
 
   return (
-    <div style={{
+    <div className="copywrite-grid" style={{
       display: 'grid',
       gridTemplateColumns: '320px 1fr',
       flex: 1,

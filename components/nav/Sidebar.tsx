@@ -5,109 +5,98 @@ import { usePathname } from 'next/navigation'
 import type { AppState, ModuleStatus } from '@/types/client'
 
 const MODULES: Array<{ id: keyof AppState['moduleStatus']; label: string; href: string }> = [
-  { id: 'intake', label: 'INTAKE', href: '/intake' },
-  { id: 'assets', label: 'ASSETS', href: '/assets' },
-  { id: 'copywrite', label: 'COPYWRITE', href: '/copywrite' },
-  { id: 'build', label: 'BUILD', href: '/build' },
-  { id: 'preview', label: 'PREVIEW', href: '/preview' },
-  { id: 'deploy', label: 'DEPLOY', href: '/deploy' },
+  { id: 'intake',    label: 'INTAKE',     href: '/intake' },
+  { id: 'assets',    label: 'ASSETS',     href: '/assets' },
+  { id: 'copywrite', label: 'COPYWRITE',  href: '/copywrite' },
+  { id: 'build',     label: 'BUILD',      href: '/build' },
+  { id: 'preview',   label: 'PREVIEW',    href: '/preview' },
+  { id: 'deploy',    label: 'DEPLOY',     href: '/deploy' },
 ]
 
 function StatusDot({ status }: { status: ModuleStatus }) {
   const color =
-    status === 'complete'
-      ? 'var(--color-success)'
-      : status === 'in_progress'
-      ? 'var(--color-warning)'
-      : 'var(--color-text-muted)'
-
+    status === 'complete'    ? 'var(--color-success)' :
+    status === 'in_progress' ? 'var(--color-warning)' :
+                               'var(--color-text-muted)'
   return (
-    <span
-      style={{
-        display: 'inline-block',
-        width: 5,
-        height: 5,
-        borderRadius: '50%',
-        background: color,
-        flexShrink: 0,
-        marginTop: 1,
-      }}
-    />
+    <span style={{
+      display: 'inline-block', width: 5, height: 5,
+      borderRadius: '50%', background: color, flexShrink: 0, marginTop: 1,
+    }} />
   )
 }
 
 interface SidebarProps {
   state: AppState
+  onClose?: () => void
 }
 
-export default function Sidebar({ state }: SidebarProps) {
+export default function Sidebar({ state, onClose }: SidebarProps) {
   const pathname = usePathname()
 
+  function navLink(href: string) {
+    return (
+      pathname === href
+        ? { background: 'var(--color-surface-2)', borderLeft: '2px solid var(--color-accent)' }
+        : { background: 'transparent', borderLeft: '2px solid transparent' }
+    )
+  }
+
   return (
-    <aside
-      style={{
-        width: 220,
-        minHeight: '100vh',
-        background: 'var(--color-surface)',
-        borderRight: '1px solid var(--color-border)',
-        display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        bottom: 0,
-      }}
-    >
-      {/* wordmark */}
-      <div
-        style={{
-          padding: '20px 20px 16px',
-          borderBottom: '1px solid var(--color-border)',
-        }}
-      >
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span
+    <aside style={{
+      width: '100%', height: '100%',
+      background: 'var(--color-surface)',
+      borderRight: '1px solid var(--color-border)',
+      display: 'flex', flexDirection: 'column',
+    }}>
+      {/* Wordmark + close button */}
+      <div style={{
+        padding: '16px 20px',
+        borderBottom: '1px solid var(--color-border)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <Link href="/" onClick={onClose} style={{ textDecoration: 'none' }}>
+          <span style={{ color: 'var(--color-text-primary)', fontSize: 15, fontWeight: 700, letterSpacing: '-0.03em' }}>
+            1page<span style={{ color: 'var(--color-accent)' }}>.my</span>
+          </span>
+          <p style={{ fontSize: 10, color: 'var(--color-text-muted)', marginTop: 1, letterSpacing: '0.06em' }}>
+            OPERATOR TOOL
+          </p>
+        </Link>
+
+        {/* Close button — only visible on mobile via CSS */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            aria-label="Tutup menu"
             style={{
-              color: 'var(--color-text-primary)',
-              fontSize: 15,
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
+              width: 32, height: 32,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'transparent', border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius)', cursor: 'pointer',
+              color: 'var(--color-text-muted)', fontSize: 18, lineHeight: 1,
             }}
           >
-            1page
-            <span style={{ color: 'var(--color-accent)' }}>.my</span>
-          </span>
-        </Link>
-        <p
-          style={{
-            fontSize: 11,
-            color: 'var(--color-text-muted)',
-            marginTop: 2,
-            letterSpacing: '0.05em',
-          }}
-        >
-          OPERATOR TOOL
-        </p>
+            ×
+          </button>
+        )}
       </div>
 
-      {/* nav */}
-      <nav style={{ padding: '12px 0', flex: 1 }}>
-        {/* Dashboard link */}
+      {/* Nav */}
+      <nav style={{ padding: '10px 0', flex: 1, overflowY: 'auto' }}>
+        {/* Dashboard */}
         <Link
           href="/operator"
+          onClick={onClose}
           style={{
             display: 'flex', alignItems: 'center', gap: 10,
-            padding: '8px 20px', marginBottom: 4,
-            textDecoration: 'none',
-            background: pathname === '/operator' ? 'var(--color-surface-2)' : 'transparent',
-            borderLeft: pathname === '/operator' ? '2px solid var(--color-accent)' : '2px solid transparent',
+            padding: '10px 20px', marginBottom: 2,
+            textDecoration: 'none', ...navLink('/operator'),
+            transition: 'background 0.1s',
           }}
-          onMouseEnter={(e) => { if (pathname !== '/operator') e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
-          onMouseLeave={(e) => { if (pathname !== '/operator') e.currentTarget.style.background = 'transparent' }}
         >
           <span style={{
-            fontSize: 11, fontWeight: 600, letterSpacing: '0.12em',
+            fontSize: 11, fontWeight: 600, letterSpacing: '0.1em',
             color: pathname === '/operator' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
           }}>
             DASHBOARD
@@ -118,128 +107,58 @@ export default function Sidebar({ state }: SidebarProps) {
 
         {MODULES.map((mod) => {
           const isActive = pathname.startsWith(mod.href)
-          const status = state.moduleStatus[mod.id]
-
+          const status   = state.moduleStatus[mod.id]
           return (
             <Link
               key={mod.id}
               href={mod.href}
+              onClick={onClose}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '8px 20px',
-                textDecoration: 'none',
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 20px', textDecoration: 'none',
                 background: isActive ? 'var(--color-surface-2)' : 'transparent',
-                borderLeft: isActive
-                  ? '2px solid var(--color-accent)'
-                  : '2px solid transparent',
+                borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
                 transition: 'background 0.1s',
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'transparent'
               }}
             >
               <StatusDot status={status} />
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: '0.12em',
-                  color: isActive
-                    ? 'var(--color-text-primary)'
-                    : 'var(--color-text-secondary)',
-                }}
-              >
+              <span style={{
+                fontSize: 11, fontWeight: 600, letterSpacing: '0.1em',
+                color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+              }}>
                 {mod.label}
               </span>
+              {status === 'complete' && (
+                <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--color-success)' }}>✓</span>
+              )}
             </Link>
           )
         })}
       </nav>
 
-      {/* active client */}
-      <div
-        style={{
-          padding: '16px 20px',
-          borderTop: '1px solid var(--color-border)',
-        }}
-      >
-        <p
-          style={{
-            fontSize: 10,
-            fontWeight: 600,
-            letterSpacing: '0.12em',
-            color: 'var(--color-text-muted)',
-            textTransform: 'uppercase',
-            marginBottom: 8,
-          }}
-        >
+      {/* Active client */}
+      <div style={{ padding: '14px 20px', borderTop: '1px solid var(--color-border)' }}>
+        <p style={{
+          fontSize: 10, fontWeight: 600, letterSpacing: '0.1em',
+          color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: 6,
+        }}>
           Active Client
         </p>
-
         {state.activeClient ? (
           <>
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 12,
-                color: 'var(--color-text-primary)',
-                marginBottom: 4,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
+            <p style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12,
+              color: 'var(--color-text-primary)', marginBottom: 2,
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
               {state.activeClient.seo.business_name}
             </p>
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 11,
-                color: 'var(--color-text-muted)',
-                marginBottom: 2,
-              }}
-            >
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--color-text-muted)' }}>
               {state.activeClient._meta.template}
             </p>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                fontSize: 11,
-                color:
-                  state.activeClient.project.status === 'live'
-                    ? 'var(--color-success)'
-                    : state.activeClient.project.status === 'preview'
-                    ? 'var(--color-warning)'
-                    : 'var(--color-text-muted)',
-              }}
-            >
-              <StatusDot
-                status={
-                  state.activeClient.project.status === 'live'
-                    ? 'complete'
-                    : state.activeClient.project.status === 'preview'
-                    ? 'in_progress'
-                    : 'idle'
-                }
-              />
-              {state.activeClient.project.status.toUpperCase()}
-            </span>
           </>
         ) : (
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 12,
-              color: 'var(--color-text-muted)',
-            }}
-          >
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--color-text-muted)' }}>
             None selected
           </p>
         )}

@@ -32,7 +32,7 @@ export default function Dashboard() {
   const hasClient = !!state.activeClient
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '32px 36px', maxWidth: 720 }}>
+    <div className="module-content" style={{ flex: 1, overflowY: 'auto', padding: '32px 36px', maxWidth: 720 }}>
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
