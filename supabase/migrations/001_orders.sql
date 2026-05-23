@@ -18,7 +18,7 @@ create table public.orders (
   tiktok           text,
   banner_atas_url  text not null,
   logo_url         text,
-  gallery_urls     text,
+  gallery_urls     text[],
   template_pilihan text not null,
   domain_sendiri   boolean default false,
   domain_url       text,

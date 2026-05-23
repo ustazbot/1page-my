@@ -3,8 +3,13 @@ import { createClient } from '@supabase/supabase-js'
 const url  = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-// Browser client — anon key, for client components (order form submit only)
-export const supabaseBrowser = createClient(url, anon)
+let _browser: ReturnType<typeof createClient> | null = null
+
+// Browser client — lazy singleton, anon key, for client components (order form submit only)
+export function supabaseBrowser() {
+  if (!_browser) _browser = createClient(url, anon)
+  return _browser
+}
 
 // Server client — service role, for API routes and server components
 export function supabaseServer() {
