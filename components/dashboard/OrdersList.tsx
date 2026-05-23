@@ -29,7 +29,7 @@ export default function OrdersList() {
 
   useEffect(() => {
     fetch('/api/orders')
-      .then((r) => r.json())
+      .then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json() })
       .then((d: { orders?: Order[] }) => { setOrders(d.orders ?? []); setLoading(false) })
       .catch(() => { setError('Gagal load orders'); setLoading(false) })
   }, [])
