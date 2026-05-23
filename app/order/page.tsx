@@ -300,7 +300,15 @@ function GalleryUploadField({
   }
 
   function remove(idx: number) {
+    const urlToDelete = urls[idx]
     onChange(urls.filter((_, i) => i !== idx).join('\n'))
+    if (urlToDelete) {
+      fetch('/api/upload', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urlToDelete }),
+      }).catch(() => {})
+    }
   }
 
   const thumbStyle: React.CSSProperties = {
