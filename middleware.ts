@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminSessionFromRequest } from '@/lib/admin-session'
+import { getAdminSessionFromRequest } from '@/lib/admin-session-edge'
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
