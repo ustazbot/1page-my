@@ -50,8 +50,13 @@ export default function OrderPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setStatus('submitting')
     setErrorMsg('')
+    if (!form.template_pilihan) {
+      setErrorMsg('Sila pilih template.')
+      setStatus('error')
+      return
+    }
+    setStatus('submitting')
     try {
       const res = await fetch('/api/orders', {
         method: 'POST',
