@@ -17,15 +17,23 @@ export async function POST(req: NextRequest) {
 
   const supabase = supabaseServer()
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from('orders')
     .update({ status: 'approved' })
     .eq('slug', slug)
     .eq('status', 'preview_ready')
+    .select('id')
 
   if (error) {
     console.error('[client-preview/approve] update error:', error)
     return NextResponse.json({ error: 'Gagal update status.' }, { status: 500 })
+  }
+
+  if (!updated || updated.length === 0) {
+    return NextResponse.json(
+      { error: 'Order tidak dalam status preview_ready atau slug tidak dijumpai.' },
+      { status: 409 }
+    )
   }
 
   const bosBase = process.env.BOS_WHATSAPP_REDIRECT ?? ''

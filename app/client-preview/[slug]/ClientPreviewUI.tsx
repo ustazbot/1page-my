@@ -29,9 +29,11 @@ export default function ClientPreviewUI({
   const [view, setView]           = useState<'main' | 'changes'>('main')
   const [changesText, setChanges] = useState('')
   const [approving, setApproving] = useState(false)
+  const [approveError, setApproveError] = useState('')
 
   async function handleApprove() {
     setApproving(true)
+    setApproveError('')
     try {
       const res  = await fetch('/api/client-preview/approve', {
         method: 'POST',
@@ -42,9 +44,11 @@ export default function ClientPreviewUI({
       if (data.ok) {
         window.location.href = data.waLink
       } else {
+        setApproveError(data.error ?? 'Ralat berlaku. Cuba lagi.')
         setApproving(false)
       }
     } catch {
+      setApproveError('Ralat rangkaian. Cuba lagi.')
       setApproving(false)
     }
   }
@@ -115,6 +119,11 @@ export default function ClientPreviewUI({
             >
               {approving ? 'Memproses...' : '✅  Saya Setuju & Nak Proceed'}
             </button>
+            {approveError && (
+              <p style={{ fontSize: 13, color: '#c53030', margin: 0, textAlign: 'center' }}>
+                {approveError}
+              </p>
+            )}
             <button
               onClick={() => setView('changes')}
               style={{
