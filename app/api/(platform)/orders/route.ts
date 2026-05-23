@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   const {
-    nama_bisnes, tagline, jenis_bisnes, produk_servis, target_pelanggan,
+    nama_bisnes, tagline, jenis_bisnes, cerita_bisnes, produk_servis, target_pelanggan,
     nama_owner, whatsapp, telefon, email,
     alamat, waktu_operasi, google_maps_link,
     instagram, facebook, tiktok,
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabase
     .from('orders')
     .insert({
-      nama_bisnes, tagline, jenis_bisnes, produk_servis, target_pelanggan,
+      nama_bisnes, tagline, jenis_bisnes, cerita_bisnes, produk_servis, target_pelanggan,
       nama_owner, whatsapp, telefon, email,
       alamat, waktu_operasi, google_maps_link,
       instagram, facebook, tiktok,
