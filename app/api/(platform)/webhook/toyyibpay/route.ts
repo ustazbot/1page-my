@@ -2,6 +2,51 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase'
 import { sendTelegramMessage } from '@/lib/telegram'
 
+async function calculateCommission(orderId: string, supabase: ReturnType<typeof supabaseServer>) {
+  const { data: order } = await supabase
+    .from('orders')
+    .select('affiliate_ref_code, commission_calculated')
+    .eq('id', orderId)
+    .single()
+
+  if (!order?.affiliate_ref_code || order.commission_calculated) return
+
+  const { data: affiliate } = await supabase
+    .from('affiliates')
+    .select('id, total_earned, status')
+    .eq('ref_code', order.affiliate_ref_code)
+    .single()
+
+  if (!affiliate || affiliate.status !== 'active') return
+
+  const baseAmount = 150
+  const commissionRate = 0.40
+  const commissionAmount = baseAmount * commissionRate
+
+  const now = new Date()
+  const earnedMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
+  await supabase.from('referrals').insert({
+    affiliate_id: affiliate.id,
+    order_id: orderId,
+    order_amount: baseAmount,
+    commission_rate: commissionRate,
+    commission_amount: commissionAmount,
+    earned_month: earnedMonth,
+    status: 'approved',
+  })
+
+  await supabase
+    .from('affiliates')
+    .update({ total_earned: Number(affiliate.total_earned) + commissionAmount })
+    .eq('id', affiliate.id)
+
+  await supabase
+    .from('orders')
+    .update({ commission_calculated: true })
+    .eq('id', orderId)
+}
+
 export async function POST(req: NextRequest) {
   let body: FormData
   try {
@@ -53,6 +98,11 @@ export async function POST(req: NextRequest) {
       console.error('[webhook] mark paid failed:', payErr)
       return NextResponse.json({ ok: false }, { status: 500 })
     }
+
+    // Commission calculation — fire and forget
+    calculateCommission(orderId, supabase).catch(err =>
+      console.error('[webhook] commission error:', err)
+    )
 
     if (process.env.CF_DEPLOY_HOOK_URL) {
       await fetch(process.env.CF_DEPLOY_HOOK_URL, { method: 'POST' })
