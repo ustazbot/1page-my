@@ -20,6 +20,7 @@ export type AppStateAction =
   | { type: 'UPDATE_CLIENT'; payload: Partial<ClientData> }
   | { type: 'SET_MODULE_STATUS'; module: keyof AppState['moduleStatus']; status: ModuleStatus }
   | { type: 'CLEAR_CLIENT' }
+  | { type: 'RESET_BUILDER' }
   | { type: 'RESTORE_STATE'; payload: AppState }
 
 export function appReducer(state: AppState, action: AppStateAction): AppState {
@@ -39,6 +40,8 @@ export function appReducer(state: AppState, action: AppStateAction): AppState {
       }
     case 'CLEAR_CLIENT':
       return { ...state, activeClient: null }
+    case 'RESET_BUILDER':
+      return defaultState
     case 'RESTORE_STATE':
       return action.payload
     default:

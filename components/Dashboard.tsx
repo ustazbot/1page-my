@@ -26,7 +26,12 @@ const STATUS_DOT = {
 }
 
 export default function Dashboard() {
-  const { state } = useAppState()
+  const { state, dispatch } = useAppState()
+
+  function handleReset() {
+    const confirmed = window.confirm('Reset builder? Active client dan semua progress modul akan dibuang.')
+    if (confirmed) dispatch({ type: 'RESET_BUILDER' })
+  }
 
   const completedCount = Object.values(state.moduleStatus).filter(s => s === 'complete').length
   const hasClient = !!state.activeClient
@@ -66,6 +71,21 @@ export default function Dashboard() {
           <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
             {completedCount}/6 modul
           </span>
+          <button
+            onClick={handleReset}
+            title="Reset builder — buang client aktif dan semua progress"
+            style={{
+              height: 26, padding: '0 10px', flexShrink: 0,
+              fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-sans)',
+              background: 'transparent',
+              color: 'var(--color-text-muted)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-sm)',
+              cursor: 'pointer',
+            }}
+          >
+            Reset
+          </button>
         </div>
       ) : (
         <div style={{
