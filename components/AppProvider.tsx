@@ -5,24 +5,20 @@ import { AppContext, appReducer, defaultState, persistState, loadPersistedState 
 import Sidebar from '@/components/nav/Sidebar'
 
 export default function AppProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, defaultState, () => {
-    const persisted = loadPersistedState()
-    return persisted ?? defaultState
-  })
-
+  // Always start with defaultState for SSR — restore from localStorage after mount
+  const [state, dispatch] = useReducer(appReducer, defaultState)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const openSidebar  = useCallback(() => setSidebarOpen(true), [])
   const closeSidebar = useCallback(() => setSidebarOpen(false), [])
 
   useEffect(() => {
+    const persisted = loadPersistedState()
+    if (persisted) dispatch({ type: 'RESTORE_STATE', payload: persisted })
+  }, [])
+
+  useEffect(() => {
     persistState(state)
   }, [state])
-
-  // Close sidebar on route change (navigation click)
-  useEffect(() => {
-    if (sidebarOpen) setSidebarOpen(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
