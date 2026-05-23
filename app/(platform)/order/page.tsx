@@ -570,6 +570,14 @@ function HelpModal({ onClose }: { onClose: () => void }) {
   )
 }
 
+// ── HELPER: GET REF COOKIE ────────────────────────────────────────────────
+
+function getRefCookie(): string | null {
+  if (typeof document === 'undefined') return null
+  const match = document.cookie.match(/(?:^|;\s*)ref=([^;]+)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 // ── MAIN PAGE ──────────────────────────────────────────────────────────────
 
 export default function OrderPage() {
@@ -591,10 +599,14 @@ export default function OrderPage() {
     }
     setStatus('submitting')
     try {
+      const refCode = getRefCookie()
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          affiliate_ref_code: refCode ?? null,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Gagal hantar.')
