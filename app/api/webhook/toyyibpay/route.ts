@@ -72,12 +72,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
+    const liveUrl = `${paid.slug}.${process.env.NEXT_PUBLIC_LIVE_DOMAIN}`
+
     await supabase
       .from('orders')
-      .update({ status: 'live' })
+      .update({ status: 'live', live_url: `https://${liveUrl}` })
       .eq('id', orderId)
-
-    const liveUrl = `${paid.slug}.${process.env.NEXT_PUBLIC_LIVE_DOMAIN}`
     const waMsg   = encodeURIComponent(`🎉 Page anda dah live! https://${liveUrl}`)
     const waLink  = `${process.env.BOS_WHATSAPP_REDIRECT}?text=${waMsg}`
 

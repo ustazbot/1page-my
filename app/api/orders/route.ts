@@ -41,7 +41,10 @@ export async function POST(req: NextRequest) {
       nama_owner, whatsapp, telefon, email,
       alamat, waktu_operasi, google_maps_link,
       instagram, facebook, tiktok,
-      banner_atas_url, logo_url, gallery_urls,
+      banner_atas_url, logo_url,
+      gallery_urls: typeof gallery_urls === 'string'
+        ? gallery_urls.split('\n').map((s) => s.trim()).filter(Boolean)
+        : [],
       template_pilihan, domain_sendiri: !!domain_sendiri, domain_url,
       domain_pref_1, domain_pref_2, domain_pref_3,
       catatan,
