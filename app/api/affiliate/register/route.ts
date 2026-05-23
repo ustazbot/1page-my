@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: telegramChatId, text: msg }),
-    }).catch(() => {})
+    }).catch((err: unknown) => console.error('[register] telegram error:', err))
   }
 
   return NextResponse.json({ ok: true, ref_code: refCode })

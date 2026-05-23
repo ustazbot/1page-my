@@ -32,7 +32,8 @@ export default function RegisterPage() {
       const data = await res.json() as { error?: string }
       if (!res.ok) { setError(data.error ?? 'Ralat berlaku'); return }
       setDone(true)
-    } catch {
+    } catch (err) {
+      console.error('[register]', err)
       setError('Ralat sambungan. Cuba lagi.')
     } finally {
       setLoading(false)

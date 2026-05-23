@@ -24,7 +24,8 @@ export default function LoginPage() {
       }
       router.push('/affiliate/dashboard')
       router.refresh()
-    } catch {
+    } catch (err) {
+      console.error('[login]', err)
       setError('Ralat sambungan. Cuba lagi.')
     } finally {
       setLoading(false)
