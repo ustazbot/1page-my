@@ -3,7 +3,12 @@ import { supabaseServer } from '@/lib/supabase'
 import { sendTelegramMessage } from '@/lib/telegram'
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  let body: Record<string, unknown>
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Permintaan tidak sah.' }, { status: 400 })
+  }
 
   const {
     nama_bisnes, tagline, jenis_bisnes, produk_servis, target_pelanggan,
@@ -51,7 +56,7 @@ export async function POST(req: NextRequest) {
 
   await sendTelegramMessage(
     `🔔 Order baru!\n${nama_bisnes} — ${whatsapp}\nID: ${data.id}`
-  )
+  ).catch((err: unknown) => console.error('[orders] telegram error:', err))
 
   return NextResponse.json({ ok: true, id: data.id })
 }
