@@ -1,0 +1,27 @@
+# Cloudflare Tunnel Config — 1page.my
+#
+# IMPORTANT: Ganti TUNNEL_ID_PLACEHOLDER dengan tunnel ID sebenar
+# Dapatkan ID selepas: cloudflared tunnel create 1page-my
+# Contoh ID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+tunnel: TUNNEL_ID_PLACEHOLDER
+credentials-file: /root/.cloudflared/TUNNEL_ID_PLACEHOLDER.json
+
+ingress:
+  - hostname: 1page.my
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+
+  - hostname: builder.1page.my
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+
+  - hostname: preview.1page.my
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+
+  # Fallback — mesti ada di bawah sekali
+  - service: http_status:404
