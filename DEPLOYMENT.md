@@ -157,6 +157,14 @@ cloudflared tunnel route dns 1page-my preview.1page.my
 
 ### D5. Install tunnel sebagai systemd service
 
+Salin config ke lokasi yang cloudflared baca:
+
+```bash
+cp /var/www/1page-my/cloudflare-tunnel/config.yml ~/.cloudflared/config.yml
+```
+
+Kemudian install sebagai service:
+
 ```bash
 cloudflared service install
 systemctl enable cloudflared
