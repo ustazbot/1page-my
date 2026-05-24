@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy 1page.my
@@ -12,6 +16,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      # No checkout needed — all work runs directly on VPS via SSH
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
