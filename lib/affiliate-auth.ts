@@ -13,9 +13,14 @@ export function createAffiliateServerClient() {
           return (await cookieStore).getAll()
         },
         async setAll(cookiesToSet) {
-          const store = await cookieStore
-          for (const { name, value, options } of cookiesToSet) {
-            store.set(name, value, options)
+          try {
+            const store = await cookieStore
+            for (const { name, value, options } of cookiesToSet) {
+              store.set(name, value, options)
+            }
+          } catch {
+            // Called from a Server Component — safe to ignore.
+            // Cookie refresh is handled by middleware.
           }
         },
       },

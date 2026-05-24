@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabaseBrowser } from '@/lib/supabase'
+import { createAffiliateBrowserClient } from '@/lib/affiliate-auth-browser'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -16,7 +16,7 @@ export default function LoginPage() {
     setError(null)
     setLoading(true)
     try {
-      const supabase = supabaseBrowser()
+      const supabase = createAffiliateBrowserClient()
       const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
       if (authError) {
         setError('Email atau password salah')

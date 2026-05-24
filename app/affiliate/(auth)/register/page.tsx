@@ -53,13 +53,24 @@ export default function RegisterPage() {
   if (done) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F8F6F1', padding: 24 }}>
       <div style={{ background: '#fff', border: '1px solid #e7e5e4', borderRadius: 12, padding: 40, maxWidth: 480, textAlign: 'center', width: '100%' }}>
-        <div style={{ fontSize: 40, marginBottom: 16 }}>✅</div>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
         <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 20, fontWeight: 700, marginBottom: 12, color: '#1C1917' }}>
-          Permohonan Diterima
+          Akaun Berjaya Didaftarkan!
         </h2>
-        <p style={{ fontSize: 14, color: '#78716C', lineHeight: 1.6 }}>
-          Permohonan anda sedang disemak. Kami akan maklumkan melalui email apabila akaun anda diaktifkan.
+        <p style={{ fontSize: 14, color: '#78716C', lineHeight: 1.6, marginBottom: 24 }}>
+          Akaun affiliate anda telah diaktifkan. Log masuk sekarang untuk dapatkan link referral anda.
         </p>
+        <a
+          href="/affiliate/login"
+          style={{
+            display: 'inline-block', padding: '11px 28px',
+            background: '#F97316', color: '#fff',
+            borderRadius: 8, fontSize: 14, fontWeight: 700,
+            textDecoration: 'none', fontFamily: 'DM Sans, sans-serif',
+          }}
+        >
+          Log Masuk Sekarang
+        </a>
       </div>
     </div>
   )

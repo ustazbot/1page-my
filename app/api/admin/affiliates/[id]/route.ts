@@ -72,3 +72,26 @@ export async function PATCH(
 
   return NextResponse.json({ ok: true })
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await getAdminSession()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await params
+  const sb = supabaseServer()
+
+  // Delete referrals first (FK constraint)
+  await sb.from('referrals').delete().eq('affiliate_id', id)
+
+  // Delete affiliate record
+  const { error } = await sb.from('affiliates').delete().eq('id', id)
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Delete auth user
+  await sb.auth.admin.deleteUser(id).catch((err: unknown) => console.error('[admin] delete user error:', err))
+
+  return NextResponse.json({ ok: true })
+}

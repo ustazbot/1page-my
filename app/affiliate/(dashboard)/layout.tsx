@@ -18,6 +18,7 @@ export default async function AffiliateLayout({
     { href: '/affiliate/referrals', label: 'Referral' },
     { href: '/affiliate/payout', label: 'Payout' },
     { href: '/affiliate/kit', label: 'Kit' },
+    { href: '/affiliate/profile', label: 'Profil' },
   ]
 
   return (

@@ -33,7 +33,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
           </a>
         </div>
       </nav>
-      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 24px' }}>
+      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px' }}>
         {children}
       </main>
     </div>

@@ -24,6 +24,15 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // 3. Builder (web builder) protection — same admin credentials
+  const BUILDER_ROUTES = ['/operator', '/assets', '/build', '/copywrite', '/deploy', '/intake', '/preview']
+  if (BUILDER_ROUTES.some(r => pathname === r || pathname.startsWith(r + '/'))) {
+    const session = await getAdminSessionFromRequest(request)
+    if (!session) {
+      return NextResponse.redirect(new URL('/admin', request.url))
+    }
+  }
+
   return response
 }
 

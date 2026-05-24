@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ business_name }} | {{ tagline }}</title>
+    <meta name="description" content="{{ seo_description }}">
+    <meta name="keywords" content="{{ seo_keywords }}">
+    <meta name="author" content="1page.my">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ business_name }} | {{ tagline }}">
+    <meta property="og:description" content="{{ seo_description }}">
+    <meta property="og:image" content="{{ og_image }}">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:type" content="business.business">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ business_name }}">
+    <meta name="twitter:description" content="{{ seo_description }}">
+    <meta name="twitter:image" content="{{ og_image }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ favicon }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "{{ business_name }}",
+        "description": "{{ seo_description }}",
+        "image": "{{ og_image }}",
+        "url": "{{ page_url }}",
+        "telephone": "{{ contact_phone }}",
+        "email": "{{ contact_email }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ address_street }}",
+            "addressLocality": "{{ address_locality }}",
+            "addressRegion": "{{ address_region }}",
+            "postalCode": "{{ address_postal }}",
+            "addressCountry": "MY"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "{{ geo_lat }}",
+            "longitude": "{{ geo_lng }}"
+        },
+        "openingHours": "{{ opening_hours_schema }}",
+        "priceRange": "{{ price_range }}",
+        "sameAs": [
+            "{{ social_instagram }}",
+            "{{ social_facebook }}",
+            "{{ social_tiktok }}"
+        ]
+    }
+    </script>
+
+    <style>
+        /* ============================================
+           1PAGE.MY TEMPLATE 4 — FRESH EDITORIAL
+           Asymmetric, vibrant, hand-crafted feel
+           ============================================ */
+
+        :root {
+            /* Primary Palette — Fresh Edition */
+            --color-primary: #059669;
+            --color-primary-dark: #064e3b;
+            --color-primary-light: #10b981;
+            --color-secondary: #fefce8;
+            --color-secondary-warm: #fef9c3;
+            --color-accent: #fbbf24;
+            --color-accent-hover: #f59e0b;
+            --color-accent-soft: rgba(251, 191, 36, 0.12);
+
+            /* Text Colors */
+            --color-text: #1f2937;
+            --color-text-light: #4b5563;
+            --color-text-muted: #9ca3af;
+            --color-white: #ffffff;
+
+            /* Spacing Scale */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+            --space-2xl: 6rem;
+
+            /* Typography */
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            /* Layout */
+            --max-width: 1280px;
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            line-height: 1.6;
+            background-color: var(--color-secondary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        .section {
+            padding: var(--space-2xl) 0;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 1rem 2.25rem;
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+            transform: translateY(-3px) scale(1.02);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .btn-accent {
+            background-color: var(--color-accent);
+            color: var(--color-primary-dark);
+        }
+
+        .btn-accent:hover {
+            background-color: var(--color-accent-hover);
+            transform: translateY(-3px) scale(1.02);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-white);
+            color: var(--color-primary);
+            border-color: var(--color-white);
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: var(--color-white);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128c7e;
+            transform: translateY(-3px);
+        }
+
+        /* ============================================
+           NAVBAR — Floating pill style
+           ============================================ */
+
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 6px;
+            padding: 0.6rem 0.6rem 0.6rem 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(5, 150, 105, 0.08);
+            transition: var(--transition);
+        }
+
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.03em;
+        }
+
+        .logo-accent {
+            color: var(--color-accent);
+        }
+
+        .nav-cta {
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .nav-cta {
+                display: inline-flex;
+                padding: 0.6rem 1.5rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ============================================
+           HERO SECTION — Full-bleed with overlapping card
+           ============================================ */
+
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: var(--space-xl);
+            padding-top: 100px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(6, 78, 59, 0.85) 0%,
+                rgba(6, 78, 59, 0.4) 40%,
+                rgba(6, 78, 59, 0.1) 70%,
+                transparent 100%
+            );
+        }
+
+        /* Floating shapes */
+        .hero-shape-1 {
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(40px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-shape-2 {
+            position: absolute;
+            bottom: 30%;
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-primary-light);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            opacity: 0.2;
+            filter: blur(30px);
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background-color: var(--color-accent);
+            color: var(--color-primary-dark);
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 6px;
+            margin-bottom: var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--color-white);
+            line-height: 1.05;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.04em;
+        }
+
+        .hero-title .accent {
+            color: var(--color-accent);
+            display: block;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: var(--space-lg);
+            max-width: 480px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .hero-meta-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: var(--font-heading);
+        }
+
+        .hero-meta-value {
+            font-size: 1rem;
+            color: var(--color-white);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           ABOUT SECTION — Editorial wrap style
+           ============================================ */
+
+        .about {
+            background-color: var(--color-white);
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background-color: var(--color-white);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            z-index: 1;
+        }
+
+        .about-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            align-items: start;
+        }
+
+        @media (min-width: 768px) {
+            .about-inner {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .about-content {
+            padding-top: var(--space-lg);
+        }
+
+        .about-label {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .about-content h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+
+        .about-content p {
+            color: var(--color-text-light);
+            margin-bottom: var(--space-md);
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--color-accent);
+            border-radius: var(--border-radius);
+            z-index: -1;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           PRODUCTS SECTION — Asymmetric featured
+           ============================================ */
+
+        .products {
+            background-color: var(--color-secondary);
+            position: relative;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--space-xl);
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .products-header h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+
+        .products-header p {
+            color: var(--color-text-light);
+            max-width: 400px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1.5fr 1fr;
+                grid-template-rows: repeat(2, 1fr);
+            }
+        }
+
+        .product-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .product-card.featured {
+            grid-row: span 2;
+        }
+
+        @media (max-width: 767px) {
+            .product-card.featured {
+                grid-row: span 1;
+            }
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card.featured .product-image {
+            height: 350px;
+        }
+
+        .product-card:not(.featured) .product-image {
+            height: 180px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.08);
+        }
+
+        .product-price {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            background-color: var(--color-accent);
+            color: var(--color-primary-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .product-info {
+            padding: var(--space-md);
+        }
+
+        .product-card.featured .product-info {
+            padding: var(--space-lg);
+        }
+
+        .product-name {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card.featured .product-name {
+            font-size: 1.6rem;
+        }
+
+        .product-desc {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            font-weight: 400;
+        }
+
+        /* ============================================
+           GALLERY SECTION — Horizontal scroll
+           ============================================ */
+
+        .gallery {
+            background-color: var(--color-white);
+            overflow: hidden;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .gallery-header h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.04em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .gallery-header p {
+            color: var(--color-text-light);
+        }
+
+        .gallery-scroll {
+            display: flex;
+            gap: var(--space-md);
+            overflow-x: auto;
+            padding: var(--space-md) 0 var(--space-xl);
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-item {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 380px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            scroll-snap-align: start;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) rotate(-2deg);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .gallery-item:nth-child(even) {
+            margin-top: 40px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(6, 78, 59, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-icon {
+            color: var(--color-white);
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        /* ============================================
+           LOCATION SECTION — Diagonal split
+           ============================================ */
+
+        .location {
+            background-color: var(--color-primary-dark);
+            color: var(--color-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .location::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background-color: var(--color-white);
+            transform: skewY(-3deg);
+            z-index: 1;
+        }
+
+        .location-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            padding-top: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .location-inner {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+        }
+
+        .location-content h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.04em;
+        }
+
+        .location-content > p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: var(--space-lg);
+            font-size: 1.1rem;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background-color: rgba(255, 255, 255, 0.06);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+        }
+
+        .location-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .location-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--color-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--color-primary-dark);
+            flex-shrink: 0;
+        }
+
+        .location-item h4 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-white);
+        }
+
+        .location-item p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.95rem;
+        }
+
+        .location-map {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.06);
+            transform: rotate(2deg);
+            transition: var(--transition);
+        }
+
+        .location-map:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        .location-cta {
+            margin-top: var(--space-md);
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn-waze {
+            background-color: var(--color-accent);
+            color: var(--color-primary-dark);
+        }
+
+        .btn-waze:hover {
+            background-color: var(--color-accent-hover);
+        }
+
+        .btn-gmaps {
+            background-color: #34a853;
+            color: #fff;
+        }
+
+        .btn-gmaps:hover {
+            background-color: #2d9249;
+        }
+
+        /* ============================================
+           SOCIAL SECTION — Floating cards
+           ============================================ */
+
+        .social {
+            background-color: var(--color-secondary);
+            text-align: center;
+            position: relative;
+        }
+
+        .social-header h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.04em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .social-header p {
+            color: var(--color-text-light);
+            margin-bottom: var(--space-xl);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            min-width: 160px;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.06);
+            border: 2px solid transparent;
+        }
+
+        .social-link:hover {
+            transform: translateY(-10px) rotate(-3deg);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-color: var(--color-accent);
+        }
+
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .social-link.instagram .social-icon {
+            background-color: #fce7f3;
+            color: #e4405f;
+        }
+
+        .social-link.facebook .social-icon {
+            background-color: #dbeafe;
+            color: #1877f2;
+        }
+
+        .social-link.tiktok .social-icon {
+            background-color: #f3f4f6;
+            color: var(--color-primary-dark);
+        }
+
+        .social-link span:last-child {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--color-primary-dark);
+        }
+
+        /* ============================================
+           CTA SECTION — Floating island
+           ============================================ */
+
+        .cta {
+            background-color: var(--color-primary);
+            text-align: center;
+            padding: var(--space-2xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(80px);
+        }
+
+        .cta::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background-color: var(--color-primary-light);
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+        }
+
+        .cta-card {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: var(--space-2xl);
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .cta-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.04em;
+        }
+
+        .cta-desc {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.15rem;
+            margin-bottom: var(--space-xl);
+            font-weight: 400;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+
+        .footer {
+            background-color: var(--color-primary-dark);
+            color: rgba(255, 255, 255, 0.4);
+            padding: var(--space-xl) 0 var(--space-lg);
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-brand span {
+            color: var(--color-accent);
+        }
+
+        .footer-tagline {
+            font-size: 1rem;
+            margin-bottom: var(--space-lg);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            transition: color 0.3s;
+            font-family: var(--font-heading);
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-copy {
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        /* ============================================
+           STICKY WHATSAPP — Pill style
+           ============================================ */
+
+        .sticky-whatsapp {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            background-color: #25d366;
+            color: var(--color-white);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(37,211,102,0.4);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .sticky-whatsapp:hover {
+            transform: scale(1.05);
+            border: 1px solid rgba(37,211,102,0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* ============================================
+           LIGHTBOX
+           ============================================ */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background-color: rgba(6, 78, 59, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            color: var(--color-white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ============================================
+           SCROLL ANIMATIONS
+           ============================================ */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           RESPONSIVE TWEAKS
+           ============================================ */
+
+        @media (max-width: 640px) {
+            .navbar {
+                top: 10px;
+                padding: 0.5rem 0.5rem 0.5rem 1rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .product-card.featured .product-image {
+                height: 250px;
+            }
+
+            .gallery-item {
+                width: 260px;
+                height: 320px;
+            }
+
+            .location-map {
+                transform: none;
+            }
+
+            .cta-card {
+                padding: var(--space-lg);
+            }
+
+            .about-stats {
+                gap: var(--space-md);
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    
+        .social-embed {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .social-embed iframe,
+        .social-embed blockquote {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        </style>
+</head>
+<body>
+
+    <!-- ============================================
+         NAVBAR — Floating pill
+         ============================================ -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="logo">{{ business_name }}<span class="logo-accent">.</span></div>
+            <a href="{{ whatsapp_link }}" class="btn btn-primary nav-cta" target="_blank">
+                <span>Hubungi Kami</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO SECTION — Full-bleed with overlay card
+         ============================================ -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="{{ hero_image }}" alt="{{ hero_image_alt }}" loading="eager">
+        </div>
+        <div class="hero-shape-1"></div>
+        <div class="hero-shape-2"></div>
+        <div class="container hero-inner">
+            <div class="hero-content fade-in">
+                <span class="hero-badge">{{ hero_badge }}</span>
+                <h1 class="hero-title">
+                    {{ hero_headline_part1 }}
+                    <span class="accent">{{ hero_headline_part2 }}</span>
+                </h1>
+                <p class="hero-tagline">{{ tagline }}</p>
+                <div class="hero-cta-group">
+                    <a href="{{ whatsapp_link }}" class="btn btn-accent" target="_blank">
+                        <span>{{ cta_primary_text }}</span>
+                    </a>
+                    <a href="#products" class="btn btn-outline">
+                        {{ cta_secondary_text }}
+                    </a>
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Lokasi</span>
+                        <span class="hero-meta-value">{{ location_short }}</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Rating</span>
+                        <span class="hero-meta-value">{{ rating_text }}</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Waktu</span>
+                        <span class="hero-meta-value">{{ hours_short }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ABOUT SECTION — Editorial style
+         ============================================ -->
+    <section class="about section" id="about">
+        <div class="container about-inner">
+            <div class="about-content fade-in">
+                <span class="about-label">Tentang Kami</span>
+                <h2>{{ about_title }}</h2>
+                <p>{{ about_paragraph_1 }}</p>
+                <p>{{ about_paragraph_2 }}</p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ stat_1_number }}</span>
+                        <span class="stat-label">{{ stat_1_label }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ stat_2_number }}</span>
+                        <span class="stat-label">{{ stat_2_label }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ stat_3_number }}</span>
+                        <span class="stat-label">{{ stat_3_label }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image fade-in">
+                <img src="{{ about_image }}" alt="{{ about_image_alt }}" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PRODUCTS SECTION — Asymmetric featured
+         ============================================ -->
+    <section class="products section" id="products">
+        <div class="container">
+            <div class="products-header fade-in">
+                <div>
+                    <h2>{{ products_title }}</h2>
+                    <p>{{ products_subtitle }}</p>
+                </div>
+            </div>
+            <div class="products-grid">
+                <!-- Featured Product -->
+                <div class="product-card featured fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_1_image }}" alt="{{ product_1_name }}" loading="lazy">
+                        <span class="product-price">{{ product_1_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_1_name }}</h3>
+                        <p class="product-desc">{{ product_1_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_2_image }}" alt="{{ product_2_name }}" loading="lazy">
+                        <span class="product-price">{{ product_2_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_2_name }}</h3>
+                        <p class="product-desc">{{ product_2_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_3_image }}" alt="{{ product_3_name }}" loading="lazy">
+                        <span class="product-price">{{ product_3_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_3_name }}</h3>
+                        <p class="product-desc">{{ product_3_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_4_image }}" alt="{{ product_4_name }}" loading="lazy">
+                        <span class="product-price">{{ product_4_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_4_name }}</h3>
+                        <p class="product-desc">{{ product_4_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 5 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_5_image }}" alt="{{ product_5_name }}" loading="lazy">
+                        <span class="product-price">{{ product_5_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_5_name }}</h3>
+                        <p class="product-desc">{{ product_5_desc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         GALLERY SECTION — Horizontal scroll
+         ============================================ -->
+    <section class="gallery section" id="gallery">
+        <div class="container">
+            <div class="gallery-header fade-in">
+                <h2>{{ gallery_title }}</h2>
+                <p>{{ gallery_subtitle }}</p>
+            </div>
+        </div>
+        <div class="gallery-scroll">
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_1_image }}')">
+                <img src="{{ gallery_1_image }}" alt="{{ gallery_1_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_2_image }}')">
+                <img src="{{ gallery_2_image }}" alt="{{ gallery_2_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_3_image }}')">
+                <img src="{{ gallery_3_image }}" alt="{{ gallery_3_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_4_image }}')">
+                <img src="{{ gallery_4_image }}" alt="{{ gallery_4_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_5_image }}')">
+                <img src="{{ gallery_5_image }}" alt="{{ gallery_5_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_6_image }}')">
+                <img src="{{ gallery_6_image }}" alt="{{ gallery_6_alt }}" loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-icon">+</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         LOCATION SECTION — Diagonal split
+         ============================================ -->
+    <section class="location section" id="location">
+        <div class="container location-inner">
+            <div class="location-content fade-in">
+                <h2>{{ location_title }}</h2>
+                <p>{{ location_subtitle }}</p>
+                <div class="location-info">
+                    <div class="location-item">
+                        <div class="location-icon">@</div>
+                        <div>
+                            <h4>Alamat</h4>
+                            <p>{{ full_address }}</p>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">T</div>
+                        <div>
+                            <h4>Waktu Operasi</h4>
+                            <p>{{ operating_hours }}</p>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">P</div>
+                        <div>
+                            <h4>Hubungi Kami</h4>
+                            <p>{{ contact_phone_display }}<br>{{ contact_email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="location-cta">
+                    <a href="{{ waze_link }}" class="btn btn-waze" target="_blank">
+                        <span>🚗 Buka di Waze</span>
+                    </a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ geo_lat }},{{ geo_lng }}" class="btn btn-gmaps" target="_blank">
+                        <span>📍 Google Maps</span>
+                    </a>
+                </div>
+            </div>
+            <div class="location-map fade-in">
+                <iframe 
+                    src="{{ google_maps_embed }}" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SOCIAL SECTION — Floating cards
+         ============================================ -->
+    <section class="social section" id="social">
+        <div class="container">
+            <div class="social-header fade-in">
+                <h2>{{ social_title }}</h2>
+                <p>{{ social_subtitle }}</p>
+            </div>
+            <!-- SOCIAL_LINKS_START -->
+<div class="social-links fade-in">
+                <a href="{{ social_instagram }}" class="social-link instagram" target="_blank">
+                    <div class="social-icon">IG</div>
+            <!-- SOCIAL_LINKS_END -->
+            <!-- SOCIAL_EMBED_HTML -->
+                    <span>Instagram</span>
+                </a>
+                <a href="{{ social_facebook }}" class="social-link facebook" target="_blank">
+                    <div class="social-icon">FB</div>
+                    <span>Facebook</span>
+                </a>
+                <a href="{{ social_tiktok }}" class="social-link tiktok" target="_blank">
+                    <div class="social-icon">TT</div>
+                    <span>TikTok</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CTA SECTION — Floating island with glass
+         ============================================ -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-card fade-in">
+                <h2 class="cta-title">{{ cta_title }}</h2>
+                <p class="cta-desc">{{ cta_desc }}</p>
+                <div class="cta-buttons">
+                    <a href="{{ whatsapp_link }}" class="btn btn-accent" target="_blank">
+                        <span>{{ cta_button_text }}</span>
+                    </a>
+                    <a href="tel:{{ contact_phone }}" class="btn btn-outline">
+                        <span>{{ cta_call_text }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">1page<span>.my</span></div>
+            <p class="footer-tagline">Landing page profesional untuk perniagaan kecil Malaysia</p>
+            <div class="footer-links">
+                <a href="#home">Laman Utama</a>
+                <a href="#products">Produk</a>
+                <a href="#location">Lokasi</a>
+                <a href="#contact">Hubungi</a>
+            </div>
+            <p class="footer-copy">
+                &copy; {{ current_year }} {{ business_name }}. Dibina oleh <strong>1page.my</strong>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         STICKY WHATSAPP — Pill with text
+         ============================================ -->
+    <a href="{{ whatsapp_link }}" class="sticky-whatsapp" target="_blank" aria-label="WhatsApp">
+        <span>WA</span>
+        <span>Hubungi Kami</span>
+    </a>
+
+    <!-- ============================================
+         LIGHTBOX
+         ============================================ -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">&times;</button>
+        <img src="" alt="Gallery" id="lightbox-img">
+    </div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script>
+        // Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -60px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Navbar hide/show on scroll
+        const navbar = document.querySelector('.navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 30px rgba(5, 150, 105, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 4px 30px rgba(5, 150, 105, 0.08)';
+            }
+
+            lastScroll = currentScroll;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ business_name }} | {{ tagline }}</title>
+    <meta name="description" content="{{ seo_description }}">
+    <meta name="keywords" content="{{ seo_keywords }}">
+    <meta name="author" content="BinaWeb">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ business_name }} | {{ tagline }}">
+    <meta property="og:description" content="{{ seo_description }}">
+    <meta property="og:image" content="{{ og_image }}">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:type" content="business.business">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ business_name }}">
+    <meta name="twitter:description" content="{{ seo_description }}">
+    <meta name="twitter:image" content="{{ og_image }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ favicon }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "{{ business_name }}",
+        "description": "{{ seo_description }}",
+        "image": "{{ og_image }}",
+        "url": "{{ page_url }}",
+        "telephone": "{{ contact_phone }}",
+        "email": "{{ contact_email }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ address_street }}",
+            "addressLocality": "{{ address_locality }}",
+            "addressRegion": "{{ address_region }}",
+            "postalCode": "{{ address_postal }}",
+            "addressCountry": "MY"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "{{ geo_lat }}",
+            "longitude": "{{ geo_lng }}"
+        },
+        "openingHours": "{{ opening_hours_schema }}",
+        "priceRange": "{{ price_range }}",
+        "sameAs": [
+            "{{ social_instagram }}",
+            "{{ social_facebook }}",
+            "{{ social_tiktok }}"
+        ]
+    }
+    </script>
+
+    <style>
+        /* ============================================
+           BINAWEB TEMPLATE 1 — BOLD MINIMAL
+           Signature Design System
+           ============================================ */
+
+        :root {
+            /* Primary Palette */
+            --color-primary: #1a1a1a;
+            --color-secondary: #f5f5f5;
+            --color-accent: #d4a574;
+            --color-accent-hover: #c49360;
+
+            /* Text Colors */
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-text-muted: #999999;
+            --color-white: #ffffff;
+
+            /* Spacing Scale */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+            --space-2xl: 6rem;
+
+            /* Typography — Swiss Typographic direction */
+            --font-heading: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+            /* Layout */
+            --max-width: 1200px;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            line-height: 1.6;
+            background-color: var(--color-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        .section {
+            padding: var(--space-2xl) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 0.875rem 2rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent-hover);
+            transform: translateY(-2px);
+            border: 1px solid rgba(212, 165, 116, 0.35);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: var(--color-white);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128c7e;
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           NAVBAR
+           ============================================ */
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-sm) var(--space-md);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .logo-accent {
+            color: var(--color-accent);
+        }
+
+        .nav-cta {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-cta {
+                display: inline-flex;
+            }
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background-color: var(--color-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background-color: var(--color-accent);
+            opacity: 0.08;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .hero-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .hero-content {
+            order: 2;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content {
+                order: 1;
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 50px;
+            margin-bottom: var(--space-md);
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--color-primary);
+            line-height: 1.1;
+            margin-bottom: var(--space-md);
+        }
+
+        .hero-title .accent {
+            color: var(--color-accent);
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2vw, 1.25rem);
+            color: var(--color-text-light);
+            margin-bottom: var(--space-lg);
+            max-width: 500px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-image {
+            order: 1;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .hero-image {
+                order: 2;
+            }
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .hero-image-badge {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+
+        .about {
+            background-color: var(--color-white);
+        }
+
+        .about-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .about-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .about-content h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .about-content p {
+            color: var(--color-text-light);
+            margin-bottom: var(--space-md);
+            font-size: 1.05rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--space-md);
+            background-color: var(--color-secondary);
+            border-radius: var(--border-radius);
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ============================================
+           PRODUCTS SECTION
+           ============================================ */
+
+        .products {
+            background-color: var(--color-secondary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .product-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .product-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-price {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .product-info {
+            padding: var(--space-md);
+        }
+
+        .product-name {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* ============================================
+           GALLERY SECTION
+           ============================================ */
+
+        .gallery {
+            background-color: var(--color-white);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--space-md);
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(26, 26, 26, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-icon {
+            color: var(--color-white);
+            font-size: 2rem;
+        }
+
+        /* ============================================
+           LOCATION SECTION
+           ============================================ */
+
+        .location {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .location .section-title {
+            color: var(--color-white);
+        }
+
+        .location .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .location-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .location-icon {
+            font-size: 1.5rem;
+            color: var(--color-accent);
+            flex-shrink: 0;
+        }
+
+        .location-item h4 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-white);
+        }
+
+        .location-item p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .location-map {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.12);
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        .location-cta {
+            margin-top: var(--space-md);
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn-waze {
+            background-color: #00b4d8;
+            color: var(--color-white);
+        }
+
+        .btn-waze:hover {
+            background-color: #0096c7;
+        }
+
+        .btn-gmaps {
+            background-color: #34a853;
+            color: var(--color-white);
+        }
+
+        .btn-gmaps:hover {
+            background-color: #2d9249;
+        }
+
+        /* ============================================
+           SOCIAL SECTION
+           ============================================ */
+
+        .social {
+            background-color: var(--color-secondary);
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 0.75rem 1.5rem;
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .social-link.instagram {
+            color: #e4405f;
+        }
+
+        .social-link.facebook {
+            color: #1877f2;
+        }
+
+        .social-link.tiktok {
+            color: var(--color-primary);
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+
+        .cta {
+            background-color: var(--color-accent);
+            text-align: center;
+            padding: var(--space-2xl) 0;
+        }
+
+        .cta-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+        }
+
+        .cta-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            background-color: var(--color-white);
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .btn-cta:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+
+        .footer {
+            background-color: var(--color-primary);
+            color: rgba(255, 255, 255, 0.6);
+            padding: var(--space-lg) 0;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-brand span {
+            color: var(--color-accent);
+        }
+
+        .footer-tagline {
+            font-size: 0.9rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        /* ============================================
+           STICKY WHATSAPP BUTTON
+           ============================================ */
+
+        .sticky-whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: #25d366;
+            color: var(--color-white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            border: 1px solid rgba(37, 211, 102, 0.4);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .sticky-whatsapp:hover {
+            transform: scale(1.1);
+            border: 2px solid rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* ============================================
+           LIGHTBOX
+           ============================================ */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: var(--border-radius);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            color: var(--color-white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* ============================================
+           SCROLL ANIMATIONS
+           ============================================ */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           RESPONSIVE TWEAKS
+           ============================================ */
+
+        @media (max-width: 640px) {
+            .hero-image-wrapper img {
+                height: 280px;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .location-map iframe {
+                height: 300px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+        .social-embed {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .social-embed iframe,
+        .social-embed blockquote {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        </style>
+</head>
+<body>
+
+    <!-- ============================================
+         NAVBAR
+         ============================================ -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="logo">{{ business_name }}<span class="logo-accent">.</span></div>
+            <a href="{{ whatsapp_link }}" class="btn btn-whatsapp nav-cta" target="_blank">
+                <span>💬</span> WhatsApp Kami
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hero" id="home">
+        <div class="container hero-inner">
+            <div class="hero-content fade-in">
+                <span class="hero-badge">{{ hero_badge }}</span>
+                <h1 class="hero-title">
+                    {{ hero_headline_part1 }}<br>
+                    <span class="accent">{{ hero_headline_part2 }}</span>
+                </h1>
+                <p class="hero-tagline">{{ tagline }}</p>
+                <div class="hero-cta-group">
+                    <a href="{{ whatsapp_link }}" class="btn btn-primary" target="_blank">
+                        <span>📱</span> {{ cta_primary_text }}
+                    </a>
+                    <a href="#products" class="btn btn-outline">
+                        {{ cta_secondary_text }}
+                    </a>
+                </div>
+                <div class="hero-meta">
+                    <span class="hero-meta-item">
+                        <span>📍</span> {{ location_short }}
+                    </span>
+                    <span class="hero-meta-item">
+                        <span>⭐</span> {{ rating_text }}
+                    </span>
+                    <span class="hero-meta-item">
+                        <span>🕐</span> {{ hours_short }}
+                    </span>
+                </div>
+            </div>
+            <div class="hero-image fade-in">
+                <div class="hero-image-wrapper">
+                    <img src="{{ hero_image }}" alt="{{ hero_image_alt }}" loading="eager">
+                    <div class="hero-image-badge">{{ hero_badge_bottom }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ABOUT SECTION
+         ============================================ -->
+    <section class="about section" id="about">
+        <div class="container about-inner">
+            <div class="about-image fade-in">
+                <img src="{{ about_image }}" alt="{{ about_image_alt }}" loading="lazy">
+            </div>
+            <div class="about-content fade-in">
+                <h2>{{ about_title }}</h2>
+                <p>{{ about_paragraph_1 }}</p>
+                <p>{{ about_paragraph_2 }}</p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stat_1_number }}</div>
+                        <div class="stat-label">{{ stat_1_label }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stat_2_number }}</div>
+                        <div class="stat-label">{{ stat_2_label }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stat_3_number }}</div>
+                        <div class="stat-label">{{ stat_3_label }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stat_4_number }}</div>
+                        <div class="stat-label">{{ stat_4_label }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PRODUCTS SECTION
+         ============================================ -->
+    <section class="products section" id="products">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">{{ products_title }}</h2>
+                <p class="section-subtitle">{{ products_subtitle }}</p>
+            </div>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_1_image }}" alt="{{ product_1_name }}" loading="lazy">
+                        <span class="product-price">{{ product_1_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_1_name }}</h3>
+                        <p class="product-desc">{{ product_1_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_2_image }}" alt="{{ product_2_name }}" loading="lazy">
+                        <span class="product-price">{{ product_2_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_2_name }}</h3>
+                        <p class="product-desc">{{ product_2_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_3_image }}" alt="{{ product_3_name }}" loading="lazy">
+                        <span class="product-price">{{ product_3_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_3_name }}</h3>
+                        <p class="product-desc">{{ product_3_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_4_image }}" alt="{{ product_4_name }}" loading="lazy">
+                        <span class="product-price">{{ product_4_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_4_name }}</h3>
+                        <p class="product-desc">{{ product_4_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 5 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_5_image }}" alt="{{ product_5_name }}" loading="lazy">
+                        <span class="product-price">{{ product_5_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_5_name }}</h3>
+                        <p class="product-desc">{{ product_5_desc }}</p>
+                    </div>
+                </div>
+                <!-- Product 6 -->
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        <img src="{{ product_6_image }}" alt="{{ product_6_name }}" loading="lazy">
+                        <span class="product-price">{{ product_6_price }}</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product_6_name }}</h3>
+                        <p class="product-desc">{{ product_6_desc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         GALLERY SECTION
+         ============================================ -->
+    <section class="gallery section" id="gallery">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">{{ gallery_title }}</h2>
+                <p class="section-subtitle">{{ gallery_subtitle }}</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_1_image }}')">
+                    <img src="{{ gallery_1_image }}" alt="{{ gallery_1_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_2_image }}')">
+                    <img src="{{ gallery_2_image }}" alt="{{ gallery_2_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_3_image }}')">
+                    <img src="{{ gallery_3_image }}" alt="{{ gallery_3_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_4_image }}')">
+                    <img src="{{ gallery_4_image }}" alt="{{ gallery_4_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_5_image }}')">
+                    <img src="{{ gallery_5_image }}" alt="{{ gallery_5_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_6_image }}')">
+                    <img src="{{ gallery_6_image }}" alt="{{ gallery_6_alt }}" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         LOCATION SECTION
+         ============================================ -->
+    <section class="location section" id="location">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">{{ location_title }}</h2>
+                <p class="section-subtitle">{{ location_subtitle }}</p>
+            </div>
+            <div class="location-inner">
+                <div class="location-info fade-in">
+                    <div class="location-item">
+                        <span class="location-icon">📍</span>
+                        <div>
+                            <h4>Alamat</h4>
+                            <p>{{ full_address }}</p>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <span class="location-icon">🕐</span>
+                        <div>
+                            <h4>Waktu Operasi</h4>
+                            <p>{{ operating_hours }}</p>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <span class="location-icon">📱</span>
+                        <div>
+                            <h4>Hubungi Kami</h4>
+                            <p>{{ contact_phone_display }}<br>{{ contact_email }}</p>
+                        </div>
+                    </div>
+                    <div class="location-cta">
+                        <a href="{{ waze_link }}" class="btn btn-waze" target="_blank">
+                            <span>🚗</span> Buka di Waze
+                        </a>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination={{ geo_lat }},{{ geo_lng }}" class="btn btn-gmaps" target="_blank">
+                            <span>📍</span> Google Maps
+                        </a>
+                    </div>
+                </div>
+                <div class="location-map fade-in">
+                    <iframe 
+                        src="{{ google_maps_embed }}" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SOCIAL SECTION
+         ============================================ -->
+    <section class="social section" id="social">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">{{ social_title }}</h2>
+                <p class="section-subtitle">{{ social_subtitle }}</p>
+            </div>
+            <!-- SOCIAL_LINKS_START -->
+<div class="social-links fade-in">
+                <a href="{{ social_instagram }}" class="social-link instagram" target="_blank">
+                    <span>📸</span> Instagram
+                </a>
+                <a href="{{ social_facebook }}" class="social-link facebook" target="_blank">
+                    <span>👍</span> Facebook
+                </a>
+                <a href="{{ social_tiktok }}" class="social-link tiktok" target="_blank">
+                    <span>🎵</span> TikTok
+                </a>
+            </div>
+            <!-- SOCIAL_LINKS_END -->
+            <!-- SOCIAL_EMBED_HTML -->
+        </div>
+    </section>
+
+    <!-- ============================================
+         CTA SECTION
+         ============================================ -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2 class="cta-title fade-in">{{ cta_title }}</h2>
+            <p class="cta-desc fade-in">{{ cta_desc }}</p>
+            <div class="cta-buttons fade-in">
+                <a href="{{ whatsapp_link }}" class="btn btn-cta" target="_blank">
+                    <span>💬</span> {{ cta_button_text }}
+                </a>
+                <a href="tel:{{ contact_phone }}" class="btn btn-cta">
+                    <span>📞</span> {{ cta_call_text }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">Bina<span>Web</span></div>
+            <p class="footer-tagline">Landing page profesional untuk perniagaan kecil Malaysia</p>
+            <div class="footer-links">
+                <a href="#home">Laman Utama</a>
+                <a href="#products">Produk</a>
+                <a href="#location">Lokasi</a>
+                <a href="#contact">Hubungi</a>
+            </div>
+            <p class="footer-copy">
+                © {{ current_year }} {{ business_name }}. Dibina oleh <strong>BinaWeb</strong>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         STICKY WHATSAPP
+         ============================================ -->
+    <a href="{{ whatsapp_link }}" class="sticky-whatsapp" target="_blank" aria-label="WhatsApp">
+        💬
+    </a>
+
+    <!-- ============================================
+         LIGHTBOX
+         ============================================ -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">&times;</button>
+        <img src="" alt="Gallery" id="lightbox-img">
+    </div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script>
+        // Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+
+            lastScroll = currentScroll;
+        });
+    </script>
+
+</body>
+</html>

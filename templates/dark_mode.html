@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ business_name }} | {{ tagline }}</title>
+    <meta name="description" content="{{ seo_description }}">
+    <meta name="keywords" content="{{ seo_keywords }}">
+    <meta name="author" content="1page.my">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ business_name }} | {{ tagline }}">
+    <meta property="og:description" content="{{ seo_description }}">
+    <meta property="og:image" content="{{ og_image }}">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:type" content="business.business">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ business_name }}">
+    <meta name="twitter:description" content="{{ seo_description }}">
+    <meta name="twitter:image" content="{{ og_image }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ favicon }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "{{ business_name }}",
+        "description": "{{ seo_description }}",
+        "image": "{{ og_image }}",
+        "url": "{{ page_url }}",
+        "telephone": "{{ contact_phone }}",
+        "email": "{{ contact_email }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ address_street }}",
+            "addressLocality": "{{ address_locality }}",
+            "addressRegion": "{{ address_region }}",
+            "postalCode": "{{ address_postal }}",
+            "addressCountry": "MY"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "{{ geo_lat }}",
+            "longitude": "{{ geo_lng }}"
+        },
+        "openingHours": "{{ opening_hours_schema }}",
+        "priceRange": "{{ price_range }}",
+        "sameAs": [
+            "{{ social_instagram }}",
+            "{{ social_facebook }}",
+            "{{ social_tiktok }}"
+        ]
+    }
+    </script>
+
+    <style>
+        /* ============================================
+           1PAGE.MY TEMPLATE 5 — DARK MODE
+           Immersive, edgy, night-life aesthetic
+           ============================================ */
+
+        :root {
+            /* Dark Palette */
+            --color-bg: #0a0a0f;
+            --color-bg-elevated: #12121a;
+            --color-bg-card: #1a1a25;
+            --color-bg-hover: #222230;
+
+            /* Neon Accents */
+            --color-accent-cyan: #06b6d4;
+            --color-accent-cyan-glow: rgba(6, 182, 212, 0.3);
+            --color-accent-purple: #a855f7;
+            --color-accent-purple-glow: rgba(168, 85, 247, 0.3);
+
+            /* Text */
+            --color-text: #e2e8f0;
+            --color-text-dim: #94a3b8;
+            --color-text-muted: #64748b;
+            --color-white: #ffffff;
+
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2.5rem;
+            --space-xl: 4rem;
+            --space-2xl: 6rem;
+
+            /* Typography */
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+
+            /* Layout */
+            --max-width: 1200px;
+            --sidebar-width: 80px;
+            --border-radius: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            line-height: 1.6;
+            background-color: var(--color-bg);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ============================================
+           SCROLLBAR — Custom dark
+           ============================================ */
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-bg-card);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent-cyan);
+        }
+
+        /* ============================================
+           UTILITY
+           ============================================ */
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .section {
+            padding: var(--space-2xl) 0;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 0.875rem 2rem;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent-cyan);
+            color: var(--color-bg);
+            box-shadow: 0 0 8px var(--color-accent-cyan-glow);
+        }
+
+        .btn-primary:hover {
+            background-color: #22d3ee;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-accent-cyan);
+            border: 1px solid var(--color-accent-cyan);
+            box-shadow: 0 0 6px var(--color-accent-cyan-glow);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-accent-cyan);
+            color: var(--color-bg);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: var(--color-white);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #128c7e;
+            transform: translateY(-2px);
+            box-shadow: 0 0 8px rgba(37, 211, 102, 0.2);
+        }
+
+        /* ============================================
+           SIDEBAR NAV — Sticky left
+           ============================================ */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background-color: var(--color-bg-elevated);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--space-lg) 0;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--color-accent-cyan);
+            margin-bottom: var(--space-xl);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.1em;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            flex: 1;
+        }
+
+        .sidebar-link {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius);
+            color: var(--color-text-muted);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            color: var(--color-accent-cyan);
+            background-color: rgba(6, 182, 212, 0.1);
+        }
+
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 0;
+            background-color: var(--color-accent-cyan);
+            transition: height 0.3s ease;
+            box-shadow: 0 0 6px var(--color-accent-cyan-glow);
+        }
+
+        .sidebar-link:hover::before,
+        .sidebar-link.active::before {
+            height: 20px;
+        }
+
+        .sidebar-cta {
+            margin-top: auto;
+        }
+
+        .sidebar-cta a {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25d366;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            box-shadow: 0 0 6px rgba(37, 211, 102, 0.2);
+        }
+
+        .sidebar-cta a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.25);
+        }
+
+        /* Mobile sidebar hide */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+        }
+
+        /* ============================================
+           HERO SECTION — Immersive dark
+           ============================================ */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--color-bg);
+        }
+
+        /* Grid background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* Vignette */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, var(--color-bg) 70%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .hero-inner {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .hero-content {
+            padding: var(--space-xl) 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba(6, 182, 212, 0.1);
+            color: var(--color-accent-cyan);
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            margin-bottom: var(--space-md);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--color-accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--color-accent-cyan-glow);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--color-accent-cyan-glow); }
+            50% { opacity: 0.5; box-shadow: 0 0 15px var(--color-accent-cyan-glow); }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 400;
+            color: var(--color-white);
+            line-height: 0.9;
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.02em;
+        }
+
+        .hero-title .accent {
+            color: var(--color-accent-cyan);
+            text-shadow: 0 0 30px var(--color-accent-cyan-glow);
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--color-text-dim);
+            margin-bottom: var(--space-xl);
+            max-width: 500px;
+            font-weight: 300;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .hero-meta-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+
+        .hero-meta-value {
+            font-size: 1rem;
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 
+                0 0 40px rgba(6, 182, 212, 0.1),
+                0 0 80px rgba(168, 85, 247, 0.05);
+        }
+
+        .hero-image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: var(--border-radius);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            filter: contrast(1.1) saturate(0.9);
+        }
+
+        /* Scanline effect */
+        .hero-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(6, 182, 212, 0.03) 2px,
+                rgba(6, 182, 212, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* ============================================
+           ABOUT SECTION — Dark card
+           ============================================ */
+
+        .about {
+            background-color: var(--color-bg-elevated);
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+            opacity: 0.3;
+        }
+
+        .about-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .about-inner {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+        }
+
+        .about-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.02em;
+            line-height: 1;
+        }
+
+        .about-content p {
+            color: var(--color-text-dim);
+            margin-bottom: var(--space-md);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+
+        .stat-item {
+            padding: var(--space-md);
+            background-color: var(--color-bg-card);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--color-accent-cyan);
+            line-height: 1;
+            text-shadow: 0 0 20px var(--color-accent-cyan-glow);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ============================================
+           PRODUCTS SECTION — Dark cards with glow
+           ============================================ */
+
+        .products {
+            background-color: var(--color-bg);
+        }
+
+        .products-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .products-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            letter-spacing: 0.02em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .products-header p {
+            color: var(--color-text-dim);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .product-card {
+            background-color: var(--color-bg-card);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.2);
+            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.1);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: contrast(1.1) saturate(0.9);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-price {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            background-color: var(--color-accent-cyan);
+            color: var(--color-bg);
+            padding: 0.4rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 0 15px var(--color-accent-cyan-glow);
+        }
+
+        .product-info {
+            padding: var(--space-md);
+        }
+
+        .product-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-dim);
+            font-weight: 300;
+        }
+
+        /* ============================================
+           GALLERY SECTION — Neon grid
+           ============================================ */
+
+        .gallery {
+            background-color: var(--color-bg-elevated);
+            position: relative;
+        }
+
+        .gallery::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-purple), transparent);
+            opacity: 0.3;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .gallery-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            letter-spacing: 0.02em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .gallery-header p {
+            color: var(--color-text-dim);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--space-md);
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: contrast(1.1) saturate(0.9);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(10, 10, 15, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-icon {
+            color: var(--color-accent-cyan);
+            font-size: 2rem;
+            text-shadow: 0 0 20px var(--color-accent-cyan-glow);
+        }
+
+        /* ============================================
+           LOCATION SECTION — Dark with neon map
+           ============================================ */
+
+        .location {
+            background-color: var(--color-bg);
+            position: relative;
+        }
+
+        .location-inner {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .location-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .location-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.02em;
+        }
+
+        .location-content > p {
+            color: var(--color-text-dim);
+            margin-bottom: var(--space-lg);
+            font-size: 1.1rem;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background-color: var(--color-bg-card);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .location-item:hover {
+            border-color: var(--color-accent-purple);
+            box-shadow: 0 0 20px var(--color-accent-purple-glow);
+        }
+
+        .location-icon {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(168, 85, 247, 0.1);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--color-accent-purple);
+            flex-shrink: 0;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .location-item h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-white);
+            letter-spacing: 0.02em;
+        }
+
+        .location-item p {
+            color: var(--color-text-dim);
+            font-size: 0.95rem;
+        }
+
+        .location-map {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            filter: invert(0.9) hue-rotate(180deg) saturate(0.5);
+        }
+
+        .location-cta {
+            margin-top: var(--space-md);
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn-waze {
+            background-color: var(--color-accent-purple);
+            color: var(--color-white);
+            box-shadow: 0 0 20px var(--color-accent-purple-glow);
+        }
+
+        .btn-waze:hover {
+            background-color: #c084fc;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-gmaps {
+            background-color: #34a853;
+            color: var(--color-white);
+            box-shadow: 0 0 20px rgba(52, 168, 83, 0.3);
+        }
+
+        .btn-gmaps:hover {
+            background-color: #2d9249;
+            box-shadow: 0 0 30px rgba(52, 168, 83, 0.4);
+        }
+
+        /* ============================================
+           SOCIAL SECTION — Neon buttons
+           ============================================ */
+
+        .social {
+            background-color: var(--color-bg-elevated);
+            text-align: center;
+            position: relative;
+        }
+
+        .social::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+            opacity: 0.3;
+        }
+
+        .social-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            letter-spacing: 0.02em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .social-header p {
+            color: var(--color-text-dim);
+            margin-bottom: var(--space-xl);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 1rem 2rem;
+            background-color: var(--color-bg-card);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: var(--font-body);
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-link.instagram {
+            color: #e4405f;
+            border-color: rgba(228, 64, 95, 0.2);
+        }
+
+        .social-link.instagram:hover {
+            box-shadow: 0 0 25px rgba(228, 64, 95, 0.2);
+            border-color: rgba(228, 64, 95, 0.4);
+        }
+
+        .social-link.facebook {
+            color: #1877f2;
+            border-color: rgba(24, 119, 242, 0.2);
+        }
+
+        .social-link.facebook:hover {
+            box-shadow: 0 0 25px rgba(24, 119, 242, 0.2);
+            border-color: rgba(24, 119, 242, 0.4);
+        }
+
+        .social-link.tiktok {
+            color: var(--color-accent-cyan);
+            border-color: rgba(6, 182, 212, 0.2);
+        }
+
+        .social-link.tiktok:hover {
+            box-shadow: 0 0 25px var(--color-accent-cyan-glow);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+
+        /* ============================================
+           CTA SECTION — Terminal style
+           ============================================ */
+
+        .cta {
+            background-color: var(--color-bg);
+            text-align: center;
+            padding: var(--space-2xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-cyan), var(--color-accent-purple), transparent);
+            opacity: 0.5;
+        }
+
+        .cta-card {
+            position: relative;
+            z-index: 1;
+            background-color: var(--color-bg-card);
+            border-radius: var(--border-radius);
+            padding: var(--space-2xl);
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            box-shadow: 
+                0 0 40px rgba(6, 182, 212, 0.05),
+                inset 0 0 40px rgba(6, 182, 212, 0.02);
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.02em;
+        }
+
+        .cta-desc {
+            color: var(--color-text-dim);
+            font-size: 1.1rem;
+            margin-bottom: var(--space-xl);
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+
+        .footer {
+            background-color: var(--color-bg-elevated);
+            color: var(--color-text-muted);
+            padding: var(--space-xl) 0 var(--space-lg);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--color-white);
+            margin-bottom: var(--space-sm);
+            letter-spacing: 0.05em;
+        }
+
+        .footer-brand span {
+            color: var(--color-accent-cyan);
+            text-shadow: 0 0 20px var(--color-accent-cyan-glow);
+        }
+
+        .footer-tagline {
+            font-size: 1rem;
+            margin-bottom: var(--space-lg);
+            color: var(--color-text-dim);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            transition: color 0.3s;
+            font-family: var(--font-body);
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent-cyan);
+            text-shadow: 0 0 10px var(--color-accent-cyan-glow);
+        }
+
+        .footer-copy {
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: var(--space-md);
+            margin-top: var(--space-md);
+            color: var(--color-text-muted);
+        }
+
+        /* ============================================
+           MOBILE NAV (hidden on desktop)
+           ============================================ */
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--color-bg-elevated);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            padding: var(--space-sm) 0;
+        }
+
+        .mobile-nav-inner {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mobile-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--color-text-muted);
+            font-size: 0.7rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav a.active {
+            color: var(--color-accent-cyan);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: block;
+            }
+
+            .main-content {
+                padding-bottom: 70px;
+            }
+        }
+
+        /* ============================================
+           LIGHTBOX
+           ============================================ */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background-color: rgba(10, 10, 15, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            color: var(--color-white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            background-color: rgba(6, 182, 212, 0.1);
+            color: var(--color-accent-cyan);
+        }
+
+        /* ============================================
+           SCROLL ANIMATIONS
+           ============================================ */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .hero-image-wrapper img {
+                height: 300px;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .location-map iframe {
+                height: 300px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 var(--space-md);
+            }
+        }
+    
+        .social-embed {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .social-embed iframe,
+        .social-embed blockquote {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        </style>
+</head>
+<body>
+
+    <!-- ============================================
+         SIDEBAR NAV — Sticky left (desktop)
+         ============================================ -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">{{ business_name }}</div>
+        <div class="sidebar-nav">
+            <a href="#home" class="sidebar-link active" title="Home">
+                <span>H</span>
+            </a>
+            <a href="#about" class="sidebar-link" title="About">
+                <span>A</span>
+            </a>
+            <a href="#products" class="sidebar-link" title="Products">
+                <span>P</span>
+            </a>
+            <a href="#gallery" class="sidebar-link" title="Gallery">
+                <span>G</span>
+            </a>
+            <a href="#location" class="sidebar-link" title="Location">
+                <span>L</span>
+            </a>
+        </div>
+        <div class="sidebar-cta">
+            <a href="{{ whatsapp_link }}" target="_blank" title="WhatsApp">
+                <span>WA</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MOBILE NAV — Bottom bar
+         ============================================ -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-inner">
+            <a href="#home" class="active">
+                <span>Home</span>
+            </a>
+            <a href="#products">
+                <span>Menu</span>
+            </a>
+            <a href="#location">
+                <span>Lokasi</span>
+            </a>
+            <a href="{{ whatsapp_link }}" target="_blank">
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-content">
+
+        <!-- ============================================
+             HERO SECTION
+             ============================================ -->
+        <section class="hero" id="home">
+            <div class="container hero-inner">
+                <div class="hero-content fade-in">
+                    <span class="hero-badge">{{ hero_badge }}</span>
+                    <h1 class="hero-title">
+                        {{ hero_headline_part1 }}<br>
+                        <span class="accent">{{ hero_headline_part2 }}</span>
+                    </h1>
+                    <p class="hero-tagline">{{ tagline }}</p>
+                    <div class="hero-cta-group">
+                        <a href="{{ whatsapp_link }}" class="btn btn-primary" target="_blank">
+                            <span>{{ cta_primary_text }}</span>
+                        </a>
+                        <a href="#products" class="btn btn-outline">
+                            {{ cta_secondary_text }}
+                        </a>
+                    </div>
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Lokasi</span>
+                            <span class="hero-meta-value">{{ location_short }}</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Rating</span>
+                            <span class="hero-meta-value">{{ rating_text }}</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Waktu</span>
+                            <span class="hero-meta-value">{{ hours_short }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image fade-in">
+                    <div class="hero-image-wrapper">
+                        <img src="{{ hero_image }}" alt="{{ hero_image_alt }}" loading="eager">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             ABOUT SECTION
+             ============================================ -->
+        <section class="about section" id="about">
+            <div class="container about-inner">
+                <div class="about-image fade-in">
+                    <img src="{{ about_image }}" alt="{{ about_image_alt }}" loading="lazy">
+                </div>
+                <div class="about-content fade-in">
+                    <h2>{{ about_title }}</h2>
+                    <p>{{ about_paragraph_1 }}</p>
+                    <p>{{ about_paragraph_2 }}</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ stat_1_number }}</div>
+                            <div class="stat-label">{{ stat_1_label }}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ stat_2_number }}</div>
+                            <div class="stat-label">{{ stat_2_label }}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ stat_3_number }}</div>
+                            <div class="stat-label">{{ stat_3_label }}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ stat_4_number }}</div>
+                            <div class="stat-label">{{ stat_4_label }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             PRODUCTS SECTION
+             ============================================ -->
+        <section class="products section" id="products">
+            <div class="container">
+                <div class="products-header fade-in">
+                    <h2>{{ products_title }}</h2>
+                    <p>{{ products_subtitle }}</p>
+                </div>
+                <div class="products-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_1_image }}" alt="{{ product_1_name }}" loading="lazy">
+                            <span class="product-price">{{ product_1_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_1_name }}</h3>
+                            <p class="product-desc">{{ product_1_desc }}</p>
+                        </div>
+                    </div>
+                    <!-- Product 2 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_2_image }}" alt="{{ product_2_name }}" loading="lazy">
+                            <span class="product-price">{{ product_2_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_2_name }}</h3>
+                            <p class="product-desc">{{ product_2_desc }}</p>
+                        </div>
+                    </div>
+                    <!-- Product 3 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_3_image }}" alt="{{ product_3_name }}" loading="lazy">
+                            <span class="product-price">{{ product_3_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_3_name }}</h3>
+                            <p class="product-desc">{{ product_3_desc }}</p>
+                        </div>
+                    </div>
+                    <!-- Product 4 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_4_image }}" alt="{{ product_4_name }}" loading="lazy">
+                            <span class="product-price">{{ product_4_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_4_name }}</h3>
+                            <p class="product-desc">{{ product_4_desc }}</p>
+                        </div>
+                    </div>
+                    <!-- Product 5 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_5_image }}" alt="{{ product_5_name }}" loading="lazy">
+                            <span class="product-price">{{ product_5_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_5_name }}</h3>
+                            <p class="product-desc">{{ product_5_desc }}</p>
+                        </div>
+                    </div>
+                    <!-- Product 6 -->
+                    <div class="product-card fade-in">
+                        <div class="product-image">
+                            <img src="{{ product_6_image }}" alt="{{ product_6_name }}" loading="lazy">
+                            <span class="product-price">{{ product_6_price }}</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">{{ product_6_name }}</h3>
+                            <p class="product-desc">{{ product_6_desc }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             GALLERY SECTION
+             ============================================ -->
+        <section class="gallery section" id="gallery">
+            <div class="container">
+                <div class="gallery-header fade-in">
+                    <h2>{{ gallery_title }}</h2>
+                    <p>{{ gallery_subtitle }}</p>
+                </div>
+                <div class="gallery-grid">
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_1_image }}')">
+                        <img src="{{ gallery_1_image }}" alt="{{ gallery_1_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_2_image }}')">
+                        <img src="{{ gallery_2_image }}" alt="{{ gallery_2_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_3_image }}')">
+                        <img src="{{ gallery_3_image }}" alt="{{ gallery_3_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_4_image }}')">
+                        <img src="{{ gallery_4_image }}" alt="{{ gallery_4_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_5_image }}')">
+                        <img src="{{ gallery_5_image }}" alt="{{ gallery_5_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item fade-in" onclick="openLightbox('{{ gallery_6_image }}')">
+                        <img src="{{ gallery_6_image }}" alt="{{ gallery_6_alt }}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <span class="gallery-icon">+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             LOCATION SECTION
+             ============================================ -->
+        <section class="location section" id="location">
+            <div class="container location-inner">
+                <div class="location-content fade-in">
+                    <h2>{{ location_title }}</h2>
+                    <p>{{ location_subtitle }}</p>
+                    <div class="location-info">
+                        <div class="location-item">
+                            <div class="location-icon">@</div>
+                            <div>
+                                <h4>Alamat</h4>
+                                <p>{{ full_address }}</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-icon">T</div>
+                            <div>
+                                <h4>Waktu Operasi</h4>
+                                <p>{{ operating_hours }}</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-icon">P</div>
+                            <div>
+                                <h4>Hubungi Kami</h4>
+                                <p>{{ contact_phone_display }}<br>{{ contact_email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-cta">
+                        <a href="{{ waze_link }}" class="btn btn-waze" target="_blank">
+                            <span>🚗 Buka di Waze</span>
+                        </a>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination={{ geo_lat }},{{ geo_lng }}" class="btn btn-gmaps" target="_blank">
+                            <span>📍 Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="location-map fade-in">
+                    <iframe 
+                        src="{{ google_maps_embed }}" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             SOCIAL SECTION
+             ============================================ -->
+        <section class="social section" id="social">
+            <div class="container">
+                <div class="social-header fade-in">
+                    <h2>{{ social_title }}</h2>
+                    <p>{{ social_subtitle }}</p>
+                </div>
+                <!-- SOCIAL_LINKS_START -->
+<div class="social-links fade-in">
+                    <a href="{{ social_instagram }}" class="social-link instagram" target="_blank">
+                        <span>IG</span> Instagram
+                    </a>
+                    <a href="{{ social_facebook }}" class="social-link facebook" target="_blank">
+                        <span>FB</span> Facebook
+                    </a>
+                    <a href="{{ social_tiktok }}" class="social-link tiktok" target="_blank">
+                        <span>TT</span> TikTok
+                    </a>
+                </div>
+            <!-- SOCIAL_LINKS_END -->
+            <!-- SOCIAL_EMBED_HTML -->
+            </div>
+        </section>
+
+        <!-- ============================================
+             CTA SECTION
+             ============================================ -->
+        <section class="cta" id="contact">
+            <div class="container">
+                <div class="cta-card fade-in">
+                    <h2 class="cta-title">{{ cta_title }}</h2>
+                    <p class="cta-desc">{{ cta_desc }}</p>
+                    <div class="cta-buttons">
+                        <a href="{{ whatsapp_link }}" class="btn btn-primary" target="_blank">
+                            <span>{{ cta_button_text }}</span>
+                        </a>
+                        <a href="tel:{{ contact_phone }}" class="btn btn-outline">
+                            <span>{{ cta_call_text }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             FOOTER
+             ============================================ -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-brand">1page<span>.my</span></div>
+                <p class="footer-tagline">Landing page profesional untuk perniagaan kecil Malaysia</p>
+                <div class="footer-links">
+                    <a href="#home">Laman Utama</a>
+                    <a href="#products">Produk</a>
+                    <a href="#location">Lokasi</a>
+                    <a href="#contact">Hubungi</a>
+                </div>
+                <p class="footer-copy">
+                    &copy; {{ current_year }} {{ business_name }}. Dibina oleh <strong>1page.my</strong>.
+                </p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- ============================================
+         LIGHTBOX
+         ============================================ -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">&times;</button>
+        <img src="" alt="Gallery" id="lightbox-img">
+    </div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script>
+        // Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Active sidebar link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

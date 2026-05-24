@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       bank_account,
       bank_holder_name,
       ref_code: refCode,
-      status: 'pending',
+      status: 'active',
     })
 
   if (insertError) {
