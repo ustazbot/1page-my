@@ -1,5 +1,11 @@
 #!/bin/bash
 set -e
+set -o pipefail
+
+if [ "$EUID" -ne 0 ]; then
+  echo "ERROR: Jalankan sebagai root. Cuba: sudo bash scripts/setup.sh"
+  exit 1
+fi
 
 echo "======================================="
 echo "  1page.my — VPS Setup Script"
@@ -33,11 +39,11 @@ cloudflared --version
 
 # Configure UFW Firewall
 echo "[5/6] Configure UFW firewall..."
-ufw --force enable
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw deny 3000/tcp
+ufw --force enable
 ufw status verbose
 
 # Setup app directory
