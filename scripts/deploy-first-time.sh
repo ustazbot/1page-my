@@ -88,7 +88,7 @@ npm run build
 echo "[4/5] Start app dengan PM2..."
 pm2 start "$APP_DIR/ecosystem.config.js"
 pm2 save
-eval "$(pm2 startup systemd -u root --hp /root | tail -1)"
+pm2 startup systemd -u root --hp /root | tail -1 | bash
 
 echo "[5/5] Verify app berjalan..."
 sleep 3
