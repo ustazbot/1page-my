@@ -10,6 +10,12 @@ echo ""
 REPO_URL="git@github.com:YOUR_USERNAME/YOUR_REPO.git"
 APP_DIR="/var/www/1page-my"
 
+# Validate REPO_URL before proceeding
+if [[ "$REPO_URL" == *"YOUR_USERNAME"* ]]; then
+  echo "ERROR: Ganti REPO_URL dalam script ini dengan URL repo GitHub sebenar sebelum jalankan."
+  exit 1
+fi
+
 # Clone atau pull repo
 echo "[1/5] Clone/pull repository..."
 if [ -d "$APP_DIR/.git" ]; then
@@ -18,8 +24,11 @@ if [ -d "$APP_DIR/.git" ]; then
   git pull origin main
 else
   git clone "$REPO_URL" "$APP_DIR"
-  cd "$APP_DIR"
 fi
+
+cd "$APP_DIR"
+
+command -v pm2 >/dev/null 2>&1 || { echo "ERROR: PM2 tidak dijumpai. Jalankan scripts/setup.sh dulu."; exit 1; }
 
 # Install dependencies
 echo "[2/5] Install npm dependencies..."
@@ -66,6 +75,11 @@ if [ ! -f "$APP_DIR/.env.local" ]; then
   exit 1
 fi
 
+if [ ! -s "$APP_DIR/.env.local" ]; then
+  echo "ERROR: .env.local wujud tapi kosong. Sila isi semua values."
+  exit 1
+fi
+
 # Build app
 echo "[3/5] Build Next.js app..."
 npm run build
@@ -74,7 +88,7 @@ npm run build
 echo "[4/5] Start app dengan PM2..."
 pm2 start "$APP_DIR/ecosystem.config.js"
 pm2 save
-pm2 startup systemd -u root --hp /root
+eval "$(pm2 startup systemd -u root --hp /root | tail -1)"
 
 echo "[5/5] Verify app berjalan..."
 sleep 3
