@@ -5,7 +5,7 @@ CREATE TABLE public.candidate_briefs (
 
   -- Identity
   full_name         text NOT NULL,
-  preferred_name    text NOT NULL,
+  preferred_name    text,
   kawasan           text NOT NULL,
   kawasan_jenis     text NOT NULL DEFAULT 'DUN',
   parti_name        text NOT NULL,
@@ -55,6 +55,8 @@ GRANT ALL ON public.candidate_briefs TO service_role;
 
 -- RLS
 ALTER TABLE public.candidate_briefs ENABLE ROW LEVEL SECURITY;
+
+CREATE INDEX idx_candidate_briefs_subdomain_live ON public.candidate_briefs(subdomain, is_live);
 
 -- Anon can submit forms
 CREATE POLICY "Public can insert briefs"
