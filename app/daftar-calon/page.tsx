@@ -138,7 +138,7 @@ export default function DaftarCalonPage() {
             <p className="text-sm font-semibold text-orange-800 mb-2">Bayar Sekarang (Online)</p>
             <p className="text-xs text-orange-700 mb-3">RM800 — One-time payment</p>
             <a
-              href={`https://toyyibpay.com/${process.env.NEXT_PUBLIC_TOYYIBPAY_CATEGORY_CODE}?ref=${submittedId}`}
+              href={`https://toyyibpay.com/1page-special?ref=${submittedId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition"
