@@ -24,6 +24,7 @@ export default function DaftarCalonPage() {
     tagline: '',
     profil_ringkas: '',
     quote_peribadi: '',
+    mengapa_bertanding: '',
     whatsapp: '',
     facebook_url: '',
     instagram_url: '',
@@ -42,6 +43,9 @@ export default function DaftarCalonPage() {
   const [pencapaian, setPencapaian] = useState(['', '', ''])
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [partiLogoFile, setPartiLogoFile] = useState<File | null>(null)
+  const [kawasanImageFile, setKawasanImageFile] = useState<File | null>(null)
+  const [galeriFiles, setGaleriFiles] = useState<File[]>([])
+  const [testimoni, setTestimoni] = useState<{ quote: string; nama: string; kawasan_asal: string }[]>([])
 
   const handleNameChange = (val: string) => {
     setForm(prev => ({
@@ -55,7 +59,7 @@ export default function DaftarCalonPage() {
     }))
   }
 
-  const uploadFile = async (file: File, type: 'photo' | 'parti-logo'): Promise<string> => {
+  const uploadFile = async (file: File, type: string): Promise<string> => {
     const subdomain = form.subdomain || `temp-${Date.now()}`
     const fd = new FormData()
     fd.append('file', file)
@@ -76,6 +80,14 @@ export default function DaftarCalonPage() {
       if (photoFile) photo_url = await uploadFile(photoFile, 'photo')
       if (partiLogoFile) parti_logo_url = await uploadFile(partiLogoFile, 'parti-logo')
 
+      let kawasan_image_url: string | null = null
+      const galeri_urls: string[] = []
+
+      if (kawasanImageFile) kawasan_image_url = await uploadFile(kawasanImageFile, 'kawasan-image')
+      for (let i = 0; i < galeriFiles.length; i++) {
+        galeri_urls.push(await uploadFile(galeriFiles[i], `galeri-${i}`))
+      }
+
       const fokus_clean = fokus.filter(f => f.trim())
       const isu_clean = isu.filter(i => i.masalah.trim())
       const pencapaian_clean = pencapaian.filter(p => p.trim())
@@ -84,6 +96,9 @@ export default function DaftarCalonPage() {
         ...form,
         photo_url,
         parti_logo_url,
+        kawasan_image_url,
+        galeri_urls,
+        testimoni: testimoni.filter(t => t.quote.trim()),
         fokus: fokus_clean,
         isu_kawasan: isu_clean,
         pencapaian: pencapaian_clean,
@@ -287,6 +302,36 @@ export default function DaftarCalonPage() {
                 />
                 <p className="text-xs text-gray-400 mt-1">Anda bertanggungjawab memastikan penggunaan logo parti adalah sah.</p>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gambar Kawasan / Latar Belakang
+                  <span className="text-gray-400 text-xs ml-2">(optional — masjid, padang, pekan, landmark kawasan)</span>
+                </label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={e => setKawasanImageFile(e.target.files?.[0] || null)}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                />
+                <p className="text-xs text-gray-400 mt-1">Akan jadi latar belakang kabur di hero page calon.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gambar Gerak Kerja di Lapangan
+                  <span className="text-gray-400 text-xs ml-2">(1–3 gambar — program, bersama rakyat, aktiviti kempen)</span>
+                </label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  onChange={e => setGaleriFiles(Array.from(e.target.files || []).slice(0, 3))}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                />
+                <p className="text-xs text-gray-400 mt-1">Maksimum 3 gambar.</p>
+                {galeriFiles.length > 0 && (
+                  <p className="text-xs text-orange-600 mt-1">{galeriFiles.length} gambar dipilih</p>
+                )}
+              </div>
             </div>
           </section>
 
@@ -365,6 +410,19 @@ export default function DaftarCalonPage() {
                   value={form.profil_ringkas}
                   onChange={e => setForm(p => ({ ...p, profil_ringkas: e.target.value }))}
                   placeholder="Cth: Graduan Universiti Malaya dalam bidang Undang-undang..."
+                  className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Mengapa Saya Bertanding
+                  <span className="text-gray-400 text-xs ml-2">(optional — 2-3 ayat, suara sendiri)</span>
+                </label>
+                <textarea
+                  rows={4}
+                  value={form.mengapa_bertanding}
+                  onChange={e => setForm(p => ({ ...p, mengapa_bertanding: e.target.value }))}
+                  placeholder="Cth: Saya membesar di kawasan ini. Saya nampak jalan yang sama rosak 10 tahun, sekolah yang sama tiada padang. Saya bertanding kerana saya faham masalah ini dari dalam."
                   className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
@@ -466,6 +524,63 @@ export default function DaftarCalonPage() {
                   className="w-full h-10 border border-gray-200 rounded-lg cursor-pointer"
                 />
               </div>
+            </div>
+          </section>
+
+          {/* H: Testimoni */}
+          <section>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">H. Testimoni dari Masyarakat</h2>
+            <p className="text-xs text-gray-500 mb-3">(Optional) Kata-kata sokongan dari penduduk atau penyokong</p>
+            <div className="space-y-4">
+              {testimoni.map((t, i) => (
+                <div key={i} className="border border-gray-100 rounded-xl p-4 bg-gray-50 space-y-2">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Testimoni {i + 1}</p>
+                  <textarea
+                    rows={2}
+                    value={t.quote}
+                    onChange={e => {
+                      const updated = [...testimoni]
+                      updated[i] = { ...updated[i], quote: e.target.value }
+                      setTestimoni(updated)
+                    }}
+                    placeholder='"Dia memang kerja keras untuk kawasan kita..."'
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={t.nama}
+                      onChange={e => {
+                        const updated = [...testimoni]
+                        updated[i] = { ...updated[i], nama: e.target.value }
+                        setTestimoni(updated)
+                      }}
+                      placeholder="Nama"
+                      className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+                    />
+                    <input
+                      type="text"
+                      value={t.kawasan_asal}
+                      onChange={e => {
+                        const updated = [...testimoni]
+                        updated[i] = { ...updated[i], kawasan_asal: e.target.value }
+                        setTestimoni(updated)
+                      }}
+                      placeholder="Kawasan asal (cth: Taman Maju)"
+                      className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+                    />
+                  </div>
+                </div>
+              ))}
+              {testimoni.length < 3 && (
+                <button
+                  type="button"
+                  onClick={() => setTestimoni([...testimoni, { quote: '', nama: '', kawasan_asal: '' }])}
+                  className="text-sm text-orange-500 hover:text-orange-700"
+                >
+                  + Tambah testimoni
+                </button>
+              )}
             </div>
           </section>
 
