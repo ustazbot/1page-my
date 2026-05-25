@@ -129,7 +129,8 @@ export default function DaftarCalonPage() {
       setSubmittedId(record.id)
       setStep(2)
     } catch (err) {
-      alert('Ralat semasa hantar. Cuba semula.')
+      const msg = err instanceof Error ? err.message : String(err)
+      alert(`Ralat: ${msg}`)
       console.error(err)
     } finally {
       setLoading(false)
