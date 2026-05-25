@@ -46,6 +46,7 @@ export default function DaftarCalonPage() {
   const [kawasanImageFile, setKawasanImageFile] = useState<File | null>(null)
   const [galeriFiles, setGaleriFiles] = useState<File[]>([])
   const [testimoni, setTestimoni] = useState<{ quote: string; nama: string; kawasan_asal: string }[]>([])
+  const [subdomainError, setSubdomainError] = useState<string | null>(null)
 
   const handleNameChange = (val: string) => {
     setForm(prev => ({
@@ -130,7 +131,12 @@ export default function DaftarCalonPage() {
       setStep(2)
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
-      alert(`Ralat: ${msg}`)
+      if (msg.includes('candidate_briefs_subdomain_key')) {
+        setSubdomainError('Subdomain ini dah digunakan. Sila pilih nama lain.')
+        document.getElementById('subdomain-field')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      } else {
+        alert(`Ralat: ${msg}`)
+      }
       console.error(err)
     } finally {
       setLoading(false)
@@ -258,18 +264,24 @@ export default function DaftarCalonPage() {
                   className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
-              <div>
+              <div id="subdomain-field">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Subdomain yang dikehendaki</label>
-                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-400">
+                <div className={`flex items-center border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-400 ${subdomainError ? 'border-red-400' : 'border-gray-200'}`}>
                   <input
                     type="text"
                     value={form.subdomain}
-                    onChange={e => setForm(p => ({ ...p, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
+                    onChange={e => {
+                      setSubdomainError(null)
+                      setForm(p => ({ ...p, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))
+                    }}
                     placeholder="hafiz-gombak"
                     className="flex-1 px-4 py-2.5 text-sm focus:outline-none"
                   />
                   <span className="bg-gray-50 px-3 py-2.5 text-sm text-gray-500 border-l border-gray-200">.1page.my</span>
                 </div>
+                {subdomainError && (
+                  <p className="mt-1 text-xs text-red-600">{subdomainError}</p>
+                )}
               </div>
             </div>
           </section>
