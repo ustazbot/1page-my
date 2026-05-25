@@ -2,6 +2,7 @@ const NAV = [
   { href: '/admin/orders', label: 'Orders' },
   { href: '/admin/affiliates', label: 'Affiliates' },
   { href: '/admin/payouts', label: 'Payouts' },
+  { href: '/admin/candidates', label: 'Candidates' },
   { href: '/admin/settings', label: 'Settings' },
 ]
 
