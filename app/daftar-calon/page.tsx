@@ -2,7 +2,6 @@
 'use client'
 
 import { useState } from 'react'
-import { supabaseBrowser } from '@/lib/supabase'
 
 const PARTI_LIST = [
   'UMNO', 'BN', 'PKR', 'DAP', 'AMANAH', 'BERSATU',
@@ -12,7 +11,6 @@ const PARTI_LIST = [
 const KAWASAN_JENIS = ['DUN', 'Parlimen']
 
 export default function DaftarCalonPage() {
-  const supabase = supabaseBrowser()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [submittedId, setSubmittedId] = useState<string | null>(null)
@@ -91,17 +89,16 @@ export default function DaftarCalonPage() {
         pencapaian: pencapaian_clean,
       }
 
-      // candidate_briefs is not in generated Supabase types yet — suppress until types are generated
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: _data, error } = await (supabase as any)
-        .from('candidate_briefs')
-        .insert(payload)
-        .select('id')
-        .single()
-
-      if (error) throw error
-
-      const record = _data as { id: string }
+      const submitRes = await fetch('/api/submit-brief', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!submitRes.ok) {
+        const { error } = await submitRes.json()
+        throw new Error(error)
+      }
+      const record = await submitRes.json() as { id: string }
 
       await fetch('/api/notify-brief', {
         method: 'POST',
