@@ -23,5 +23,10 @@ ingress:
     originRequest:
       noTLSVerify: true
 
+  - hostname: "*.1page.my"
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+
   # Fallback — mesti ada di bawah sekali
   - service: http_status:404
