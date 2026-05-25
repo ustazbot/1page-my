@@ -3,6 +3,23 @@ import { getAdminSessionFromRequest } from '@/lib/admin-session-edge'
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
+
+  // Subdomain detection — rewrite [subdomain].1page.my → /candidate/[subdomain]
+  const hostname = request.headers.get('host') || ''
+  const isMainDomain =
+    hostname === '1page.my' ||
+    hostname === 'www.1page.my' ||
+    hostname.startsWith('localhost')
+
+  if (!isMainDomain && hostname.endsWith('.1page.my')) {
+    const subdomain = hostname.replace('.1page.my', '')
+    const url = request.nextUrl.clone()
+    if (!url.pathname.startsWith('/candidate/')) {
+      url.pathname = `/candidate/${subdomain}${url.pathname}`
+      return NextResponse.rewrite(url)
+    }
+  }
+
   const response = NextResponse.next()
 
   // 1. Tracking cookie — set ref on any page visit with ?ref=
