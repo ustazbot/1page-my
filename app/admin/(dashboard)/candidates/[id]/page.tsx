@@ -82,14 +82,20 @@ export default function CandidateDetailPage() {
   const update = async (updates: Partial<Candidate>) => {
     if (!candidate) return
     setSaving(true)
-    const { data } = await supabase
-      .from('candidate_briefs')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single()
-    setCandidate(data as Candidate)
-    setSaving(false)
+    try {
+      const { data, error } = await supabase
+        .from('candidate_briefs')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+      if (error) throw error
+      setCandidate(data as Candidate)
+    } catch {
+      alert('Ralat semasa simpan. Cuba semula.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!candidate) return <div style={{ padding: 24 }}>Loading...</div>

@@ -91,23 +91,25 @@ export default async function CandidatePage({ params }: Props) {
               &ldquo;{c.tagline as string}&rdquo;
             </p>
           )}
-          <a
-            href={`https://wa.me/${c.whatsapp}`}
-            target="_blank"
-            style={{
-              marginTop: 32,
-              background: '#22c55e',
-              color: '#fff',
-              fontWeight: 600,
-              padding: '16px 32px',
-              borderRadius: 999,
-              fontSize: 18,
-              textDecoration: 'none',
-              display: 'inline-block',
-            }}
-          >
-            💬 Hubungi {(c.preferred_name as string) || (c.full_name as string)}
-          </a>
+          {c.whatsapp && (
+            <a
+              href={`https://wa.me/${c.whatsapp}`}
+              target="_blank"
+              style={{
+                marginTop: 32,
+                background: '#22c55e',
+                color: '#fff',
+                fontWeight: 600,
+                padding: '16px 32px',
+                borderRadius: 999,
+                fontSize: 18,
+                textDecoration: 'none',
+                display: 'inline-block',
+              }}
+            >
+              💬 Hubungi {(c.preferred_name as string) || (c.full_name as string)}
+            </a>
+          )}
         </section>
 
         {/* FOKUS */}

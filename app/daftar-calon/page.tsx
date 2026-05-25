@@ -477,7 +477,7 @@ export default function DaftarCalonPage() {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={loading || !form.full_name || !form.kawasan || !form.parti_name || !form.whatsapp}
+              disabled={loading || !form.full_name || !form.kawasan || !form.parti_name || !form.whatsapp || !form.subdomain}
               className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl text-base transition"
             >
               {loading ? 'Menghantar...' : 'Hantar Borang →'}

@@ -12,6 +12,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
     }
 
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 413 })
+    }
+
     const ext = file.name.split('.').pop() || 'jpg'
     const key = `candidates/${subdomain}/${type}.${ext}`
     const buffer = await file.arrayBuffer()
