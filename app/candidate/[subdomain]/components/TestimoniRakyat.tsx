@@ -24,9 +24,11 @@ export default function TestimoniRakyat({ c, warna }: Props) {
           Suara Rakyat
         </h2>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${Math.min(list.length, 2)}, 1fr)`,
+          display: 'flex',
           gap: 20,
+          overflowX: 'auto',
+          paddingBottom: 8,
+          WebkitOverflowScrolling: 'touch' as any,
         }}>
           {list.map((t, i) => (
             <div key={i} style={{
@@ -34,6 +36,8 @@ export default function TestimoniRakyat({ c, warna }: Props) {
               border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: 16,
               padding: 28,
+              minWidth: 280,
+              flex: '0 0 auto',
             }}>
               <div style={{
                 fontFamily: 'var(--font-playfair)',
