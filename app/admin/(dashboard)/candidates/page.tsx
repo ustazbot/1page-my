@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabaseBrowser } from '@/lib/supabase'
 
 type Candidate = {
   id: string
@@ -35,14 +34,13 @@ export default function CandidatePipelinePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    (supabaseBrowser() as any)
-      .from('candidate_briefs')
-      .select('id, full_name, kawasan, parti_name, whatsapp, subdomain, is_paid, is_live, revision_count, submitted_at')
-      .order('submitted_at', { ascending: false })
-      .then(({ data }: { data: Candidate[] | null }) => {
-        setCandidates(data ?? [])
+    fetch('/api/admin/candidates')
+      .then(r => r.json())
+      .then(({ candidates }: { candidates: Candidate[] }) => {
+        setCandidates(candidates ?? [])
         setLoading(false)
       })
+      .catch(() => setLoading(false))
   }, [])
 
   if (loading) return <div>Loading...</div>

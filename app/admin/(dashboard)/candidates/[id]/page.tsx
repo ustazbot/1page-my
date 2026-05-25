@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { supabaseBrowser } from '@/lib/supabase'
 
 type Candidate = {
   id: string
@@ -66,33 +65,29 @@ function Toggle({ on, disabled, onChange }: { on: boolean; disabled?: boolean; o
 
 export default function CandidateDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const supabase = supabaseBrowser() as any
   const [candidate, setCandidate] = useState<Candidate | null>(null)
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    supabase
-      .from('candidate_briefs')
-      .select('*')
-      .eq('id', id)
-      .single()
-      .then(({ data }: { data: Candidate | null }) => setCandidate(data))
+    fetch(`/api/admin/candidates/${id}`)
+      .then(r => r.json())
+      .then(({ candidate }: { candidate: Candidate }) => setCandidate(candidate))
   }, [id])
 
   const update = async (updates: Partial<Candidate>) => {
     if (!candidate) return
     setSaving(true)
     try {
-      const { data, error } = await supabase
-        .from('candidate_briefs')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single()
-      if (error) throw error
-      setCandidate(data as Candidate)
-    } catch {
-      alert('Ralat semasa simpan. Cuba semula.')
+      const res = await fetch(`/api/admin/candidates/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      })
+      const { candidate: updated, error } = await res.json()
+      if (error) throw new Error(error)
+      setCandidate(updated as Candidate)
+    } catch (err) {
+      alert(`Ralat semasa simpan: ${err instanceof Error ? err.message : 'Cuba semula.'}`)
     } finally {
       setSaving(false)
     }
