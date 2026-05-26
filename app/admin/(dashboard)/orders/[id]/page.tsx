@@ -100,7 +100,6 @@ export default function OrderDetailPage() {
   const [loading, setLoading]         = useState(true)
   const [fetchError, setFetchError]   = useState('')
   const [slug, setSlug]               = useState('')
-  const [previewUrl, setPreviewUrl]   = useState('')
   const [submitting, setSubmitting]   = useState(false)
   const [actionError, setActionError] = useState('')
   const [copied, setCopied]           = useState(false)
@@ -116,7 +115,6 @@ export default function OrderDetailPage() {
       if (d.order) {
         setOrder(d.order)
         setSlug(d.order.slug ?? (d.order.domain_pref_1 ?? '').toLowerCase().replace(/[^a-z0-9-]/g, ''))
-        setPreviewUrl(d.order.preview_url ?? '')
       } else {
         setFetchError('Order tidak dijumpai')
       }
@@ -138,7 +136,7 @@ export default function OrderDetailPage() {
       const res = await fetch(`/api/admin/orders/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'set_preview', slug, preview_url: previewUrl }),
+        body: JSON.stringify({ action: 'set_preview', slug }),
       })
       const data = await res.json()
       if (!res.ok) { setActionError(data.error || 'Gagal'); return }
@@ -264,18 +262,11 @@ export default function OrderDetailPage() {
               </div>
             </div>
 
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>
-                Preview URL
-              </label>
-              <input
-                value={previewUrl}
-                onChange={e => setPreviewUrl(e.target.value)}
-                placeholder="https://preview.1page.my/namakedai"
-                type="url"
-                style={{ width: '100%', padding: '10px 12px', fontSize: 14, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', boxSizing: 'border-box' as const }}
-              />
-            </div>
+            {slug && (
+              <p style={{ fontSize: 12, color: '#78716C', marginBottom: 14 }}>
+                Preview URL: <span style={{ fontFamily: 'monospace', color: '#44403C' }}>https://{slug}.1page.my</span>
+              </p>
+            )}
 
             {actionError && (
               <p style={{ color: '#dc2626', fontSize: 12, marginBottom: 12 }}>⚠ {actionError}</p>
@@ -283,12 +274,12 @@ export default function OrderDetailPage() {
 
             <button
               onClick={handleSetPreview}
-              disabled={submitting || !slug || !previewUrl}
+              disabled={submitting || !slug}
               style={{
                 width: '100%', padding: 14, fontSize: 15, fontWeight: 700,
-                background: submitting || !slug || !previewUrl ? '#d6d3d1' : '#1C1917',
+                background: submitting || !slug ? '#d6d3d1' : '#1C1917',
                 color: '#fff', border: 'none', borderRadius: 10,
-                cursor: submitting || !slug || !previewUrl ? 'not-allowed' : 'pointer',
+                cursor: submitting || !slug ? 'not-allowed' : 'pointer',
               }}
             >
               {submitting ? 'Memproses...' : '📋 Jana Bill & Preview Ready'}

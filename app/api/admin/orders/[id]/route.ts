@@ -78,10 +78,11 @@ export async function PATCH(
 
   // ── ACTION: set_preview ──────────────────────────────────────────────────
   if (body.action === 'set_preview') {
-    const { slug, preview_url } = body
+    const { slug } = body
+    const preview_url = `https://${slug}.1page.my`
 
-    if (!slug || !preview_url) {
-      return NextResponse.json({ error: 'Slug dan preview URL diperlukan' }, { status: 400 })
+    if (!slug) {
+      return NextResponse.json({ error: 'Slug diperlukan' }, { status: 400 })
     }
     if (!/^[a-z0-9-]+$/.test(slug)) {
       return NextResponse.json(
