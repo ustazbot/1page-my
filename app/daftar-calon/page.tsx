@@ -10,6 +10,12 @@ const PARTI_LIST = [
 
 const KAWASAN_JENIS = ['DUN', 'Parlimen']
 
+const TEMPLATES = [
+  { id: 'T1', nama: 'Klasik', warna: '#1e3a5f', desc: 'Formal & Berwibawa', bg: '#1e3a5f', text: '#ffffff' },
+  { id: 'T2', nama: 'Moden',  warna: '#0f766e', desc: 'Segar & Dinamik',   bg: '#0f766e', text: '#ffffff' },
+  { id: 'T3', nama: 'Berani', warna: '#7f1d1d', desc: 'Tegas & Berpengaruh', bg: '#7f1d1d', text: '#ffffff' },
+]
+
 export default function DaftarCalonPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -32,7 +38,9 @@ export default function DaftarCalonPage() {
     bahasa: 'BM',
     warna_utama: '#1e3a5f',
     subdomain: '',
+    template_id: 'T1',
   })
+  const [aiImproving, setAiImproving] = useState(false)
 
   const [fokus, setFokus] = useState(['', '', ''])
   const [isu, setIsu] = useState([
@@ -70,6 +78,28 @@ export default function DaftarCalonPage() {
     const res = await fetch('/api/r2-upload', { method: 'POST', body: fd })
     const { publicUrl } = await res.json()
     return publicUrl
+  }
+
+  const handleImproveText = async () => {
+    if (!form.mengapa_bertanding.trim()) return
+    setAiImproving(true)
+    try {
+      const res = await fetch('/api/candidate/improve-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teks: form.mengapa_bertanding,
+          nama: form.preferred_name || form.full_name,
+          kawasan: form.kawasan,
+        }),
+      })
+      const data = await res.json()
+      if (res.ok && data.hasil) {
+        setForm(p => ({ ...p, mengapa_bertanding: data.hasil }))
+      }
+    } finally {
+      setAiImproving(false)
+    }
   }
 
   const handleSubmit = async () => {
@@ -438,6 +468,20 @@ export default function DaftarCalonPage() {
                   placeholder="Cth: Saya membesar di kawasan ini. Saya nampak jalan yang sama rosak 10 tahun, sekolah yang sama tiada padang. Saya bertanding kerana saya faham masalah ini dari dalam."
                   className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
+                {form.mengapa_bertanding.trim().length > 20 && (
+                  <button
+                    type="button"
+                    onClick={handleImproveText}
+                    disabled={aiImproving}
+                    className="mt-2 flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-orange-300 text-orange-600 bg-orange-50 hover:bg-orange-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    {aiImproving ? (
+                      <><span className="animate-spin">⟳</span> AI sedang perbaiki...</>
+                    ) : (
+                      <>✨ Perbaiki dengan AI</>
+                    )}
+                  </button>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -513,6 +557,29 @@ export default function DaftarCalonPage() {
           {/* G: Pilihan Laman */}
           <section>
             <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">G. Pilihan Laman</h2>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">Pilih Template</label>
+              <div className="grid grid-cols-3 gap-3">
+                {TEMPLATES.map(t => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setForm(p => ({ ...p, template_id: t.id, warna_utama: t.warna }))}
+                    className={`rounded-xl overflow-hidden border-2 transition text-left ${form.template_id === t.id ? 'border-orange-500 ring-2 ring-orange-200' : 'border-gray-200 hover:border-gray-300'}`}
+                  >
+                    <div style={{ background: t.bg, color: t.text }} className="p-4 text-center">
+                      <div className="text-xs font-bold opacity-70 mb-1">{t.id}</div>
+                      <div className="font-bold text-sm">{t.nama}</div>
+                    </div>
+                    <div className="px-3 py-2 bg-gray-50">
+                      <p className="text-xs text-gray-500 leading-tight">{t.desc}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bahasa Laman</label>
