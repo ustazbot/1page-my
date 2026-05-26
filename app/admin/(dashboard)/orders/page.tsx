@@ -79,7 +79,11 @@ export default function AdminOrdersPage() {
                   <td colSpan={6} style={{ padding: 24, textAlign: 'center', color: '#78716C', fontSize: 13 }}>Tiada order</td>
                 </tr>
               ) : orders.map((o, i) => (
-                <tr key={o.id} style={{ borderTop: i > 0 ? '1px solid #f5f5f4' : undefined }}>
+                <tr
+                  key={o.id}
+                  onClick={() => { window.location.href = `/admin/orders/${o.id}` }}
+                  style={{ borderTop: i > 0 ? '1px solid #f5f5f4' : undefined, cursor: 'pointer' }}
+                >
                   <td style={{ padding: '12px 14px', fontSize: 12, color: '#78716C', whiteSpace: 'nowrap' }}>
                     {new Date(o.created_at).toLocaleDateString('ms-MY')}
                   </td>
