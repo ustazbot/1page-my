@@ -16,6 +16,7 @@ export async function GET(
     .eq('id', id)
     .single()
 
-  if (error || !data) return NextResponse.json({ error: 'Order tidak dijumpai' }, { status: 404 })
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (!data) return NextResponse.json({ error: 'Order tidak dijumpai' }, { status: 404 })
   return NextResponse.json({ order: data })
 }
