@@ -109,16 +109,21 @@ export default function OrderDetailPage() {
   // ── Fetch order ──────────────────────────────────────────────────────────
 
   async function fetchOrder() {
-    const res = await fetch(`/api/admin/orders/${id}`)
-    const d = await res.json()
-    if (d.order) {
-      setOrder(d.order)
-      setSlug(d.order.slug ?? '')
-      setPreviewUrl(d.order.preview_url ?? '')
-    } else {
-      setFetchError('Order tidak dijumpai')
+    try {
+      const res = await fetch(`/api/admin/orders/${id}`)
+      const d = await res.json()
+      if (d.order) {
+        setOrder(d.order)
+        setSlug(d.order.slug ?? '')
+        setPreviewUrl(d.order.preview_url ?? '')
+      } else {
+        setFetchError('Order tidak dijumpai')
+      }
+    } catch {
+      setFetchError('Gagal memuatkan order. Cuba refresh.')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => { fetchOrder() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -136,7 +141,11 @@ export default function OrderDetailPage() {
       })
       const data = await res.json()
       if (!res.ok) { setActionError(data.error || 'Gagal'); return }
-      await fetchOrder()
+      try {
+        await fetchOrder()
+      } catch {
+        setActionError('Tindakan berjaya tapi gagal refresh. Cuba reload halaman.')
+      }
     } finally {
       setSubmitting(false)
     }
@@ -153,7 +162,11 @@ export default function OrderDetailPage() {
       })
       const data = await res.json()
       if (!res.ok) { setActionError(data.error || 'Gagal'); return }
-      await fetchOrder()
+      try {
+        await fetchOrder()
+      } catch {
+        setActionError('Tindakan berjaya tapi gagal refresh. Cuba reload halaman.')
+      }
     } finally {
       setSubmitting(false)
     }
