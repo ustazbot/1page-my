@@ -68,7 +68,7 @@ export async function PATCH(
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { id } = await params
-  let body: { action: string; slug?: string; preview_url?: string }
+  let body: { action: string; slug?: string; preview_url?: string } & Record<string, string | null | undefined>
   try {
     body = await req.json()
   } catch {
@@ -176,6 +176,28 @@ export async function PATCH(
     ).catch((err: unknown) => console.error('[orders/patch] telegram error:', err))
 
     return NextResponse.json({ ok: true, live_url })
+  }
+
+  // ── ACTION: edit_fields ──────────────────────────────────────────────────
+  if (body.action === 'edit_fields') {
+    const EDITABLE = ['nama_bisnes', 'tagline', 'cerita_bisnes', 'produk_servis',
+      'target_pelanggan', 'waktu_operasi', 'alamat', 'google_maps_link',
+      'instagram', 'facebook', 'tiktok'] as const
+    const updates: Record<string, string | null> = {}
+    for (const field of EDITABLE) {
+      if (field in body) {
+        updates[field] = body[field] ?? null
+      }
+    }
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ error: 'Tiada field untuk dikemaskini' }, { status: 400 })
+    }
+    const { error: updateErr } = await sb.from('orders').update(updates).eq('id', id)
+    if (updateErr) {
+      console.error('[orders/patch] edit_fields error:', updateErr)
+      return NextResponse.json({ error: 'Gagal kemaskini order' }, { status: 500 })
+    }
+    return NextResponse.json({ ok: true })
   }
 
   return NextResponse.json({ error: 'Action tidak dikenali' }, { status: 400 })

@@ -105,6 +105,11 @@ export default function OrderDetailPage() {
   const [copied, setCopied]           = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [confirmCancel, setConfirmCancel] = useState(false)
+  const [editOpen, setEditOpen]           = useState(false)
+  const [editFields, setEditFields]       = useState<Record<string, string>>({})
+  const [editSubmitting, setEditSubmitting] = useState(false)
+  const [editError, setEditError]         = useState('')
+  const [editSuccess, setEditSuccess]     = useState(false)
 
   // ── Fetch order ──────────────────────────────────────────────────────────
 
@@ -193,6 +198,49 @@ export default function OrderDetailPage() {
     navigator.clipboard.writeText(buildWaText(order.preview_url, order.toyyibpay_bill_code))
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  function openEdit() {
+    if (!order) return
+    setEditFields({
+      nama_bisnes:     order.nama_bisnes      ?? '',
+      tagline:         order.tagline          ?? '',
+      cerita_bisnes:   order.cerita_bisnes    ?? '',
+      produk_servis:   order.produk_servis    ?? '',
+      target_pelanggan: order.target_pelanggan ?? '',
+      waktu_operasi:   order.waktu_operasi    ?? '',
+      alamat:          order.alamat           ?? '',
+      google_maps_link: order.google_maps_link ?? '',
+      instagram:       order.instagram        ?? '',
+      facebook:        order.facebook         ?? '',
+      tiktok:          order.tiktok           ?? '',
+    })
+    setEditError('')
+    setEditSuccess(false)
+    setEditOpen(true)
+  }
+
+  async function handleEditFields() {
+    setEditSubmitting(true)
+    setEditError('')
+    setEditSuccess(false)
+    try {
+      const payload: Record<string, string | null> = { action: 'edit_fields' }
+      for (const [k, v] of Object.entries(editFields)) {
+        payload[k] = v.trim() === '' ? null : v.trim()
+      }
+      const res = await fetch(`/api/admin/orders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) { setEditError(data.error || 'Gagal'); return }
+      setEditSuccess(true)
+      try { await fetchOrder() } catch { /* order refreshed best-effort */ }
+    } finally {
+      setEditSubmitting(false)
+    }
   }
 
   // ── Render guards ────────────────────────────────────────────────────────
@@ -464,6 +512,88 @@ export default function OrderDetailPage() {
           )}
         </div>
       )}
+
+      {/* ── Edit Order Data ── */}
+      <div style={{ background: '#fff', border: '1px solid #e7e5e4', borderRadius: 12, overflow: 'hidden', marginBottom: 16 }}>
+        <button
+          onClick={() => { if (!editOpen) openEdit(); else setEditOpen(false) }}
+          style={{
+            width: '100%', padding: '14px 20px',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: 13, fontWeight: 600, color: '#44403C', fontFamily: 'DM Sans, sans-serif',
+          }}
+        >
+          <span>Edit Order Data</span>
+          <span style={{ fontSize: 20, lineHeight: 1, color: '#78716C' }}>{editOpen ? '−' : '+'}</span>
+        </button>
+
+        {editOpen && (
+          <div style={{ padding: '0 20px 20px', borderTop: '1px solid #f5f5f4' }}>
+            {[
+              { key: 'nama_bisnes',      label: 'Nama Bisnes',      type: 'input' },
+              { key: 'tagline',          label: 'Tagline',          type: 'input' },
+              { key: 'cerita_bisnes',    label: 'Cerita Bisnes',    type: 'textarea' },
+              { key: 'produk_servis',    label: 'Produk & Servis',  type: 'textarea' },
+              { key: 'target_pelanggan', label: 'Target Pelanggan', type: 'input' },
+              { key: 'waktu_operasi',    label: 'Waktu Operasi',    type: 'input' },
+              { key: 'alamat',           label: 'Alamat',           type: 'textarea' },
+              { key: 'google_maps_link', label: 'Google Maps Link', type: 'input' },
+              { key: 'instagram',        label: 'Instagram',        type: 'input' },
+              { key: 'facebook',         label: 'Facebook',         type: 'input' },
+              { key: 'tiktok',           label: 'TikTok',           type: 'input' },
+            ].filter(f => f.key in editFields).map(({ key, label, type }) => (
+              <div key={key} style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>
+                  {label}
+                </label>
+                {type === 'textarea' ? (
+                  <textarea
+                    value={editFields[key] ?? ''}
+                    onChange={e => setEditFields(p => ({ ...p, [key]: e.target.value }))}
+                    rows={3}
+                    style={{
+                      width: '100%', padding: '10px 12px', fontSize: 13,
+                      border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none',
+                      fontFamily: 'DM Sans, sans-serif', resize: 'vertical', boxSizing: 'border-box' as const,
+                    }}
+                  />
+                ) : (
+                  <input
+                    value={editFields[key] ?? ''}
+                    onChange={e => setEditFields(p => ({ ...p, [key]: e.target.value }))}
+                    style={{
+                      width: '100%', padding: '10px 12px', fontSize: 13,
+                      border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none',
+                      fontFamily: 'DM Sans, sans-serif', boxSizing: 'border-box' as const,
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+
+            {editError && (
+              <p style={{ color: '#dc2626', fontSize: 12, marginBottom: 10 }}>⚠ {editError}</p>
+            )}
+            {editSuccess && (
+              <p style={{ color: '#065F46', fontSize: 12, marginBottom: 10 }}>✓ Dikemaskini.</p>
+            )}
+
+            <button
+              onClick={handleEditFields}
+              disabled={editSubmitting}
+              style={{
+                width: '100%', padding: 12, fontSize: 14, fontWeight: 600,
+                background: editSubmitting ? '#d6d3d1' : '#1C1917',
+                color: '#fff', border: 'none', borderRadius: 8,
+                cursor: editSubmitting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {editSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* ── Collapsible Order Details ── */}
       <div style={{ background: '#fff', border: '1px solid #e7e5e4', borderRadius: 12, overflow: 'hidden', marginBottom: 32 }}>
