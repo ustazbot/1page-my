@@ -14,8 +14,27 @@ export async function middleware(request: NextRequest) {
   if (!isMainDomain && hostname.endsWith('.1page.my')) {
     const subdomain = hostname.replace('.1page.my', '')
     const url = request.nextUrl.clone()
-    if (!url.pathname.startsWith('/candidate/')) {
-      url.pathname = `/candidate/${subdomain}${url.pathname}`
+
+    // Skip if already rewritten
+    if (!url.pathname.startsWith('/bisnes/') && !url.pathname.startsWith('/candidate/')) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+      let isBisnes = false
+      try {
+        const res = await fetch(
+          `${supabaseUrl}/rest/v1/orders?slug=eq.${subdomain}&status=in.(preview_ready,paid,live)&select=id&limit=1`,
+          { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` } }
+        )
+        const rows = await res.json()
+        isBisnes = Array.isArray(rows) && rows.length > 0
+      } catch {
+        // On fetch error, fall through to candidate
+      }
+
+      url.pathname = isBisnes
+        ? `/bisnes/${subdomain}${url.pathname}`
+        : `/candidate/${subdomain}${url.pathname}`
       return NextResponse.rewrite(url)
     }
   }
