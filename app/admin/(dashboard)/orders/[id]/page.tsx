@@ -105,6 +105,7 @@ export default function OrderDetailPage() {
   const [actionError, setActionError] = useState('')
   const [copied, setCopied]           = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [confirmCancel, setConfirmCancel] = useState(false)
 
   // ── Fetch order ──────────────────────────────────────────────────────────
 
@@ -169,6 +170,23 @@ export default function OrderDetailPage() {
       }
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  async function handleCancel() {
+    setSubmitting(true)
+    setActionError('')
+    try {
+      const res = await fetch(`/api/admin/orders/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const data = await res.json()
+        setActionError(data.error || 'Gagal padam order')
+        return
+      }
+      router.push('/admin/orders')
+    } finally {
+      setSubmitting(false)
+      setConfirmCancel(false)
     }
   }
 
@@ -407,6 +425,54 @@ export default function OrderDetailPage() {
           <p style={{ fontSize: 13, color: '#78716C' }}>Status: {order.status}</p>
         )}
       </div>
+
+      {/* ── Cancel Order ── */}
+      {['pending', 'preview_ready', 'paid'].includes(order.status) && (
+        <div style={{ marginBottom: 16, textAlign: 'center' }}>
+          {!confirmCancel ? (
+            <button
+              onClick={() => setConfirmCancel(true)}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontSize: 13, color: '#dc2626', textDecoration: 'underline', padding: '4px 8px',
+              }}
+            >
+              Batalkan & Padam Order
+            </button>
+          ) : (
+            <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 10, padding: 16 }}>
+              <p style={{ fontSize: 13, color: '#991B1B', marginBottom: 14, fontWeight: 600 }}>
+                Padam order ini? Data tidak boleh dipulihkan.
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button
+                  onClick={() => setConfirmCancel(false)}
+                  disabled={submitting}
+                  style={{
+                    flex: 1, padding: 10, fontSize: 14, fontWeight: 600,
+                    background: '#fff', color: '#44403C', border: '1px solid #d6d3d1',
+                    borderRadius: 8, cursor: 'pointer',
+                  }}
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleCancel}
+                  disabled={submitting}
+                  style={{
+                    flex: 1, padding: 10, fontSize: 14, fontWeight: 600,
+                    background: submitting ? '#d6d3d1' : '#dc2626',
+                    color: '#fff', border: 'none', borderRadius: 8,
+                    cursor: submitting ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {submitting ? 'Memproses...' : 'Ya, Padam'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Collapsible Order Details ── */}
       <div style={{ background: '#fff', border: '1px solid #e7e5e4', borderRadius: 12, overflow: 'hidden', marginBottom: 32 }}>

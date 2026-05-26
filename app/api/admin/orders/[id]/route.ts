@@ -179,3 +179,23 @@ export async function PATCH(
 
   return NextResponse.json({ error: 'Action tidak dikenali' }, { status: 400 })
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await getAdminSession()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await params
+  const { error } = await supabaseServer()
+    .from('orders')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('[orders/delete] error:', error)
+    return NextResponse.json({ error: 'Gagal padam order' }, { status: 500 })
+  }
+  return NextResponse.json({ ok: true })
+}
