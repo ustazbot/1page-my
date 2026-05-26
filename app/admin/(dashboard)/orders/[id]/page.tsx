@@ -114,7 +114,7 @@ export default function OrderDetailPage() {
       const d = await res.json()
       if (d.order) {
         setOrder(d.order)
-        setSlug(d.order.slug ?? '')
+        setSlug(d.order.slug ?? (d.order.domain_pref_1 ?? '').toLowerCase().replace(/[^a-z0-9-]/g, ''))
         setPreviewUrl(d.order.preview_url ?? '')
       } else {
         setFetchError('Order tidak dijumpai')
