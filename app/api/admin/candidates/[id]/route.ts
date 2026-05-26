@@ -19,6 +19,24 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   return NextResponse.json({ candidate: data })
 }
 
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const session = await getAdminSession()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await params
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseServer() as any)
+    .from('candidate_briefs')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('[candidates/delete] error:', error)
+    return NextResponse.json({ error: 'Gagal padam candidate' }, { status: 500 })
+  }
+  return NextResponse.json({ ok: true })
+}
+
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getAdminSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

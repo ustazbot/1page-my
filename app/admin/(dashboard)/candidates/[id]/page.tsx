@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 type Candidate = {
   id: string
@@ -73,8 +73,11 @@ function Toggle({ on, disabled, onChange }: { on: boolean; disabled?: boolean; o
 
 export default function CandidateDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const router = useRouter()
   const [candidate, setCandidate] = useState<Candidate | null>(null)
   const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [editOpen, setEditOpen]           = useState(false)
   const [editFields, setEditFields]       = useState<Record<string, string>>({})
   const [editSubmitting, setEditSubmitting] = useState(false)
@@ -103,6 +106,22 @@ export default function CandidateDetailPage() {
       alert(`Ralat semasa simpan: ${err instanceof Error ? err.message : 'Cuba semula.'}`)
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleDelete() {
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/admin/candidates/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error || 'Gagal padam candidate')
+        return
+      }
+      router.push('/admin/candidates')
+    } finally {
+      setDeleting(false)
+      setConfirmDelete(false)
     }
   }
 
@@ -327,6 +346,52 @@ export default function CandidateDetailPage() {
             >
               {editSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
             </button>
+          </div>
+        )}
+      </div>
+
+      {/* Batalkan & Padam */}
+      <div style={{ marginBottom: 16, textAlign: 'center' }}>
+        {!confirmDelete ? (
+          <button
+            onClick={() => setConfirmDelete(true)}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontSize: 13, color: '#dc2626', textDecoration: 'underline', padding: '4px 8px',
+            }}
+          >
+            Batalkan & Padam Candidate
+          </button>
+        ) : (
+          <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: 16 }}>
+            <p style={{ fontSize: 13, color: '#991b1b', marginBottom: 14, fontWeight: 600 }}>
+              Padam candidate ini? Data tidak boleh dipulihkan.
+            </p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleting}
+                style={{
+                  flex: 1, padding: 10, fontSize: 14, fontWeight: 600,
+                  background: '#fff', color: '#374151', border: '1px solid #e5e7eb',
+                  borderRadius: 8, cursor: 'pointer',
+                }}
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                style={{
+                  flex: 1, padding: 10, fontSize: 14, fontWeight: 600,
+                  background: deleting ? '#e5e7eb' : '#dc2626',
+                  color: '#fff', border: 'none', borderRadius: 8,
+                  cursor: deleting ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {deleting ? 'Memproses...' : 'Ya, Padam'}
+              </button>
+            </div>
           </div>
         )}
       </div>
