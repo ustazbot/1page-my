@@ -47,7 +47,7 @@ async function createToyyibPayBill(order: {
     billTo: order.nama_owner,
     billPhone: order.whatsapp,
   })
-  body.set('billEmail', order.email ?? 'noreply@1page.my')
+  body.set('billEmail', order.email || 'noreply@1page.my')
 
   const res = await fetch('https://toyyibpay.com/index.php/api/createBill', {
     method: 'POST',
