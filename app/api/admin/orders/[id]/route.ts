@@ -68,7 +68,12 @@ export async function PATCH(
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { id } = await params
-  const body = await req.json() as { action: string; slug?: string; preview_url?: string }
+  let body: { action: string; slug?: string; preview_url?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Permintaan tidak sah.' }, { status: 400 })
+  }
   const sb = supabaseServer()
 
   // ── ACTION: set_preview ──────────────────────────────────────────────────
@@ -97,11 +102,15 @@ export async function PATCH(
     }
 
     // Get order for ToyyibPay
-    const { data: order } = await sb
+    const { data: order, error: fetchErr } = await sb
       .from('orders')
       .select('nama_bisnes, nama_owner, whatsapp, email')
       .eq('id', id)
       .single()
+    if (fetchErr) {
+      console.error('[orders/patch] fetch error:', fetchErr)
+      return NextResponse.json({ error: 'Ralat dalaman' }, { status: 500 })
+    }
     if (!order) return NextResponse.json({ error: 'Order tidak dijumpai' }, { status: 404 })
 
     // Create ToyyibPay bill
@@ -140,12 +149,15 @@ export async function PATCH(
 
   // ── ACTION: mark_live ────────────────────────────────────────────────────
   if (body.action === 'mark_live') {
-    const { data: order } = await sb
+    const { data: order, error: fetchErr } = await sb
       .from('orders')
       .select('slug, nama_bisnes')
       .eq('id', id)
       .single()
-
+    if (fetchErr) {
+      console.error('[orders/patch] fetch error:', fetchErr)
+      return NextResponse.json({ error: 'Ralat dalaman' }, { status: 500 })
+    }
     if (!order) return NextResponse.json({ error: 'Order tidak dijumpai' }, { status: 404 })
     if (!order.slug) return NextResponse.json({ error: 'Slug belum ditetapkan' }, { status: 400 })
 
