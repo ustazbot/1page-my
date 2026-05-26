@@ -9,8 +9,12 @@ type Candidate = {
   full_name: string
   preferred_name: string | null
   kawasan: string
+  kawasan_jenis: string | null
   parti_name: string
   whatsapp: string | null
+  facebook_url: string | null
+  instagram_url: string | null
+  tiktok_url: string | null
   subdomain: string | null
   is_paid: boolean
   is_live: boolean
@@ -22,8 +26,12 @@ type Candidate = {
   isu_kawasan: { masalah: string; penyelesaian: string }[]
   pencapaian: string[]
   profil_ringkas: string | null
+  mengapa_bertanding: string | null
+  quote_peribadi: string | null
   tagline: string | null
   warna_utama: string | null
+  bahasa: string | null
+  template_id: string | null
   payment_method: string | null
   submitted_at: string
   paid_at: string | null
@@ -67,6 +75,11 @@ export default function CandidateDetailPage() {
   const { id } = useParams<{ id: string }>()
   const [candidate, setCandidate] = useState<Candidate | null>(null)
   const [saving, setSaving] = useState(false)
+  const [editOpen, setEditOpen]           = useState(false)
+  const [editFields, setEditFields]       = useState<Record<string, string>>({})
+  const [editSubmitting, setEditSubmitting] = useState(false)
+  const [editError, setEditError]         = useState('')
+  const [editSuccess, setEditSuccess]     = useState(false)
 
   useEffect(() => {
     fetch(`/api/admin/candidates/${id}`)
@@ -90,6 +103,49 @@ export default function CandidateDetailPage() {
       alert(`Ralat semasa simpan: ${err instanceof Error ? err.message : 'Cuba semula.'}`)
     } finally {
       setSaving(false)
+    }
+  }
+
+  function openEdit() {
+    if (!candidate) return
+    setEditFields({
+      full_name:          candidate.full_name          ?? '',
+      preferred_name:     candidate.preferred_name     ?? '',
+      tagline:            candidate.tagline            ?? '',
+      profil_ringkas:     candidate.profil_ringkas     ?? '',
+      mengapa_bertanding: candidate.mengapa_bertanding ?? '',
+      quote_peribadi:     candidate.quote_peribadi     ?? '',
+      warna_utama:        candidate.warna_utama        ?? '#1e3a5f',
+      whatsapp:           candidate.whatsapp           ?? '',
+      facebook_url:       candidate.facebook_url       ?? '',
+      instagram_url:      candidate.instagram_url      ?? '',
+      tiktok_url:         candidate.tiktok_url         ?? '',
+    })
+    setEditError('')
+    setEditSuccess(false)
+    setEditOpen(true)
+  }
+
+  async function handleEditFields() {
+    setEditSubmitting(true)
+    setEditError('')
+    setEditSuccess(false)
+    try {
+      const payload: Record<string, string | null> = {}
+      for (const [k, v] of Object.entries(editFields)) {
+        payload[k] = v.trim() === '' ? null : v.trim()
+      }
+      const res = await fetch(`/api/admin/candidates/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) { setEditError(data.error || 'Gagal'); return }
+      setCandidate(data.candidate as Candidate)
+      setEditSuccess(true)
+    } finally {
+      setEditSubmitting(false)
     }
   }
 
@@ -191,6 +247,88 @@ export default function CandidateDetailPage() {
           placeholder="Nota untuk Bos sendiri..."
           className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
+      </div>
+
+      {/* Edit Data Calon */}
+      <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden', marginBottom: 16 }}>
+        <button
+          onClick={() => { if (!editOpen) openEdit(); else setEditOpen(false) }}
+          style={{
+            width: '100%', padding: '14px 24px',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: 13, fontWeight: 600, color: '#374151',
+          }}
+        >
+          <span>Edit Data Calon</span>
+          <span style={{ fontSize: 20, lineHeight: 1, color: '#9ca3af' }}>{editOpen ? '−' : '+'}</span>
+        </button>
+
+        {editOpen && (
+          <div style={{ padding: '0 24px 24px', borderTop: '1px solid #f3f4f6' }}>
+            {[
+              { key: 'full_name',          label: 'Nama Penuh',           type: 'input' },
+              { key: 'preferred_name',     label: 'Nama Panggilan',       type: 'input' },
+              { key: 'tagline',            label: 'Tagline',              type: 'input' },
+              { key: 'profil_ringkas',     label: 'Profil Ringkas',       type: 'textarea' },
+              { key: 'mengapa_bertanding', label: 'Mengapa Bertanding',   type: 'textarea' },
+              { key: 'quote_peribadi',     label: 'Quote Peribadi',       type: 'input' },
+              { key: 'warna_utama',        label: 'Warna Utama (hex)',    type: 'input' },
+              { key: 'whatsapp',           label: 'WhatsApp',             type: 'input' },
+              { key: 'facebook_url',       label: 'Facebook URL',         type: 'input' },
+              { key: 'instagram_url',      label: 'Instagram URL',        type: 'input' },
+              { key: 'tiktok_url',         label: 'TikTok URL',           type: 'input' },
+            ].map(({ key, label, type }) => (
+              <div key={key} style={{ marginTop: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 5 }}>
+                  {label}
+                </label>
+                {type === 'textarea' ? (
+                  <textarea
+                    value={editFields[key] ?? ''}
+                    onChange={e => setEditFields(p => ({ ...p, [key]: e.target.value }))}
+                    rows={3}
+                    style={{
+                      width: '100%', padding: '9px 12px', fontSize: 13,
+                      border: '1px solid #e5e7eb', borderRadius: 8, outline: 'none',
+                      resize: 'vertical', boxSizing: 'border-box' as const,
+                    }}
+                  />
+                ) : (
+                  <input
+                    value={editFields[key] ?? ''}
+                    onChange={e => setEditFields(p => ({ ...p, [key]: e.target.value }))}
+                    style={{
+                      width: '100%', padding: '9px 12px', fontSize: 13,
+                      border: '1px solid #e5e7eb', borderRadius: 8, outline: 'none',
+                      boxSizing: 'border-box' as const,
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+
+            {editError && (
+              <p style={{ color: '#dc2626', fontSize: 12, marginTop: 12 }}>⚠ {editError}</p>
+            )}
+            {editSuccess && (
+              <p style={{ color: '#065f46', fontSize: 12, marginTop: 12 }}>✓ Dikemaskini.</p>
+            )}
+
+            <button
+              onClick={handleEditFields}
+              disabled={editSubmitting}
+              style={{
+                marginTop: 16, width: '100%', padding: 12, fontSize: 14, fontWeight: 600,
+                background: editSubmitting ? '#e5e7eb' : '#111827',
+                color: '#fff', border: 'none', borderRadius: 8,
+                cursor: editSubmitting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {editSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Quick Links */}
