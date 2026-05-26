@@ -18,18 +18,21 @@ export async function middleware(request: NextRequest) {
     // Skip if already rewritten
     if (!url.pathname.startsWith('/bisnes/') && !url.pathname.startsWith('/candidate/')) {
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
       let isBisnes = false
       try {
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
         const res = await fetch(
           `${supabaseUrl}/rest/v1/orders?slug=eq.${subdomain}&status=in.(preview_ready,paid,live)&select=id&limit=1`,
-          { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` } }
+          {
+            headers: { apikey: supabaseServiceKey, Authorization: `Bearer ${supabaseServiceKey}` },
+            signal: AbortSignal.timeout(1500),
+          }
         )
         const rows = await res.json()
         isBisnes = Array.isArray(rows) && rows.length > 0
       } catch {
-        // On fetch error, fall through to candidate
+        // On fetch error or timeout, fall through to candidate
       }
 
       url.pathname = isBisnes
