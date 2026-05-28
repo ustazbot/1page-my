@@ -67,8 +67,12 @@ export default async function BisnesPage({ params }: Props) {
   const order = data as BisnesOrder
 
   if (NON_PUBLIC_STATUSES.includes(order.status)) {
-    const session = await getAdminSession()
-    if (!session) return <ComingSoonPage bisnesName={order.nama_bisnes} />
+    try {
+      const session = await getAdminSession()
+      if (!session) return <ComingSoonPage bisnesName={order.nama_bisnes} />
+    } catch {
+      return <ComingSoonPage bisnesName={order.nama_bisnes} />
+    }
   }
 
   const jsonLd = {
