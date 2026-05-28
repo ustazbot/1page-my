@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
       try {
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
         const res = await fetch(
-          `${supabaseUrl}/rest/v1/orders?slug=eq.${subdomain}&status=in.(preview_ready,paid,live)&select=id&limit=1`,
+          `${supabaseUrl}/rest/v1/orders?slug=eq.${subdomain}&status=in.(draft,preview_ready,paid,live)&select=id&limit=1`,
           {
             headers: { apikey: supabaseServiceKey, Authorization: `Bearer ${supabaseServiceKey}` },
             signal: AbortSignal.timeout(1500),
