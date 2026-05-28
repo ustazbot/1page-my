@@ -1,4 +1,5 @@
 import { supabaseServer } from '@/lib/supabase'
+import { getAdminSession } from '@/lib/admin-session'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { BisnesOrder } from './types'
@@ -7,6 +8,7 @@ import WarmHeritage from './templates/warm-heritage'
 import CoolProfessional from './templates/cool-professional'
 import FreshEditorial from './templates/fresh-editorial'
 import DarkMode from './templates/dark-mode'
+import ComingSoonPage from '@/components/admin/ComingSoonPage'
 
 interface Props {
   params: Promise<{ subdomain: string }>
@@ -20,16 +22,22 @@ const TEMPLATES: Record<string, React.ComponentType<{ order: BisnesOrder }>> = {
   dark_mode: DarkMode,
 }
 
+const NON_PUBLIC_STATUSES = ['draft', 'preview_ready', 'paid']
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { subdomain } = await params
   const { data } = await supabaseServer()
     .from('orders')
-    .select('nama_bisnes, tagline, jenis_bisnes, cerita_bisnes, banner_atas_url')
+    .select('nama_bisnes, tagline, jenis_bisnes, cerita_bisnes, banner_atas_url, status')
     .eq('slug', subdomain)
-    .in('status', ['preview_ready', 'paid', 'live'])
+    .in('status', ['draft', 'preview_ready', 'paid', 'live'])
     .maybeSingle()
 
   if (!data) return { title: '1page.my' }
+
+  if (NON_PUBLIC_STATUSES.includes(data.status as string)) {
+    return { title: `${data.nama_bisnes} — Akan Datang` }
+  }
 
   return {
     title: `${data.nama_bisnes}${data.tagline ? ` — ${data.tagline}` : ''}`,
@@ -51,12 +59,17 @@ export default async function BisnesPage({ params }: Props) {
     .from('orders')
     .select('*')
     .eq('slug', subdomain)
-    .in('status', ['preview_ready', 'paid', 'live'])
+    .in('status', ['draft', 'preview_ready', 'paid', 'live'])
     .single()
 
   if (!data) return notFound()
 
   const order = data as BisnesOrder
+
+  if (NON_PUBLIC_STATUSES.includes(order.status)) {
+    const session = await getAdminSession()
+    if (!session) return <ComingSoonPage bisnesName={order.nama_bisnes} />
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',
