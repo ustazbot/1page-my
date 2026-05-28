@@ -22,7 +22,7 @@ const TEMPLATES: Record<string, React.ComponentType<{ order: BisnesOrder }>> = {
   dark_mode: DarkMode,
 }
 
-const NON_PUBLIC_STATUSES = ['draft', 'preview_ready', 'paid']
+const NON_PUBLIC_STATUSES = ['draft']
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { subdomain } = await params
