@@ -205,14 +205,23 @@ export async function PATCH(
       }
     }
 
-    // Handle slug separately — requires validation
-    if ('slug' in body) {
+    // Handle slug separately — requires validation and uniqueness check
+    if ('slug' in body && body.slug != null) {
       const slugVal = body.slug
-      if (!slugVal || !/^[a-z0-9-]+$/.test(slugVal)) {
+      if (!/^[a-z0-9-]+$/.test(slugVal)) {
         return NextResponse.json(
           { error: 'Slug hanya boleh mengandungi huruf kecil, nombor, dan tanda -' },
           { status: 400 }
         )
+      }
+      const { data: slugExists } = await sb
+        .from('orders')
+        .select('id')
+        .eq('slug', slugVal)
+        .neq('id', id)
+        .maybeSingle()
+      if (slugExists) {
+        return NextResponse.json({ error: 'Slug sudah digunakan oleh order lain' }, { status: 409 })
       }
       updates.slug = slugVal
     }

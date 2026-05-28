@@ -150,6 +150,19 @@ export default function OrderDetailPage() {
     setGenerating(true)
     setGenerateError('')
     try {
+      // Save slug to DB first so generate-copy endpoint can read it
+      if (!order?.slug || order.slug !== slug) {
+        const saveRes = await fetch(`/api/admin/orders/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'edit_fields', slug }),
+        })
+        if (!saveRes.ok) {
+          const d = await saveRes.json()
+          setGenerateError(d.error || 'Gagal simpan slug. Cuba lagi.')
+          return
+        }
+      }
       const res = await fetch(`/api/admin/orders/${id}/generate-copy`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok) { setGenerateError(data.error || 'Gagal jana copy'); return }
@@ -205,11 +218,13 @@ export default function OrderDetailPage() {
       const res = await fetch('/api/upload', { method: 'POST', body: form })
       const data = await res.json()
       if (!res.ok) { setUploadError(data.error || 'Upload gagal'); return }
-      await fetch(`/api/admin/orders/${id}`, {
+      const patchRes = await fetch(`/api/admin/orders/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'edit_fields', [slot]: data.url }),
       })
+      const patchData = await patchRes.json()
+      if (!patchRes.ok) { setUploadError(patchData.error || 'Gagal simpan URL gambar'); return }
       setIframeKey(k => k + 1)
       await fetchOrder()
     } finally {
