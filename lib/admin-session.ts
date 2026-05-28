@@ -31,7 +31,11 @@ export async function createAdminSessionCookie(res: NextResponse): Promise<void>
   const sig = await sign(encoded)
   const value = `${encoded}.${sig}`
   res.cookies.set(COOKIE_NAME, value, {
-    httpOnly: true, sameSite: 'lax', maxAge: MAX_AGE, path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: MAX_AGE,
+    path: '/',
+    domain: process.env.NODE_ENV === 'production' ? '.1page.my' : undefined,
   })
 }
 
@@ -58,7 +62,11 @@ export async function getAdminSession(): Promise<AdminSession | null> {
 }
 
 export function clearAdminSessionCookie(res: NextResponse): void {
-  res.cookies.set(COOKIE_NAME, '', { maxAge: 0, path: '/' })
+  res.cookies.set(COOKIE_NAME, '', {
+    maxAge: 0,
+    path: '/',
+    domain: process.env.NODE_ENV === 'production' ? '.1page.my' : undefined,
+  })
 }
 
 export async function getAdminSessionFromRequest(req: NextRequest): Promise<AdminSession | null> {
