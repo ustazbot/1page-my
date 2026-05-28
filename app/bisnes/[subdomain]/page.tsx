@@ -67,12 +67,14 @@ export default async function BisnesPage({ params }: Props) {
   const order = data as BisnesOrder
 
   if (NON_PUBLIC_STATUSES.includes(order.status)) {
+    let isAdmin = false
     try {
       const session = await getAdminSession()
-      if (!session) return <ComingSoonPage bisnesName={order.nama_bisnes} />
+      isAdmin = !!session
     } catch {
-      return <ComingSoonPage bisnesName={order.nama_bisnes} />
+      // ADMIN_SESSION_SECRET missing or cookie invalid — treat as non-admin
     }
+    if (!isAdmin) return <ComingSoonPage bisnesName={order.nama_bisnes} />
   }
 
   const jsonLd = {

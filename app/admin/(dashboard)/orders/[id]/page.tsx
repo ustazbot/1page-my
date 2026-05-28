@@ -141,7 +141,7 @@ export default function OrderDetailPage() {
     }
   }
 
-  useEffect(() => { fetchOrder() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchOrder() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps,react-hooks/set-state-in-effect
 
   // ── Handlers ─────────────────────────────────────────────────────────────
 
