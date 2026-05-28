@@ -102,6 +102,20 @@ export async function PATCH(
       return NextResponse.json({ error: 'Slug sudah digunakan oleh order lain' }, { status: 409 })
     }
 
+    // Validate status — mesti draft sebelum boleh set preview
+    const { data: statusCheck } = await sb
+      .from('orders')
+      .select('status')
+      .eq('id', id)
+      .single()
+
+    if (!statusCheck || !['draft', 'preview_ready'].includes(statusCheck.status)) {
+      return NextResponse.json(
+        { error: 'Jana copy dulu (status mesti draft) sebelum set preview.' },
+        { status: 400 }
+      )
+    }
+
     // Get order for ToyyibPay
     const { data: order, error: fetchErr } = await sb
       .from('orders')
@@ -182,16 +196,42 @@ export async function PATCH(
   if (body.action === 'edit_fields') {
     const EDITABLE = ['nama_bisnes', 'tagline', 'cerita_bisnes', 'produk_servis',
       'target_pelanggan', 'waktu_operasi', 'alamat', 'google_maps_link',
-      'instagram', 'facebook', 'tiktok'] as const
+      'instagram', 'facebook', 'tiktok', 'template_pilihan',
+      'banner_atas_url', 'logo_url'] as const
     const updates: Record<string, string | null> = {}
     for (const field of EDITABLE) {
       if (field in body) {
         updates[field] = body[field] ?? null
       }
     }
+
+    // Handle slug separately — requires validation
+    if ('slug' in body) {
+      const slugVal = body.slug
+      if (!slugVal || !/^[a-z0-9-]+$/.test(slugVal)) {
+        return NextResponse.json(
+          { error: 'Slug hanya boleh mengandungi huruf kecil, nombor, dan tanda -' },
+          { status: 400 }
+        )
+      }
+      updates.slug = slugVal
+    }
+
     if (Object.keys(updates).length === 0) {
       return NextResponse.json({ error: 'Tiada field untuk dikemaskini' }, { status: 400 })
     }
+
+    // Auto-promote pending → draft bila admin mula edit
+    const { data: currentOrder } = await sb
+      .from('orders')
+      .select('status')
+      .eq('id', id)
+      .single()
+
+    if (currentOrder?.status === 'pending') {
+      updates.status = 'draft'
+    }
+
     const { error: updateErr } = await sb.from('orders').update(updates).eq('id', id)
     if (updateErr) {
       console.error('[orders/patch] edit_fields error:', updateErr)
