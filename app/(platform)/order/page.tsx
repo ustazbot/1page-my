@@ -585,6 +585,11 @@ export default function OrderPage() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [helpOpen, setHelpOpen] = useState(false)
+  const [statsBar, setStatsBar] = useState<{ nilai: string; label: string }[]>([])
+  const [uspList, setUspList]   = useState<{ tajuk: string; huraian: string }[]>([])
+  const [pakejList, setPakejList] = useState<{ nama: string; harga: string; ciri: string; popular: boolean }[]>([])
+  const [testimoniList, setTestimoniList] = useState<{ nama: string; dari: string; ulasan: string }[]>([])
+  const [faqList, setFaqList]   = useState<{ soalan: string; jawapan: string }[]>([])
 
   const set = (field: keyof FormState, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -606,6 +611,13 @@ export default function OrderPage() {
         body: JSON.stringify({
           ...form,
           affiliate_ref_code: refCode ?? null,
+          stats_bar: statsBar.filter(s => s.nilai.trim() && s.label.trim()),
+          usp: uspList.filter(u => u.tajuk.trim()),
+          pakej: pakejList
+            .filter(p => p.nama.trim())
+            .map(p => ({ ...p, ciri: p.ciri.split('\n').map(c => c.trim()).filter(Boolean) })),
+          testimoni: testimoniList.filter(t => t.ulasan.trim()),
+          faq: faqList.filter(f => f.soalan.trim()),
         }),
       })
       const data = await res.json()
@@ -863,6 +875,166 @@ export default function OrderPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ── H — Pencapaian Bisnes (Stats Bar) ── */}
+          <div style={s.section}>
+            <p style={s.sectionTitle}>H — Pencapaian Bisnes</p>
+            <p style={s.hint}>Nombor yang tunjukkan kredibiliti anda — contoh: "200+" / "Pelanggan Berpuas Hati". Sehingga 4 statistik. (Optional)</p>
+            {statsBar.map((row, i) => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 8, marginBottom: 10, alignItems: 'center' }}>
+                <input style={s.input} placeholder="200+" value={row.nilai}
+                  onChange={e => setStatsBar(prev => prev.map((r, j) => j === i ? { ...r, nilai: e.target.value } : r))} />
+                <input style={s.input} placeholder="Pelanggan Berpuas Hati" value={row.label}
+                  onChange={e => setStatsBar(prev => prev.map((r, j) => j === i ? { ...r, label: e.target.value } : r))} />
+                <button type="button" onClick={() => setStatsBar(prev => prev.filter((_, j) => j !== i))}
+                  style={{ padding: '8px 12px', background: '#fee2e2', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, color: '#dc2626' }}>✕</button>
+              </div>
+            ))}
+            {statsBar.length < 4 && (
+              <button type="button" onClick={() => setStatsBar(prev => [...prev, { nilai: '', label: '' }])}
+                style={{ fontSize: 13, color: '#555', background: 'none', border: '1px dashed #ddd', borderRadius: 6, padding: '8px 16px', cursor: 'pointer', marginTop: 4 }}>
+                + Tambah Statistik
+              </button>
+            )}
+          </div>
+
+          {/* ── I — Kenapa Pilih Kami ── */}
+          <div style={s.section}>
+            <p style={s.sectionTitle}>I — Kenapa Pilih Kami</p>
+            <p style={s.hint}>3–4 sebab ringkas kenapa pelanggan patut pilih anda. (Optional)</p>
+            {uspList.map((row, i) => (
+              <div key={i} style={{ marginBottom: 12, border: '1px solid #eee', borderRadius: 8, padding: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <label style={{ ...s.label, marginBottom: 0 }}>Point {i + 1}</label>
+                  <button type="button" onClick={() => setUspList(prev => prev.filter((_, j) => j !== i))}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
+                </div>
+                <input style={{ ...s.input, marginBottom: 8 }} placeholder="Tajuk ringkas, cth: Servis Cepat" value={row.tajuk}
+                  onChange={e => setUspList(prev => prev.map((r, j) => j === i ? { ...r, tajuk: e.target.value } : r))} />
+                <input style={s.input} placeholder="Huraian 1 ayat, cth: Siap dalam 24 jam bekerja" value={row.huraian}
+                  onChange={e => setUspList(prev => prev.map((r, j) => j === i ? { ...r, huraian: e.target.value } : r))} />
+              </div>
+            ))}
+            {uspList.length < 4 && (
+              <button type="button" onClick={() => setUspList(prev => [...prev, { tajuk: '', huraian: '' }])}
+                style={{ fontSize: 13, color: '#555', background: 'none', border: '1px dashed #ddd', borderRadius: 6, padding: '8px 16px', cursor: 'pointer' }}>
+                + Tambah Point
+              </button>
+            )}
+          </div>
+
+          {/* ── J — Pakej & Harga ── */}
+          <div style={s.section}>
+            <p style={s.sectionTitle}>J — Pakej & Harga</p>
+            <p style={s.hint}>Sehingga 3 pakej. Boleh letak harga tepat (RM150) atau terbuka ("Hubungi Kami"). (Optional)</p>
+            {pakejList.map((row, i) => (
+              <div key={i} style={{ marginBottom: 16, border: '1px solid #eee', borderRadius: 8, padding: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <label style={{ ...s.label, marginBottom: 0 }}>Pakej {i + 1}</label>
+                  <button type="button" onClick={() => setPakejList(prev => prev.filter((_, j) => j !== i))}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+                  <div>
+                    <label style={s.label}>Nama Pakej</label>
+                    <input style={s.input} placeholder="Pakej Basic" value={row.nama}
+                      onChange={e => setPakejList(prev => prev.map((r, j) => j === i ? { ...r, nama: e.target.value } : r))} />
+                  </div>
+                  <div>
+                    <label style={s.label}>Harga</label>
+                    <input style={s.input} placeholder="RM150" value={row.harga}
+                      onChange={e => setPakejList(prev => prev.map((r, j) => j === i ? { ...r, harga: e.target.value } : r))} />
+                  </div>
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Ciri-ciri (satu per baris)</label>
+                  <textarea style={{ ...s.textarea, minHeight: 80 }}
+                    placeholder={"Termasuk konsultasi percuma\nDeliveri dalam 3 hari\nGaransi 30 hari"}
+                    value={row.ciri}
+                    onChange={e => setPakejList(prev => prev.map((r, j) => j === i ? { ...r, ciri: e.target.value } : r))} />
+                </div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={row.popular}
+                    onChange={e => setPakejList(prev => prev.map((r, j) => j === i ? { ...r, popular: e.target.checked } : r))} />
+                  Tandai sebagai "Pilihan Ramai"
+                </label>
+              </div>
+            ))}
+            {pakejList.length < 3 && (
+              <button type="button" onClick={() => setPakejList(prev => [...prev, { nama: '', harga: '', ciri: '', popular: false }])}
+                style={{ fontSize: 13, color: '#555', background: 'none', border: '1px dashed #ddd', borderRadius: 6, padding: '8px 16px', cursor: 'pointer' }}>
+                + Tambah Pakej
+              </button>
+            )}
+          </div>
+
+          {/* ── K — Testimoni Pelanggan ── */}
+          <div style={s.section}>
+            <p style={s.sectionTitle}>K — Testimoni Pelanggan</p>
+            <p style={s.hint}>Sehingga 3 testimoni dari pelanggan anda. (Optional)</p>
+            {testimoniList.map((row, i) => (
+              <div key={i} style={{ marginBottom: 14, border: '1px solid #eee', borderRadius: 8, padding: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <label style={{ ...s.label, marginBottom: 0 }}>Testimoni {i + 1}</label>
+                  <button type="button" onClick={() => setTestimoniList(prev => prev.filter((_, j) => j !== i))}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+                  <div>
+                    <label style={s.label}>Nama</label>
+                    <input style={s.input} placeholder="Siti Rahimah" value={row.nama}
+                      onChange={e => setTestimoniList(prev => prev.map((r, j) => j === i ? { ...r, nama: e.target.value } : r))} />
+                  </div>
+                  <div>
+                    <label style={s.label}>Dari Mana</label>
+                    <input style={s.input} placeholder="Kuala Lumpur" value={row.dari}
+                      onChange={e => setTestimoniList(prev => prev.map((r, j) => j === i ? { ...r, dari: e.target.value } : r))} />
+                  </div>
+                </div>
+                <div>
+                  <label style={s.label}>Ulasan</label>
+                  <textarea style={{ ...s.textarea, minHeight: 72 }}
+                    placeholder="Servis terbaik, cepat dan mesra pelanggan!"
+                    value={row.ulasan}
+                    onChange={e => setTestimoniList(prev => prev.map((r, j) => j === i ? { ...r, ulasan: e.target.value } : r))} />
+                </div>
+              </div>
+            ))}
+            {testimoniList.length < 3 && (
+              <button type="button" onClick={() => setTestimoniList(prev => [...prev, { nama: '', dari: '', ulasan: '' }])}
+                style={{ fontSize: 13, color: '#555', background: 'none', border: '1px dashed #ddd', borderRadius: 6, padding: '8px 16px', cursor: 'pointer' }}>
+                + Tambah Testimoni
+              </button>
+            )}
+          </div>
+
+          {/* ── L — Soalan Lazim (FAQ) ── */}
+          <div style={s.section}>
+            <p style={s.sectionTitle}>L — Soalan Lazim</p>
+            <p style={s.hint}>Soalan yang selalu ditanya pelanggan dan jawapannya. Sehingga 5 soalan. (Optional)</p>
+            {faqList.map((row, i) => (
+              <div key={i} style={{ marginBottom: 14, border: '1px solid #eee', borderRadius: 8, padding: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <label style={{ ...s.label, marginBottom: 0 }}>Soalan {i + 1}</label>
+                  <button type="button" onClick={() => setFaqList(prev => prev.filter((_, j) => j !== i))}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
+                </div>
+                <input style={{ ...s.input, marginBottom: 10 }}
+                  placeholder="Berapa lama masa siapkan order?" value={row.soalan}
+                  onChange={e => setFaqList(prev => prev.map((r, j) => j === i ? { ...r, soalan: e.target.value } : r))} />
+                <textarea style={{ ...s.textarea, minHeight: 72 }}
+                  placeholder="Biasanya dalam 3–5 hari bekerja bergantung pada jenis order."
+                  value={row.jawapan}
+                  onChange={e => setFaqList(prev => prev.map((r, j) => j === i ? { ...r, jawapan: e.target.value } : r))} />
+              </div>
+            ))}
+            {faqList.length < 5 && (
+              <button type="button" onClick={() => setFaqList(prev => [...prev, { soalan: '', jawapan: '' }])}
+                style={{ fontSize: 13, color: '#555', background: 'none', border: '1px dashed #ddd', borderRadius: 6, padding: '8px 16px', cursor: 'pointer' }}>
+                + Tambah Soalan
+              </button>
+            )}
           </div>
 
           {/* ── G — Maklumat Tambahan ── */}
