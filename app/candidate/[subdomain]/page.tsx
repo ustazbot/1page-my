@@ -3,15 +3,20 @@ import { supabaseServer } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { CandidateBrief } from './types'
-import HeroSection from './components/HeroSection'
-import QuoteBlock from './components/QuoteBlock'
-import MengapaBertanding from './components/MengapaBertanding'
-import KenaliCandidate from './components/KenaliCandidate'
-import FokusUtama from './components/FokusUtama'
-import GaleriGerakKerja from './components/GaleriGerakKerja'
-import TestimoniRakyat from './components/TestimoniRakyat'
-import IsuKawasan from './components/IsuKawasan'
-import CtaFooter from './components/CtaFooter'
+import { generatePalette } from '@/lib/candidate-colors'
+import T1Statesman from './templates/T1Statesman'
+import T2Reformer from './templates/T2Reformer'
+import T3Guardian from './templates/T3Guardian'
+import T4Champion from './templates/T4Champion'
+import T5Visionary from './templates/T5Visionary'
+
+const TEMPLATES = {
+  T1: T1Statesman,
+  T2: T2Reformer,
+  T3: T3Guardian,
+  T4: T4Champion,
+  T5: T5Visionary,
+} as const
 
 interface Props {
   params: Promise<{ subdomain: string }>
@@ -34,7 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${c.full_name} — Calon ${c.kawasan_jenis} ${c.kawasan}`,
     description: `Kenali ${displayName}, calon ${c.parti_name} untuk ${c.kawasan_jenis} ${c.kawasan}. ${tagline}`,
-    keywords: [c.full_name as string, c.kawasan as string, c.parti_name as string, `calon ${c.kawasan}`, `PRU ${c.kawasan}`],
+    keywords: [
+      c.full_name as string, c.kawasan as string, c.parti_name as string,
+      `calon ${c.kawasan}`, `PRU ${c.kawasan}`, `PRN ${c.kawasan}`,
+    ],
     openGraph: {
       title: `${c.full_name} — ${c.kawasan}`,
       description: tagline,
@@ -44,29 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const ANIMATIONS = `
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .hero-parti   { animation: fadeUp 0.5s ease 0.1s both; }
-  .hero-photo   { animation: fadeUp 0.6s ease 0.2s both; }
-  .hero-nama    { animation: fadeUp 0.6s ease 0.3s both; }
-  .hero-tagline { animation: fadeUp 0.6s ease 0.4s both; }
-  .hero-cta     { animation: fadeUp 0.6s ease 0.5s both; }
-
-  @supports (animation-timeline: scroll()) {
-    .section-reveal {
-      animation: fadeUp 0.7s ease both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%;
-    }
-  }
-`
-
 export default async function CandidatePage({ params }: Props) {
   const { subdomain } = await params
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: c } = await (supabaseServer() as any)
     .from('candidate_briefs')
@@ -78,7 +65,9 @@ export default async function CandidatePage({ params }: Props) {
   if (!c) return notFound()
 
   const candidate = c as CandidateBrief
-  const warna = candidate.warna_utama || '#1e3a5f'
+  const palette = generatePalette(candidate.warna_utama, candidate.parti_name)
+  const templateId = (candidate.template_id || 'T1') as keyof typeof TEMPLATES
+  const Template = TEMPLATES[templateId] ?? T1Statesman
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -89,27 +78,18 @@ export default async function CandidatePage({ params }: Props) {
     description: candidate.tagline,
     image: candidate.photo_url,
     url: `https://${candidate.subdomain}.1page.my`,
-    sameAs: ([candidate.facebook_url, candidate.instagram_url, candidate.tiktok_url] as (string | null)[]).filter(Boolean),
+    sameAs: (
+      [candidate.facebook_url, candidate.instagram_url, candidate.tiktok_url] as (string | null)[]
+    ).filter(Boolean),
   }
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: ANIMATIONS }} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main style={{ fontFamily: 'var(--font-dm)', overflowX: 'hidden' }}>
-        <HeroSection c={candidate} warna={warna} />
-        <QuoteBlock c={candidate} warna={warna} />
-        <MengapaBertanding c={candidate} />
-        <KenaliCandidate c={candidate} warna={warna} />
-        <FokusUtama c={candidate} warna={warna} />
-        <GaleriGerakKerja c={candidate} warna={warna} />
-        <TestimoniRakyat c={candidate} warna={warna} />
-        <IsuKawasan c={candidate} warna={warna} />
-        <CtaFooter c={candidate} warna={warna} />
-      </main>
+      <Template candidate={candidate} palette={palette} />
     </>
   )
 }
