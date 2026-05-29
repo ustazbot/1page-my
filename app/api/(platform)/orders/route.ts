@@ -1,3 +1,4 @@
+// app/api/(platform)/orders/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase'
 import { sendTelegramMessage } from '@/lib/telegram'
@@ -19,6 +20,7 @@ export async function POST(req: NextRequest) {
     template_pilihan, domain_sendiri, domain_url,
     domain_pref_1, domain_pref_2, domain_pref_3,
     catatan,
+    stats_bar, usp, pakej, testimoni, faq,
   } = body
 
   if (
@@ -48,6 +50,11 @@ export async function POST(req: NextRequest) {
       template_pilihan, domain_sendiri: !!domain_sendiri, domain_url,
       domain_pref_1, domain_pref_2, domain_pref_3,
       catatan,
+      stats_bar:  Array.isArray(stats_bar)  ? stats_bar  : [],
+      usp:        Array.isArray(usp)        ? usp        : [],
+      pakej:      Array.isArray(pakej)      ? pakej      : [],
+      testimoni:  Array.isArray(testimoni)  ? testimoni  : [],
+      faq:        Array.isArray(faq)        ? faq        : [],
     })
     .select('id')
     .single()
