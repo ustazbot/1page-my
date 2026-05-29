@@ -28,4 +28,10 @@ export interface CandidateBrief {
   bahasa: string
   is_live: boolean
   ai_copy: { tagline?: string; mengapa_bertanding?: string; ayat_penutup?: string } | null
+  // new fields
+  template_id: string
+  umur: number | null
+  bilangan_anak: number | null
+  tahun_pengalaman: number | null
+  nama_syarikat: string | null
 }
