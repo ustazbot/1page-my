@@ -11,9 +11,11 @@ const PARTI_LIST = [
 const KAWASAN_JENIS = ['DUN', 'Parlimen']
 
 const TEMPLATES = [
-  { id: 'T1', nama: 'Klasik', warna: '#1e3a5f', desc: 'Formal & Berwibawa', bg: '#1e3a5f', text: '#ffffff' },
-  { id: 'T2', nama: 'Moden',  warna: '#0f766e', desc: 'Segar & Dinamik',   bg: '#0f766e', text: '#ffffff' },
-  { id: 'T3', nama: 'Berani', warna: '#7f1d1d', desc: 'Tegas & Berpengaruh', bg: '#7f1d1d', text: '#ffffff' },
+  { id: 'T1', nama: 'The Statesman',  warna: '#0d1f3c', desc: 'Klasik, berwibawa, elegan',       bg: '#0d1f3c', text: '#F0A500' },
+  { id: 'T2', nama: 'The Reformer',   warna: '#0a0a0a', desc: 'Bold, bertenaga, impactful',       bg: '#0a0a0a', text: '#C9A84C' },
+  { id: 'T3', nama: 'The Guardian',   warna: '#3d2a0f', desc: 'Hangat, amanah, berakar',          bg: '#3d2a0f', text: '#C9A84C' },
+  { id: 'T4', nama: 'The Champion',   warna: '#1a3a1a', desc: 'Autentik, dekat rakyat',           bg: '#1a3a1a', text: '#22c55e' },
+  { id: 'T5', nama: 'The Visionary',  warna: '#0a0a0a', desc: 'Bersih, moden, profesional',       bg: '#ffffff', text: '#0a0a0a' },
 ]
 
 export default function DaftarCalonPage() {
@@ -39,6 +41,10 @@ export default function DaftarCalonPage() {
     warna_utama: '#1e3a5f',
     subdomain: '',
     template_id: 'T1',
+    umur: '',
+    bilangan_anak: '',
+    tahun_pengalaman: '',
+    nama_syarikat: '',
   })
   const [aiImproving, setAiImproving] = useState(false)
 
@@ -125,6 +131,10 @@ export default function DaftarCalonPage() {
 
       const payload = {
         ...form,
+        umur:             form.umur             ? parseInt(form.umur, 10)             : null,
+        bilangan_anak:    form.bilangan_anak     ? parseInt(form.bilangan_anak, 10)     : null,
+        tahun_pengalaman: form.tahun_pengalaman  ? parseInt(form.tahun_pengalaman, 10)  : null,
+        nama_syarikat:    form.nama_syarikat || null,
         photo_url,
         parti_logo_url,
         kawasan_image_url,
@@ -314,6 +324,58 @@ export default function DaftarCalonPage() {
                 )}
               </div>
             </div>
+
+              {/* Stats — untuk Stats Bar (S2) pada candidate page */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Umur <span className="text-gray-400 text-xs ml-1">(optional)</span>
+                  </label>
+                  <input
+                    type="number" min="18" max="99"
+                    value={form.umur}
+                    onChange={e => setForm(p => ({ ...p, umur: e.target.value }))}
+                    placeholder="Cth: 45"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Bilangan Anak <span className="text-gray-400 text-xs ml-1">(optional)</span>
+                  </label>
+                  <input
+                    type="number" min="0" max="20"
+                    value={form.bilangan_anak}
+                    onChange={e => setForm(p => ({ ...p, bilangan_anak: e.target.value }))}
+                    placeholder="Cth: 3"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Tahun Pengalaman <span className="text-gray-400 text-xs ml-1">(optional)</span>
+                  </label>
+                  <input
+                    type="number" min="0" max="60"
+                    value={form.tahun_pengalaman}
+                    onChange={e => setForm(p => ({ ...p, tahun_pengalaman: e.target.value }))}
+                    placeholder="Cth: 15"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nama Syarikat / Institusi <span className="text-gray-400 text-xs ml-1">(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.nama_syarikat}
+                    onChange={e => setForm(p => ({ ...p, nama_syarikat: e.target.value }))}
+                    placeholder="Cth: Universiti Malaya"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
+              </div>
           </section>
 
           {/* B: Gambar & Logo */}
