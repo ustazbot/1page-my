@@ -534,7 +534,7 @@ export default function OrderDetailPage() {
             )}
 
             {/* Cancel */}
-            {['pending', 'draft', 'preview_ready', 'paid'].includes(order.status) && (
+            {['pending', 'draft', 'preview_ready', 'paid', 'live'].includes(order.status) && (
               <div style={{ marginTop: 14, textAlign: 'center' }}>
                 {!confirmCancel ? (
                   <button onClick={() => setConfirmCancel(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: '#dc2626', textDecoration: 'underline' }}>
