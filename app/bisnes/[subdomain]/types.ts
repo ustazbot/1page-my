@@ -1,3 +1,5 @@
+// app/bisnes/[subdomain]/types.ts
+
 export interface BisnesOrder {
   id: string
   nama_bisnes: string
@@ -22,4 +24,9 @@ export interface BisnesOrder {
   template_pilihan: string
   slug: string
   status: string
+  stats_bar: { nilai: string; label: string }[] | null
+  usp:       { tajuk: string; huraian: string }[] | null
+  pakej:     { nama: string; harga: string; ciri: string[]; popular?: boolean }[] | null
+  testimoni: { nama: string; dari: string; ulasan: string }[] | null
+  faq:       { soalan: string; jawapan: string }[] | null
 }
