@@ -99,7 +99,7 @@ const EMPTY: FormState = {
 
 const s = {
   label:        { display: 'block', fontSize: 14, fontWeight: 600, color: '#1a1a1a', marginBottom: 6 } as React.CSSProperties,
-  hint:         { fontSize: 12, color: '#666', marginBottom: 8, lineHeight: 1.5 } as React.CSSProperties,
+  hint:         { fontSize: 13, color: '#666', marginBottom: 8, lineHeight: 1.5 } as React.CSSProperties,
   input:        { width: '100%', padding: '12px 14px', fontSize: 16, border: '1px solid #ddd', borderRadius: 8, background: '#fff', outline: 'none', boxSizing: 'border-box' as const },
   textarea:     { width: '100%', padding: '12px 14px', fontSize: 16, border: '1px solid #ddd', borderRadius: 8, background: '#fff', outline: 'none', boxSizing: 'border-box' as const, minHeight: 100, resize: 'vertical' as const },
   section:      { background: '#fff', borderRadius: 12, padding: 24, marginBottom: 20, border: '1px solid #eee' } as React.CSSProperties,
@@ -644,8 +644,18 @@ export default function OrderPage() {
 
   return (
     <>
+      <style>{`
+        @media (max-width: 520px) {
+          .order-sec { padding: 16px !important; }
+          .order-grid-stack { grid-template-columns: 1fr !important; }
+          .order-stats-row { grid-template-columns: 1fr !important; }
+          .order-header { padding: 24px 0 28px !important; }
+          .order-header h1 { font-size: 22px !important; }
+          .order-header p { font-size: 14px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '40px 20px 100px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+        <div className="order-header" style={{ textAlign: 'center', marginBottom: 40 }}>
           <h1 style={{ fontSize: 28, fontWeight: 800, color: '#1a1a1a', marginBottom: 8 }}>
             Order Landing Page
           </h1>
@@ -657,7 +667,7 @@ export default function OrderPage() {
         <form onSubmit={handleSubmit}>
 
           {/* ── A — Maklumat Bisnes ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>A — Maklumat Bisnes</p>
 
             <div style={s.field}>
@@ -713,7 +723,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── B — Maklumat Hubungan ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>B — Maklumat Hubungan</p>
 
             <div style={s.field}>
@@ -722,7 +732,7 @@ export default function OrderPage() {
                 onChange={(e) => set('nama_owner', e.target.value)} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="order-grid-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
               <div style={s.field}>
                 <label style={s.label}>Nombor WhatsApp<span style={s.required}>*</span></label>
                 <input style={s.input} type="tel" placeholder="0123456789"
@@ -745,7 +755,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── C — Lokasi & Operasi ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>C — Lokasi & Operasi</p>
 
             <div style={s.field}>
@@ -771,7 +781,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── D — Media Sosial ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>D — Media Sosial</p>
             {(['instagram', 'facebook', 'tiktok'] as const).map((p) => (
               <div key={p} style={s.field}>
@@ -785,7 +795,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── E — Imej ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>E — Imej</p>
 
             <ImageUploadField
@@ -812,7 +822,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── F — Domain & Template ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>F — Domain & Template</p>
 
             <div style={s.field}>
@@ -878,11 +888,11 @@ export default function OrderPage() {
           </div>
 
           {/* ── H — Pencapaian Bisnes (Stats Bar) ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>H — Pencapaian Bisnes</p>
             <p style={s.hint}>Nombor yang tunjukkan kredibiliti anda — contoh: "200+" / "Pelanggan Berpuas Hati". Sehingga 4 statistik. (Optional)</p>
             {statsBar.map((row, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 8, marginBottom: 10, alignItems: 'center' }}>
+              <div key={i} className="order-stats-row" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 8, marginBottom: 10, alignItems: 'center' }}>
                 <input style={s.input} placeholder="200+" value={row.nilai}
                   onChange={e => setStatsBar(prev => prev.map((r, j) => j === i ? { ...r, nilai: e.target.value } : r))} />
                 <input style={s.input} placeholder="Pelanggan Berpuas Hati" value={row.label}
@@ -900,7 +910,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── I — Kenapa Pilih Kami ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>I — Kenapa Pilih Kami</p>
             <p style={s.hint}>3–4 sebab ringkas kenapa pelanggan patut pilih anda. (Optional)</p>
             {uspList.map((row, i) => (
@@ -925,7 +935,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── J — Pakej & Harga ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>J — Pakej & Harga</p>
             <p style={s.hint}>Sehingga 3 pakej. Boleh letak harga tepat (RM150) atau terbuka ("Hubungi Kami"). (Optional)</p>
             {pakejList.map((row, i) => (
@@ -935,7 +945,7 @@ export default function OrderPage() {
                   <button type="button" onClick={() => setPakejList(prev => prev.filter((_, j) => j !== i))}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+                <div className="order-grid-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
                   <div>
                     <label style={s.label}>Nama Pakej</label>
                     <input style={s.input} placeholder="Pakej Basic" value={row.nama}
@@ -970,7 +980,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── K — Testimoni Pelanggan ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>K — Testimoni Pelanggan</p>
             <p style={s.hint}>Sehingga 3 testimoni dari pelanggan anda. (Optional)</p>
             {testimoniList.map((row, i) => (
@@ -980,7 +990,7 @@ export default function OrderPage() {
                   <button type="button" onClick={() => setTestimoniList(prev => prev.filter((_, j) => j !== i))}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>Padam</button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+                <div className="order-grid-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
                   <div>
                     <label style={s.label}>Nama</label>
                     <input style={s.input} placeholder="Siti Rahimah" value={row.nama}
@@ -1010,7 +1020,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── L — Soalan Lazim (FAQ) ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>L — Soalan Lazim</p>
             <p style={s.hint}>Soalan yang selalu ditanya pelanggan dan jawapannya. Sehingga 5 soalan. (Optional)</p>
             {faqList.map((row, i) => (
@@ -1038,7 +1048,7 @@ export default function OrderPage() {
           </div>
 
           {/* ── G — Maklumat Tambahan ── */}
-          <div style={s.section}>
+          <div className="order-sec" style={s.section}>
             <p style={s.sectionTitle}>G — Maklumat Tambahan</p>
             <textarea style={s.textarea}
               placeholder="Sebarang maklumat tambahan yang kami perlu tahu, permintaan khas, atau soalan..."
