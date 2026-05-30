@@ -1,8 +1,6 @@
 // app/bisnes/[subdomain]/templates/fresh-editorial.tsx
 import type { BisnesOrder } from '../types'
 
-const ADMIN_WA = '60103602175'
-
 const ANIMS = `
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -250,11 +248,6 @@ export default function FreshEditorial({ order }: { order: BisnesOrder }) {
             {order.facebook && <a href={order.facebook} target="_blank" rel="noopener noreferrer" style={{ color: '#6ee7b7', fontSize: 13, textDecoration: 'none' }}>Facebook</a>}
             {order.tiktok && <a href={order.tiktok} target="_blank" rel="noopener noreferrer" style={{ color: '#6ee7b7', fontSize: 13, textDecoration: 'none' }}>TikTok</a>}
           </div>
-          <a href={waHref(ADMIN_WA, `Salam, saya nak minta pindaan untuk ${order.nama_bisnes} (${order.slug}.1page.my). Saya nak ubah: `)}
-            target="_blank" rel="noopener noreferrer"
-            style={{ fontSize: 12, color: '#6ee7b7', textDecoration: 'underline', display: 'block', marginBottom: 32 }}>
-            Minta Pindaan
-          </a>
           <p style={{ fontSize: 11, color: '#065f46', margin: 0 }}>Dibina dengan <a href="https://1page.my" style={{ color: '#10b981' }}>1page.my</a></p>
         </footer>
       </main>
