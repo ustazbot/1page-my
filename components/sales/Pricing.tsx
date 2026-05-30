@@ -182,6 +182,54 @@ export default function Pricing() {
             &ldquo;Tengok preview dulu. Bayar lepas setuju. Tiada hidden fees.&rdquo;
           </p>
         </AnimateIn>
+
+        <AnimateIn delay={300}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 10,
+              marginTop: 40,
+            }}
+          >
+            <a
+              href="/order"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 700,
+                fontSize: 17,
+                padding: '16px 36px',
+                background: '#F97316',
+                color: 'white',
+                borderRadius: 10,
+                textDecoration: 'none',
+                letterSpacing: '-0.02em',
+                transition: 'background 0.2s ease, transform 0.15s ease',
+                display: 'inline-block',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#EA6A0A'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#F97316'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+            >
+              Cuba Percuma — Bayar Lepas Setuju
+            </a>
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13,
+                color: '#78716C',
+              }}
+            >
+              Tengok preview dulu. Bayar lepas setuju.
+            </span>
+          </div>
+        </AnimateIn>
       </div>
     </section>
   )
