@@ -41,6 +41,11 @@ type Order = {
   live_url: string | null
   toyyibpay_bill_code: string | null
   toyyibpay_amount: number | null
+  stats_bar: { nilai: string; label: string }[] | null
+  usp:       { tajuk: string; huraian: string }[] | null
+  pakej:     { nama: string; harga: string; ciri: string[]; popular?: boolean }[] | null
+  testimoni: { nama: string; dari: string; ulasan: string }[] | null
+  faq:       { soalan: string; jawapan: string }[] | null
 }
 
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
@@ -107,6 +112,13 @@ export default function OrderDetailPage() {
   // Confirm cancel
   const [confirmCancel, setConfirmCancel] = useState(false)
 
+  // Conversion segments
+  const [statsBar,      setStatsBar]      = useState<{ nilai: string; label: string }[]>([])
+  const [uspList,       setUspList]       = useState<{ tajuk: string; huraian: string }[]>([])
+  const [pakejList,     setPakejList]     = useState<{ nama: string; harga: string; ciri: string; popular: boolean }[]>([])
+  const [testimoniList, setTestimoniList] = useState<{ nama: string; dari: string; ulasan: string }[]>([])
+  const [faqList,       setFaqList]       = useState<{ soalan: string; jawapan: string }[]>([])
+
   // ── Data fetching ────────────────────────────────────────────────────────
 
   async function fetchOrder() {
@@ -131,6 +143,11 @@ export default function OrderDetailPage() {
           tiktok:           o.tiktok           ?? '',
           template_pilihan: o.template_pilihan ?? 'bold_minimal',
         })
+        setStatsBar(o.stats_bar ?? [])
+        setUspList(o.usp ?? [])
+        setPakejList((o.pakej ?? []).map(p => ({ ...p, ciri: p.ciri.join('\n'), popular: p.popular ?? false })))
+        setTestimoniList(o.testimoni ?? [])
+        setFaqList(o.faq ?? [])
       } else {
         setFetchError('Order tidak dijumpai')
       }
@@ -178,11 +195,18 @@ export default function OrderDetailPage() {
     setSaveSubmitting(true)
     setSaveError('')
     setSaveSuccess(false)
-    const payload: Record<string, string | null> = { action: 'edit_fields' }
+    const payload: Record<string, unknown> = { action: 'edit_fields' }
     for (const [k, v] of Object.entries(editFields)) {
       payload[k] = v.trim() === '' ? null : v.trim()
     }
     payload.slug = slug || null
+    payload.stats_bar  = statsBar.filter(s => s.nilai.trim() && s.label.trim())
+    payload.usp        = uspList.filter(u => u.tajuk.trim())
+    payload.pakej      = pakejList
+      .filter(p => p.nama.trim())
+      .map(p => ({ ...p, ciri: p.ciri.split('\n').map(c => c.trim()).filter(Boolean) }))
+    payload.testimoni  = testimoniList.filter(t => t.ulasan.trim())
+    payload.faq        = faqList.filter(f => f.soalan.trim())
     try {
       const res = await fetch(`/api/admin/orders/${id}`, {
         method: 'PATCH',
@@ -433,6 +457,151 @@ export default function OrderDetailPage() {
                   )}
                 </div>
               ))}
+
+              {/* Stats Bar */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>Pencapaian Bisnes (Stats Bar)</label>
+                {statsBar.map((row, i) => (
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: 6, marginBottom: 6 }}>
+                    <input placeholder="200+" value={row.nilai}
+                      onChange={e => setStatsBar(p => p.map((r, j) => j === i ? { ...r, nilai: e.target.value } : r))}
+                      style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                    <input placeholder="Pelanggan Berpuas Hati" value={row.label}
+                      onChange={e => setStatsBar(p => p.map((r, j) => j === i ? { ...r, label: e.target.value } : r))}
+                      style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                    <button type="button" onClick={() => setStatsBar(p => p.filter((_, j) => j !== i))}
+                      style={{ padding: '8px 10px', background: '#fee2e2', border: 'none', borderRadius: 8, cursor: 'pointer', color: '#dc2626', fontSize: 13 }}>✕</button>
+                  </div>
+                ))}
+                {statsBar.length < 4 && (
+                  <button type="button" onClick={() => setStatsBar(p => [...p, { nilai: '', label: '' }])}
+                    style={{ fontSize: 12, color: '#44403C', background: 'none', border: '1px dashed #d6d3d1', borderRadius: 6, padding: '6px 14px', cursor: 'pointer' }}>
+                    + Tambah Statistik
+                  </button>
+                )}
+              </div>
+
+              {/* USP */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>Kenapa Pilih Kami (USP)</label>
+                {uspList.map((row, i) => (
+                  <div key={i} style={{ border: '1px solid #e7e5e4', borderRadius: 8, padding: 10, marginBottom: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontSize: 11, color: '#78716C' }}>Point {i + 1}</span>
+                      <button type="button" onClick={() => setUspList(p => p.filter((_, j) => j !== i))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 12 }}>Padam</button>
+                    </div>
+                    <input placeholder="Tajuk ringkas" value={row.tajuk}
+                      onChange={e => setUspList(p => p.map((r, j) => j === i ? { ...r, tajuk: e.target.value } : r))}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', marginBottom: 6, boxSizing: 'border-box' as const }} />
+                    <input placeholder="Huraian 1 ayat" value={row.huraian}
+                      onChange={e => setUspList(p => p.map((r, j) => j === i ? { ...r, huraian: e.target.value } : r))}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', boxSizing: 'border-box' as const }} />
+                  </div>
+                ))}
+                {uspList.length < 4 && (
+                  <button type="button" onClick={() => setUspList(p => [...p, { tajuk: '', huraian: '' }])}
+                    style={{ fontSize: 12, color: '#44403C', background: 'none', border: '1px dashed #d6d3d1', borderRadius: 6, padding: '6px 14px', cursor: 'pointer' }}>
+                    + Tambah Point
+                  </button>
+                )}
+              </div>
+
+              {/* Pakej */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>Pakej & Harga</label>
+                {pakejList.map((row, i) => (
+                  <div key={i} style={{ border: '1px solid #e7e5e4', borderRadius: 8, padding: 10, marginBottom: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, color: '#78716C' }}>Pakej {i + 1}</span>
+                      <button type="button" onClick={() => setPakejList(p => p.filter((_, j) => j !== i))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 12 }}>Padam</button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 6 }}>
+                      <input placeholder="Nama Pakej" value={row.nama}
+                        onChange={e => setPakejList(p => p.map((r, j) => j === i ? { ...r, nama: e.target.value } : r))}
+                        style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                      <input placeholder="Harga (RM150)" value={row.harga}
+                        onChange={e => setPakejList(p => p.map((r, j) => j === i ? { ...r, harga: e.target.value } : r))}
+                        style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                    </div>
+                    <textarea placeholder={'Ciri-ciri (satu per baris)\nDeliveri dalam 3 hari\nGaransi 30 hari'} value={row.ciri}
+                      onChange={e => setPakejList(p => p.map((r, j) => j === i ? { ...r, ciri: e.target.value } : r))}
+                      rows={3}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', resize: 'vertical', boxSizing: 'border-box' as const, marginBottom: 6 }} />
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, cursor: 'pointer' }}>
+                      <input type="checkbox" checked={row.popular}
+                        onChange={e => setPakejList(p => p.map((r, j) => j === i ? { ...r, popular: e.target.checked } : r))} />
+                      Tandai sebagai &ldquo;Pilihan Ramai&rdquo;
+                    </label>
+                  </div>
+                ))}
+                {pakejList.length < 3 && (
+                  <button type="button" onClick={() => setPakejList(p => [...p, { nama: '', harga: '', ciri: '', popular: false }])}
+                    style={{ fontSize: 12, color: '#44403C', background: 'none', border: '1px dashed #d6d3d1', borderRadius: 6, padding: '6px 14px', cursor: 'pointer' }}>
+                    + Tambah Pakej
+                  </button>
+                )}
+              </div>
+
+              {/* Testimoni */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>Testimoni Pelanggan</label>
+                {testimoniList.map((row, i) => (
+                  <div key={i} style={{ border: '1px solid #e7e5e4', borderRadius: 8, padding: 10, marginBottom: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, color: '#78716C' }}>Testimoni {i + 1}</span>
+                      <button type="button" onClick={() => setTestimoniList(p => p.filter((_, j) => j !== i))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 12 }}>Padam</button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 6 }}>
+                      <input placeholder="Nama" value={row.nama}
+                        onChange={e => setTestimoniList(p => p.map((r, j) => j === i ? { ...r, nama: e.target.value } : r))}
+                        style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                      <input placeholder="Dari (Kuala Lumpur)" value={row.dari}
+                        onChange={e => setTestimoniList(p => p.map((r, j) => j === i ? { ...r, dari: e.target.value } : r))}
+                        style={{ padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none' }} />
+                    </div>
+                    <textarea placeholder="Ulasan pelanggan..." value={row.ulasan}
+                      onChange={e => setTestimoniList(p => p.map((r, j) => j === i ? { ...r, ulasan: e.target.value } : r))}
+                      rows={2}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', resize: 'vertical', boxSizing: 'border-box' as const }} />
+                  </div>
+                ))}
+                {testimoniList.length < 3 && (
+                  <button type="button" onClick={() => setTestimoniList(p => [...p, { nama: '', dari: '', ulasan: '' }])}
+                    style={{ fontSize: 12, color: '#44403C', background: 'none', border: '1px dashed #d6d3d1', borderRadius: 6, padding: '6px 14px', cursor: 'pointer' }}>
+                    + Tambah Testimoni
+                  </button>
+                )}
+              </div>
+
+              {/* FAQ */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>Soalan Lazim (FAQ)</label>
+                {faqList.map((row, i) => (
+                  <div key={i} style={{ border: '1px solid #e7e5e4', borderRadius: 8, padding: 10, marginBottom: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, color: '#78716C' }}>Soalan {i + 1}</span>
+                      <button type="button" onClick={() => setFaqList(p => p.filter((_, j) => j !== i))}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: 12 }}>Padam</button>
+                    </div>
+                    <input placeholder="Soalan..." value={row.soalan}
+                      onChange={e => setFaqList(p => p.map((r, j) => j === i ? { ...r, soalan: e.target.value } : r))}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', marginBottom: 6, boxSizing: 'border-box' as const }} />
+                    <textarea placeholder="Jawapan..." value={row.jawapan}
+                      onChange={e => setFaqList(p => p.map((r, j) => j === i ? { ...r, jawapan: e.target.value } : r))}
+                      rows={2}
+                      style={{ width: '100%', padding: '8px 10px', fontSize: 13, border: '1px solid #d6d3d1', borderRadius: 8, outline: 'none', resize: 'vertical', boxSizing: 'border-box' as const }} />
+                  </div>
+                ))}
+                {faqList.length < 5 && (
+                  <button type="button" onClick={() => setFaqList(p => [...p, { soalan: '', jawapan: '' }])}
+                    style={{ fontSize: 12, color: '#44403C', background: 'none', border: '1px dashed #d6d3d1', borderRadius: 6, padding: '6px 14px', cursor: 'pointer' }}>
+                    + Tambah Soalan
+                  </button>
+                )}
+              </div>
 
               {saveError && <p style={{ color: '#dc2626', fontSize: 12, marginBottom: 10 }}>⚠ {saveError}</p>}
               {saveSuccess && <p style={{ color: '#065F46', fontSize: 12, marginBottom: 10 }}>✓ Disimpan. Iframe akan refresh.</p>}

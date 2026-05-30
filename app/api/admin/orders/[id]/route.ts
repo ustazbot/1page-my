@@ -198,10 +198,16 @@ export async function PATCH(
       'target_pelanggan', 'waktu_operasi', 'alamat', 'google_maps_link',
       'instagram', 'facebook', 'tiktok', 'template_pilihan',
       'banner_atas_url', 'logo_url'] as const
-    const updates: Record<string, string | null> = {}
+    const updates: Record<string, unknown> = {}
     for (const field of EDITABLE) {
       if (field in body) {
         updates[field] = body[field] ?? null
+      }
+    }
+    // JSONB array fields
+    for (const field of ['stats_bar', 'usp', 'pakej', 'testimoni', 'faq'] as const) {
+      if (field in body) {
+        updates[field] = Array.isArray(body[field]) ? body[field] : []
       }
     }
 
