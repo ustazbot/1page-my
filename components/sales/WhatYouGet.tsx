@@ -49,7 +49,7 @@ export default function WhatYouGet() {
           left: 0,
           right: 0,
           height: 72,
-          background: '#1C1917',
+          background: '#FFFFFF',
           clipPath: 'polygon(0 100%, 100% 0, 100% 100%)',
         }}
       />
