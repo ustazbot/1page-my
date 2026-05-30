@@ -301,7 +301,7 @@ export default function OrderDetailPage() {
   )
 
   const statusStyle = STATUS_COLOR[order.status] ?? { bg: '#F5F5F4', color: '#78716C' }
-  const isEditable = !['live'].includes(order.status)
+  const isEditable = true
   const showIframe = !!order.slug && ['draft', 'preview_ready', 'paid', 'live'].includes(order.status)
   const showGenerateButton = ['pending', 'draft'].includes(order.status)
 
