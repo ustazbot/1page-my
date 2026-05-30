@@ -177,11 +177,11 @@ export default function Hero() {
                 margin: '0 0 20px',
               }}
             >
-              Landing Page
+              Landing Page{' '}
               <br />
-              untuk Bisnes Anda.
+              untuk Bisnes Anda.{' '}
               <br />
-              <span style={{ color: '#F97316' }}>Professional.</span>
+              <span style={{ color: '#F97316' }}>Professional.</span>{' '}
               <br />
               Cepat.{' '}
               <span
