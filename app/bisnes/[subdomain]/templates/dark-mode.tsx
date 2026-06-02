@@ -30,6 +30,20 @@ function waHref(number: string, message: string): string {
   return `https://wa.me/${number.replace(/^0/, '60')}?text=${encodeURIComponent(message)}`
 }
 
+function googleMapsEmbedUrl(url: string): string | null {
+  if (!url) return null
+  try {
+    if (url.includes('output=embed') || url.includes('/maps/embed')) return url
+    const coordMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+    if (coordMatch) return `https://maps.google.com/maps?output=embed&q=${coordMatch[1]},${coordMatch[2]}`
+    const qMatch = url.match(/[?&]q=([^&]+)/)
+    if (qMatch && url.includes('google.com')) return `https://maps.google.com/maps?output=embed&q=${qMatch[1]}`
+    const placeMatch = url.match(/\/maps\/place\/([^/@?]+)/)
+    if (placeMatch) return `https://maps.google.com/maps?output=embed&q=${placeMatch[1]}`
+    return null
+  } catch { return null }
+}
+
 function ctaCopy(jenis: string | null): string {
   if (!jenis) return 'WhatsApp Kami Sekarang'
   if (jenis.includes('F&B') || jenis.includes('Retail')) return 'Tanya Harga Sekarang'
@@ -240,10 +254,19 @@ export default function DarkMode({ order }: { order: BisnesOrder }) {
               <span style={{ color: '#cbd5e1', fontSize: 15, lineHeight: 1.6 }}>{order.alamat}</span>
             </div>
             {order.google_maps_link && (
-              <a href={order.google_maps_link} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#38bdf8', fontSize: 14, fontWeight: 600, textDecoration: 'none', marginTop: 4 }}>
-                🗺️ Buka Google Maps →
-              </a>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {googleMapsEmbedUrl(order.google_maps_link) && (
+                  <div style={{ borderRadius: 10, overflow: 'hidden' }}>
+                    <iframe src={googleMapsEmbedUrl(order.google_maps_link)!} width="100%" height="220"
+                      style={{ border: 0, display: 'block' }} allowFullScreen loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade" />
+                  </div>
+                )}
+                <a href={order.google_maps_link} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#38bdf8', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
+                  🗺️ Buka Google Maps →
+                </a>
+              </div>
             )}
           </div>
         </section>
