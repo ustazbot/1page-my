@@ -178,6 +178,27 @@ export default function OrderDetailPage() {
 
   // ── Handlers ─────────────────────────────────────────────────────────────
 
+  async function handleSelectVariant(variantId: number) {
+    setSelectedVariantId(variantId)
+    const variant = ctaVariants.find(v => v.id === variantId)
+    if (!variant) return
+    try {
+      await fetch(`/api/admin/orders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'edit_fields',
+          cta_button_text: variant.cta_button_text,
+          cta_subtext:     variant.cta_subtext,
+          cta_wa_message:  variant.cta_wa_message,
+        }),
+      })
+      setIframeKey(k => k + 1)
+    } catch {
+      // silent — user can still deploy
+    }
+  }
+
   async function handleGenerate() {
     if (!slug) { setGenerateError('Set slug dulu sebelum jana copy.'); return }
     setGenerating(true)
@@ -461,7 +482,7 @@ export default function OrderDetailPage() {
                 {ctaVariants.map(v => (
                   <button
                     key={v.id}
-                    onClick={() => setSelectedVariantId(v.id)}
+                    onClick={() => handleSelectVariant(v.id)}
                     style={{
                       flex: 1, padding: '8px 0', fontSize: 12, fontWeight: 600,
                       borderRadius: 8, border: '2px solid',
