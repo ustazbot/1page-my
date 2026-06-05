@@ -202,7 +202,7 @@ export async function PATCH(
   if (body.action === 'edit_fields') {
     const EDITABLE = ['nama_bisnes', 'tagline', 'cerita_bisnes', 'produk_servis',
       'target_pelanggan', 'waktu_operasi', 'alamat', 'google_maps_link',
-      'instagram', 'facebook', 'tiktok', 'template_pilihan',
+      'instagram', 'facebook', 'tiktok', 'video_url', 'template_pilihan',
       'banner_atas_url', 'logo_url',
       'cta_button_text', 'cta_subtext', 'cta_wa_message'] as const
     const updates: Record<string, unknown> = {}

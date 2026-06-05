@@ -20,6 +20,7 @@ export type SupabaseOrder = {
   instagram?: string
   facebook?: string
   tiktok?: string
+  video_url?: string
   banner_atas_url?: string
   logo_url?: string
   gallery_urls?: string[]
@@ -304,10 +305,9 @@ export function orderToClientData(order: SupabaseOrder): ClientData {
         facebook: order.facebook || undefined,
         tiktok: order.tiktok || undefined,
       },
-      embed: {
-        enabled: false,
-        type: 'none',
-      },
+      embed: order.video_url
+        ? { enabled: true, type: 'youtube' as const, youtube: { enabled: true, video_url: order.video_url } }
+        : { enabled: false, type: 'none' as const },
     },
   }
 }

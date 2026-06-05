@@ -20,6 +20,7 @@ type Order = {
   instagram: string | null
   facebook: string | null
   tiktok: string | null
+  video_url: string | null
   tagline: string | null
   jenis_bisnes: string | null
   cerita_bisnes: string | null
@@ -192,6 +193,7 @@ export default function OrderDetailPage() {
           instagram:        o.instagram        ?? '',
           facebook:         o.facebook         ?? '',
           tiktok:           o.tiktok           ?? '',
+          video_url:        o.video_url        ?? '',
           template_pilihan: o.template_pilihan ?? 'bold_minimal',
         })
         setStatsBar(o.stats_bar ?? [])
@@ -603,6 +605,7 @@ export default function OrderDetailPage() {
                 { key: 'instagram',        label: 'Instagram',         type: 'input' },
                 { key: 'facebook',         label: 'Facebook',          type: 'input' },
                 { key: 'tiktok',           label: 'TikTok',            type: 'input' },
+                { key: 'video_url',        label: 'Link Video YouTube', type: 'input' },
               ].map(({ key, label, type }) => (
                 <div key={key} style={{ marginBottom: 14 }}>
                   <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#44403C', marginBottom: 6 }}>{label}</label>
