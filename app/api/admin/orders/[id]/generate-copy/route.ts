@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminSession } from '@/lib/admin-session'
 import { supabaseServer } from '@/lib/supabase'
-import { generateCopy } from '@/lib/claude'
+import { generateCopy, generateCTA } from '@/lib/claude'
 import type { CopyBrief } from '@/lib/claude'
 
 export async function POST(
@@ -42,13 +42,18 @@ export async function POST(
     language: 'BM',
   }
 
-  let copy
-  try {
-    copy = await generateCopy(brief, 'claude')
-  } catch (err) {
-    console.error('[generate-copy] Claude error:', err)
+  // Run copy and CTA generation in parallel
+  const [copyResult, ctaResult] = await Promise.allSettled([
+    generateCopy(brief, 'claude'),
+    generateCTA(brief),
+  ])
+
+  if (copyResult.status === 'rejected') {
+    console.error('[generate-copy] Claude copy error:', copyResult.reason)
     return NextResponse.json({ error: 'AI gagal jana copy. Cuba lagi.' }, { status: 502 })
   }
+
+  const copy = copyResult.value
 
   const { error: updateErr } = await sb.from('orders').update({
     tagline: copy.tagline,
@@ -61,6 +66,11 @@ export async function POST(
     return NextResponse.json({ error: 'Gagal simpan copy' }, { status: 500 })
   }
 
+  const cta_variants = ctaResult.status === 'fulfilled' ? ctaResult.value : null
+  const cta_error = ctaResult.status === 'rejected'
+    ? 'Gagal jana CTA, cuba semula'
+    : null
+
   return NextResponse.json({
     ok: true,
     copy: {
@@ -68,5 +78,7 @@ export async function POST(
       cerita_bisnes: copy.about_paragraph_1 + (copy.about_paragraph_2 ? '\n\n' + copy.about_paragraph_2 : ''),
       produk_servis: copy.products_title + '\n' + copy.products_subtitle,
     },
+    cta_variants,
+    cta_error,
   })
 }
