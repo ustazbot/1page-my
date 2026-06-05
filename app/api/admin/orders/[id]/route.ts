@@ -138,12 +138,18 @@ export async function PATCH(
     }
 
     // Update order
+    const ctaFields: Record<string, string | null> = {}
+    if (typeof body.cta_button_text === 'string') ctaFields.cta_button_text = body.cta_button_text || null
+    if (typeof body.cta_subtext === 'string') ctaFields.cta_subtext = body.cta_subtext || null
+    if (typeof body.cta_wa_message === 'string') ctaFields.cta_wa_message = body.cta_wa_message || null
+
     const { error: updateErr } = await sb.from('orders').update({
       slug,
       preview_url,
       toyyibpay_bill_code: bill_code,
       toyyibpay_amount: 150,
       status: 'preview_ready',
+      ...ctaFields,
     }).eq('id', id)
 
     if (updateErr) {
@@ -197,7 +203,8 @@ export async function PATCH(
     const EDITABLE = ['nama_bisnes', 'tagline', 'cerita_bisnes', 'produk_servis',
       'target_pelanggan', 'waktu_operasi', 'alamat', 'google_maps_link',
       'instagram', 'facebook', 'tiktok', 'template_pilihan',
-      'banner_atas_url', 'logo_url'] as const
+      'banner_atas_url', 'logo_url',
+      'cta_button_text', 'cta_subtext', 'cta_wa_message'] as const
     const updates: Record<string, unknown> = {}
     for (const field of EDITABLE) {
       if (field in body) {
