@@ -46,6 +46,9 @@ type Order = {
   pakej:     { nama: string; harga: string; ciri: string[]; popular?: boolean }[] | null
   testimoni: { nama: string; dari: string; ulasan: string }[] | null
   faq:       { soalan: string; jawapan: string }[] | null
+  cta_button_text: string | null
+  cta_subtext:     string | null
+  cta_wa_message:  string | null
 }
 
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
