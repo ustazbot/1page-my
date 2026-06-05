@@ -51,6 +51,14 @@ type Order = {
   cta_wa_message:  string | null
 }
 
+type CTAVariant = {
+  id: number
+  tone: 'direct' | 'soft' | 'value'
+  cta_button_text: string
+  cta_subtext: string
+  cta_wa_message: string
+}
+
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
 
 const STATUS_LABEL: Record<string, string> = {
@@ -115,6 +123,11 @@ export default function OrderDetailPage() {
   // Confirm cancel
   const [confirmCancel, setConfirmCancel] = useState(false)
 
+  // CTA variants from AI generation
+  const [ctaVariants, setCtaVariants]             = useState<CTAVariant[]>([])
+  const [selectedVariantId, setSelectedVariantId] = useState<number>(1)
+  const [ctaError, setCTAError]                   = useState('')
+
   // Conversion segments
   const [statsBar,      setStatsBar]      = useState<{ nilai: string; label: string }[]>([])
   const [uspList,       setUspList]       = useState<{ tajuk: string; huraian: string }[]>([])
@@ -169,6 +182,7 @@ export default function OrderDetailPage() {
     if (!slug) { setGenerateError('Set slug dulu sebelum jana copy.'); return }
     setGenerating(true)
     setGenerateError('')
+    setCTAError('')
     try {
       // Save slug to DB first so generate-copy endpoint can read it
       if (!order?.slug || order.slug !== slug) {
@@ -187,6 +201,11 @@ export default function OrderDetailPage() {
       const data = await res.json()
       if (!res.ok) { setGenerateError(data.error || 'Gagal jana copy'); return }
       setEditFields(prev => ({ ...prev, ...data.copy }))
+      if (Array.isArray(data.cta_variants) && data.cta_variants.length === 3) {
+        setCtaVariants(data.cta_variants)
+        setSelectedVariantId(1)
+      }
+      if (data.cta_error) setCTAError(data.cta_error)
       setIframeKey(k => k + 1)
       await fetchOrder()
     } finally {
@@ -263,10 +282,17 @@ export default function OrderDetailPage() {
     setSubmitting(true)
     setActionError('')
     try {
+      const selectedVariant = ctaVariants.find(v => v.id === selectedVariantId)
+      const payload: Record<string, unknown> = { action: 'set_preview', slug }
+      if (selectedVariant) {
+        payload.cta_button_text = selectedVariant.cta_button_text
+        payload.cta_subtext     = selectedVariant.cta_subtext
+        payload.cta_wa_message  = selectedVariant.cta_wa_message
+      }
       const res = await fetch(`/api/admin/orders/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'set_preview', slug }),
+        body: JSON.stringify(payload),
       })
       const data = await res.json()
       if (!res.ok) { setActionError(data.error || 'Gagal'); return }
@@ -422,6 +448,56 @@ export default function OrderDetailPage() {
               </button>
               {!slug && <p style={{ fontSize: 11, color: '#78716C', marginTop: 8, textAlign: 'center' }}>Set slug dulu sebelum jana copy.</p>}
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+          )}
+
+          {/* CTA Variants — muncul selepas generate */}
+          {ctaVariants.length > 0 && showGenerateButton && (
+            <div style={{ background: '#fff', border: '1px solid #e7e5e4', borderRadius: 12, padding: 20 }}>
+              <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#78716C', marginBottom: 14 }}>Pilih CTA</p>
+
+              {/* Tone tabs */}
+              <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+                {ctaVariants.map(v => (
+                  <button
+                    key={v.id}
+                    onClick={() => setSelectedVariantId(v.id)}
+                    style={{
+                      flex: 1, padding: '8px 0', fontSize: 12, fontWeight: 600,
+                      borderRadius: 8, border: '2px solid',
+                      borderColor: selectedVariantId === v.id ? '#1C1917' : '#e7e5e4',
+                      background: selectedVariantId === v.id ? '#1C1917' : '#fff',
+                      color: selectedVariantId === v.id ? '#fff' : '#78716C',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {v.tone === 'direct' ? 'Terus' : v.tone === 'soft' ? 'Lembut' : 'Nilai'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Preview kad */}
+              {(() => {
+                const v = ctaVariants.find(x => x.id === selectedVariantId)
+                if (!v) return null
+                return (
+                  <div style={{ background: '#F8F6F1', borderRadius: 10, padding: 14 }}>
+                    <div style={{ display: 'inline-block', background: '#1C1917', color: '#fff', fontSize: 13, fontWeight: 700, padding: '10px 20px', borderRadius: 8, marginBottom: 6 }}>
+                      💬 {v.cta_button_text}
+                    </div>
+                    {v.cta_subtext ? (
+                      <p style={{ fontSize: 12, color: '#78716C', margin: '4px 0 8px' }}>{v.cta_subtext}</p>
+                    ) : (
+                      <p style={{ fontSize: 11, color: '#a8a29e', margin: '4px 0 8px', fontStyle: 'italic' }}>Tiada subtext</p>
+                    )}
+                    <p style={{ fontSize: 11, color: '#a8a29e', margin: 0, fontStyle: 'italic' }}>
+                      WA: &ldquo;{v.cta_wa_message}&rdquo;
+                    </p>
+                  </div>
+                )
+              })()}
+
+              {ctaError && <p style={{ fontSize: 12, color: '#dc2626', marginTop: 8 }}>⚠ {ctaError}</p>}
             </div>
           )}
 
