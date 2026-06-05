@@ -55,7 +55,8 @@ function initials(nama: string): string {
 export default function CoolProfessional({ order }: { order: BisnesOrder }) {
   const items     = parseItems(order.produk_servis)
   const galleries = order.gallery_urls?.filter(Boolean) ?? []
-  const cta       = ctaCopy(order.jenis_bisnes)
+  const cta   = order.cta_button_text ?? ctaCopy(order.jenis_bisnes)
+  const waMsg = order.cta_wa_message ?? `Salam, saya berminat dengan perkhidmatan ${order.nama_bisnes}`
   const stats     = order.stats_bar?.filter(s => s.nilai && s.label) ?? []
   const usp       = order.usp?.filter(u => u.tajuk) ?? []
   const pakej     = order.pakej?.filter(p => p.nama) ?? []
@@ -82,11 +83,16 @@ export default function CoolProfessional({ order }: { order: BisnesOrder }) {
             {order.tagline && (
               <p style={{ fontSize: 16, color: '#93c5fd', margin: '0 0 32px', lineHeight: 1.6 }}>{order.tagline}</p>
             )}
-            <a href={waHref(order.whatsapp, `Salam, saya berminat dengan perkhidmatan ${order.nama_bisnes}`)}
+            <a href={waHref(order.whatsapp, waMsg)}
               target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#3b82f6', color: '#fff', padding: '13px 26px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none', width: 'fit-content' }}>
               💬 {cta}
             </a>
+            {order.cta_subtext && (
+              <p style={{ fontSize: 13, opacity: 0.7, marginTop: 8, fontFamily: '"DM Sans", sans-serif' }}>
+                {order.cta_subtext}
+              </p>
+            )}
           </div>
         </section>
 
@@ -277,11 +283,16 @@ export default function CoolProfessional({ order }: { order: BisnesOrder }) {
 
         {/* S12: Footer CTA */}
         <footer style={{ background: '#1e3a8a', padding: '48px 24px 80px', textAlign: 'center' }}>
-          <a href={waHref(order.whatsapp, `Salam, saya berminat dengan perkhidmatan ${order.nama_bisnes}`)}
+          <a href={waHref(order.whatsapp, waMsg)}
             target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#3b82f6', color: '#fff', padding: '16px 36px', borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: 'none', marginBottom: 12 }}>
             💬 Hubungi Kami di WhatsApp
           </a>
+          {order.cta_subtext && (
+            <p style={{ fontSize: 13, opacity: 0.7, marginTop: 8, fontFamily: '"DM Sans", sans-serif' }}>
+              {order.cta_subtext}
+            </p>
+          )}
           <p style={{ fontSize: 14, color: '#93c5fd', margin: '0 0 20px' }}>📞 {order.telefon}</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 28, flexWrap: 'wrap' }}>
             {order.instagram && <a href={order.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#93c5fd', fontSize: 13, textDecoration: 'none' }}>Instagram</a>}
@@ -292,7 +303,7 @@ export default function CoolProfessional({ order }: { order: BisnesOrder }) {
         </footer>
       </main>
 
-      <a href={waHref(order.whatsapp, `Salam, saya berminat dengan perkhidmatan ${order.nama_bisnes}`)}
+      <a href={waHref(order.whatsapp, waMsg)}
         target="_blank" rel="noopener noreferrer"
         style={{ position: 'fixed', bottom: 24, right: 20, zIndex: 900, background: '#3b82f6', color: '#fff', borderRadius: 50, padding: '12px 20px', fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 4px 20px rgba(59,130,246,0.5)', display: 'flex', alignItems: 'center', gap: 8 }}>
         💬 {cta}
