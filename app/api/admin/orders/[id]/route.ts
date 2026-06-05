@@ -217,6 +217,10 @@ export async function PATCH(
         updates[field] = Array.isArray(body[field]) ? body[field] : []
       }
     }
+    // gallery_urls — string array stored as text[]
+    if ('gallery_urls' in body && Array.isArray(body.gallery_urls)) {
+      updates.gallery_urls = (body.gallery_urls as string[]).filter(Boolean)
+    }
 
     // Handle slug separately — requires validation and uniqueness check
     if ('slug' in body && body.slug != null) {

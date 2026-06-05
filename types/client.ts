@@ -125,10 +125,11 @@ export interface ClientData {
     }
     embed: {
       enabled: boolean
-      type: 'none' | 'facebook_page' | 'instagram_post' | 'tiktok_video'
+      type: 'none' | 'facebook_page' | 'instagram_post' | 'tiktok_video' | 'youtube'
       facebook_page?: { enabled: boolean; page_url?: string; embed_html?: string }
       instagram_post?: { enabled: boolean; post_url?: string; embed_html?: string }
       tiktok_video?: { enabled: boolean; video_url?: string; embed_html?: string }
+      youtube?: { enabled: boolean; video_url?: string; video_id?: string; video_title?: string }
     }
   }
   design?: {

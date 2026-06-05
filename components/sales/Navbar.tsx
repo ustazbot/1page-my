@@ -47,34 +47,6 @@ export default function Navbar() {
         1page<span style={{ color: '#F97316' }}>.my</span>
       </a>
 
-      <div
-        className="nav-text-links"
-        style={{ display: 'flex', alignItems: 'center', gap: 24 }}
-      >
-        {[
-          { label: 'Jadi Affiliate', href: '/affiliate' },
-          { label: 'Terma & Syarat', href: '/terms' },
-        ].map(({ label, href }) => (
-          <a
-            key={href}
-            href={href}
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 500,
-              fontSize: 14,
-              color: '#78716C',
-              textDecoration: 'none',
-              letterSpacing: '-0.01em',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#1C1917' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#78716C' }}
-          >
-            {label}
-          </a>
-        ))}
-      </div>
-
       <a
         href="/order"
         style={{

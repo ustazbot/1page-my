@@ -57,10 +57,30 @@ export function flattenClientData(data: ClientData): Record<string, string> {
   flat['social_facebook'] = data.social.links.facebook ?? ''
   flat['social_tiktok'] = data.social.links.tiktok ?? ''
 
+  for (const item of data.testimonials.items) {
+    flat[`testimonial_${item.id}_quote`] = item.quote
+    flat[`testimonial_${item.id}_name`] = item.name
+    if (item.business) flat[`testimonial_${item.id}_business`] = item.business
+  }
+
   flat['page_url'] = data.project.page_url
   flat['slug'] = data.project.slug
 
   return flat
+}
+
+function extractYouTubeId(url: string): string | null {
+  const patterns = [
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ]
+  for (const p of patterns) {
+    const m = url.match(p)
+    if (m) return m[1]
+  }
+  return null
 }
 
 const SECTION_TOGGLES: Array<{
@@ -114,10 +134,21 @@ export function injectTemplate(html: string, data: ClientData): {
   if (data.social.embed.enabled && data.social.embed.type !== 'none') {
     // Has embed: hide plain links, inject embed HTML
     const type = data.social.embed.type
-    const embedData = data.social.embed[type]
-    const embedHtml = embedData?.embed_html
-      ? `<div class="social-embed">${embedData.embed_html}</div>`
-      : ''
+    let embedHtml = ''
+
+    if (type === 'youtube') {
+      const yt = data.social.embed.youtube
+      const videoId = yt?.video_id || (yt?.video_url ? extractYouTubeId(yt.video_url) : null)
+      if (videoId) {
+        const title = yt?.video_title ?? 'Video'
+        embedHtml = `<div class="social-embed youtube-embed"><div class="youtube-responsive"><iframe src="https://www.youtube.com/embed/${videoId}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>`
+      }
+    } else {
+      const embedData = data.social.embed[type as 'facebook_page' | 'instagram_post' | 'tiktok_video']
+      embedHtml = embedData?.embed_html
+        ? `<div class="social-embed">${embedData.embed_html}</div>`
+        : ''
+    }
 
     // Remove plain links block
     result = result.replace(

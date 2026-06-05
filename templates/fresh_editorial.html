@@ -1221,6 +1221,7 @@
             .navbar {
                 top: 10px;
                 padding: 0.5rem 0.5rem 0.5rem 1rem;
+                width: min(calc(100% - 2rem), 560px);
             }
 
             .hero-title {
@@ -1255,18 +1256,175 @@
             .stat-number {
                 font-size: 2rem;
             }
+            .hero-cta-group {
+                flex-direction: column;
+            }
+            .hero-cta-group .btn {
+                width: 100%;
+                justify-content: center;
+                min-height: 52px;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .cta-buttons .btn {
+                width: 100%;
+                min-height: 52px;
+                justify-content: center;
+            }
+            .hero-image-badge {
+                white-space: normal;
+                text-align: center;
+            }
         }
     
+        body {
+            overflow-x: hidden;
+        }
+
         .social-embed {
             margin-top: 2rem;
             display: flex;
             justify-content: center;
+            overflow: hidden;
+            max-width: 100%;
         }
         .social-embed iframe,
-        .social-embed blockquote {
-            max-width: 100%;
+        .social-embed blockquote,
+        .social-embed > * {
+            max-width: 100% !important;
             border-radius: 8px;
         }
+
+        /* YouTube responsive embed */
+        .youtube-embed {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto 0;
+        }
+        .youtube-responsive {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+        }
+        .youtube-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Per-product CTA button */
+        .product-cta-btn {
+            display: block;
+            text-align: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: var(--space-sm);
+            transition: var(--transition);
+        }
+        .product-cta-btn:hover {
+            background-color: var(--color-accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials section */
+        .testimonials {
+            background-color: var(--color-white);
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+        @media (min-width: 640px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .testimonial-card {
+            background-color: var(--color-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-lg);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '"';
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            color: var(--color-accent);
+            opacity: 0.2;
+            position: absolute;
+            top: -0.5rem;
+            left: 1rem;
+            line-height: 1;
+        }
+        .testimonial-quote {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            line-height: 1.7;
+            margin-bottom: var(--space-md);
+            font-style: italic;
+        }
+        .testimonial-author strong {
+            display: block;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        .testimonial-author span {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Sticky mobile CTA bar */
+        .mobile-cta-bar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-cta-bar {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--color-white);
+                padding: 10px 16px;
+                box-shadow: 0 -2px 20px rgba(0,0,0,0.12);
+                z-index: 998;
+                gap: 10px;
+                border-top: 1px solid rgba(0,0,0,0.06);
+            }
+            .mobile-cta-bar .btn {
+                flex: 1;
+                justify-content: center;
+                min-height: 48px;
+                font-size: 0.9rem;
+            }
+            body {
+                padding-bottom: 76px;
+            }
+            .sticky-whatsapp {
+                bottom: 86px;
+            }
+        }
+        /* Hide empty/unfilled image and iframe slots */
+        img[src=""], img:not([src]) { display: none !important; }
+        iframe[src=""], iframe:not([src]) { display: none !important; }
         </style>
 </head>
 <body>
@@ -1378,6 +1536,7 @@
                     <div class="product-info">
                         <h3 class="product-name">{{ product_1_name }}</h3>
                         <p class="product-desc">{{ product_1_desc }}</p>
+                        <a href="{{ whatsapp_link }}" class="product-cta-btn" target="_blank">💬 Tanya Harga</a>
                     </div>
                 </div>
                 <!-- Product 2 -->
@@ -1389,6 +1548,7 @@
                     <div class="product-info">
                         <h3 class="product-name">{{ product_2_name }}</h3>
                         <p class="product-desc">{{ product_2_desc }}</p>
+                        <a href="{{ whatsapp_link }}" class="product-cta-btn" target="_blank">💬 Tanya Harga</a>
                     </div>
                 </div>
                 <!-- Product 3 -->
@@ -1400,6 +1560,7 @@
                     <div class="product-info">
                         <h3 class="product-name">{{ product_3_name }}</h3>
                         <p class="product-desc">{{ product_3_desc }}</p>
+                        <a href="{{ whatsapp_link }}" class="product-cta-btn" target="_blank">💬 Tanya Harga</a>
                     </div>
                 </div>
                 <!-- Product 4 -->
@@ -1411,6 +1572,7 @@
                     <div class="product-info">
                         <h3 class="product-name">{{ product_4_name }}</h3>
                         <p class="product-desc">{{ product_4_desc }}</p>
+                        <a href="{{ whatsapp_link }}" class="product-cta-btn" target="_blank">💬 Tanya Harga</a>
                     </div>
                 </div>
                 <!-- Product 5 -->
@@ -1422,6 +1584,7 @@
                     <div class="product-info">
                         <h3 class="product-name">{{ product_5_name }}</h3>
                         <p class="product-desc">{{ product_5_desc }}</p>
+                        <a href="{{ whatsapp_link }}" class="product-cta-btn" target="_blank">💬 Tanya Harga</a>
                     </div>
                 </div>
             </div>
@@ -1429,8 +1592,46 @@
     </section>
 
     <!-- ============================================
+         TESTIMONIALS SECTION
+         ============================================ -->
+<!-- TESTIMONIALS_START -->
+    <section class="testimonials section" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Apa Kata Pelanggan Kami</h2>
+                <p class="section-subtitle">Kepuasan pelanggan adalah keutamaan kami</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">{{ testimonial_1_quote }}</p>
+                    <div class="testimonial-author">
+                        <strong>{{ testimonial_1_name }}</strong>
+                        <span>{{ testimonial_1_business }}</span>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">{{ testimonial_2_quote }}</p>
+                    <div class="testimonial-author">
+                        <strong>{{ testimonial_2_name }}</strong>
+                        <span>{{ testimonial_2_business }}</span>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-quote">{{ testimonial_3_quote }}</p>
+                    <div class="testimonial-author">
+                        <strong>{{ testimonial_3_name }}</strong>
+                        <span>{{ testimonial_3_business }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- TESTIMONIALS_END -->
+
+    <!-- ============================================
          GALLERY SECTION — Horizontal scroll
          ============================================ -->
+<!-- GALLERY_START -->
     <section class="gallery section" id="gallery">
         <div class="container">
             <div class="gallery-header fade-in">
@@ -1477,10 +1678,12 @@
             </div>
         </div>
     </section>
+<!-- GALLERY_END -->
 
     <!-- ============================================
          LOCATION SECTION — Diagonal split
          ============================================ -->
+<!-- LOCATION_START -->
     <section class="location section" id="location">
         <div class="container location-inner">
             <div class="location-content fade-in">
@@ -1528,6 +1731,7 @@
             </div>
         </div>
     </section>
+<!-- LOCATION_END -->
 
     <!-- ============================================
          SOCIAL SECTION — Floating cards
@@ -1542,8 +1746,6 @@
 <div class="social-links fade-in">
                 <a href="{{ social_instagram }}" class="social-link instagram" target="_blank">
                     <div class="social-icon">IG</div>
-            <!-- SOCIAL_LINKS_END -->
-            <!-- SOCIAL_EMBED_HTML -->
                     <span>Instagram</span>
                 </a>
                 <a href="{{ social_facebook }}" class="social-link facebook" target="_blank">
@@ -1555,6 +1757,8 @@
                     <span>TikTok</span>
                 </a>
             </div>
+            <!-- SOCIAL_LINKS_END -->
+            <!-- SOCIAL_EMBED_HTML -->
         </div>
     </section>
 
@@ -1604,6 +1808,18 @@
         <span>WA</span>
         <span>Hubungi Kami</span>
     </a>
+
+    <!-- ============================================
+         STICKY MOBILE CTA BAR
+         ============================================ -->
+    <div class="mobile-cta-bar">
+        <a href="{{ whatsapp_link }}" class="btn btn-whatsapp" target="_blank">
+            💬 {{ cta_button_text }}
+        </a>
+        <a href="tel:{{ contact_phone }}" class="btn btn-outline">
+            📞 Hubungi
+        </a>
+    </div>
 
     <!-- ============================================
          LIGHTBOX

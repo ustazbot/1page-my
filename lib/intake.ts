@@ -89,6 +89,20 @@ function parseProducts(raw: string): ClientData['products']['items'] {
   }))
 }
 
+function buildGoogleMapsEmbed(link: string, address: string): string {
+  if (!link && !address) return ''
+  // Already an embed URL
+  if (link && (link.includes('google.com/maps/embed') || link.includes('output=embed'))) return link
+  // Extract coordinates from standard Google Maps URL (@lat,lng)
+  if (link) {
+    const coord = link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+    if (coord) return `https://maps.google.com/maps?q=${coord[1]},${coord[2]}&output=embed&z=17`
+  }
+  // Fallback: use address search (always works for any address)
+  const q = address || link
+  return q ? `https://maps.google.com/maps?q=${encodeURIComponent(q)}&output=embed` : ''
+}
+
 function generateSlug(businessName: string): string {
   return businessName
     .toLowerCase()
@@ -266,10 +280,11 @@ export function orderToClientData(order: SupabaseOrder): ClientData {
       address_region: '',
       address_postal: '',
       full_address: order.alamat || '',
+      google_maps_embed: buildGoogleMapsEmbed(order.google_maps_link || '', order.alamat || '') || undefined,
       waze_link: order.google_maps_link || undefined,
       operating_hours: order.waktu_operasi || '',
       hours_short: order.waktu_operasi || '',
-      enabled: !!order.alamat,
+      enabled: !!(order.alamat || order.waktu_operasi),
     },
     contact: {
       contact_phone: order.telefon ? formatPhone(order.telefon) : '',

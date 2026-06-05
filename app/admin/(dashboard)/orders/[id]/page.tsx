@@ -114,6 +114,41 @@ export default function OrderDetailPage() {
   const [uploadingSlot, setUploadingSlot] = useState<string | null>(null)
   const [uploadError, setUploadError]     = useState('')
 
+  async function compressImage(file: File, maxBytes = 4.5 * 1024 * 1024): Promise<File> {
+    return new Promise((resolve) => {
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      img.onload = () => {
+        URL.revokeObjectURL(url)
+        const MAX_DIM = 1920
+        let { width, height } = img
+        if (width > MAX_DIM || height > MAX_DIM) {
+          const ratio = Math.min(MAX_DIM / width, MAX_DIM / height)
+          width = Math.round(width * ratio)
+          height = Math.round(height * ratio)
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width; canvas.height = height
+        canvas.getContext('2d')!.drawImage(img, 0, 0, width, height)
+        let quality = 0.88
+        const tryCompress = () => {
+          canvas.toBlob((blob) => {
+            if (!blob) return resolve(file)
+            if (blob.size <= maxBytes || quality < 0.2) {
+              resolve(new File([blob], file.name, { type: 'image/jpeg' }))
+            } else {
+              quality -= 0.1
+              tryCompress()
+            }
+          }, 'image/jpeg', quality)
+        }
+        tryCompress()
+      }
+      img.onerror = () => resolve(file)
+      img.src = url
+    })
+  }
+
   // WA copy
   const [copied, setCopied] = useState(false)
 
@@ -269,18 +304,15 @@ export default function OrderDetailPage() {
   async function handleUploadImage(slot: 'banner_atas_url' | 'logo_url', file: File) {
     setUploadingSlot(slot)
     setUploadError('')
-    const form = new FormData()
-    form.append('file', file)
-    form.append('folder', 'orders')
     try {
+      const compressed = await compressImage(file)
+      const form = new FormData()
+      form.append('file', compressed)
+      form.append('folder', 'orders')
       // Best-effort delete old image from R2
       const oldUrl = slot === 'banner_atas_url' ? order?.banner_atas_url : order?.logo_url
       if (oldUrl) {
-        fetch('/api/upload', {
-          method: 'DELETE',
-          body: JSON.stringify({ url: oldUrl }),
-          headers: { 'Content-Type': 'application/json' },
-        }).catch(() => { /* ignore delete errors */ })
+        fetch('/api/upload', { method: 'DELETE', body: JSON.stringify({ url: oldUrl }), headers: { 'Content-Type': 'application/json' } }).catch(() => {})
       }
       const res = await fetch('/api/upload', { method: 'POST', body: form })
       const data = await res.json()
@@ -292,6 +324,39 @@ export default function OrderDetailPage() {
       })
       const patchData = await patchRes.json()
       if (!patchRes.ok) { setUploadError(patchData.error || 'Gagal simpan URL gambar'); return }
+      setIframeKey(k => k + 1)
+      await fetchOrder()
+    } finally {
+      setUploadingSlot(null)
+    }
+  }
+
+  async function handleUploadGalleryImage(index: number, file: File) {
+    const slotKey = `gallery_${index}`
+    setUploadingSlot(slotKey)
+    setUploadError('')
+    try {
+      const compressed = await compressImage(file)
+      const form = new FormData()
+      form.append('file', compressed)
+      form.append('folder', 'orders')
+      // Best-effort delete old gallery image
+      const oldUrl = order?.gallery_urls?.[index]
+      if (oldUrl) {
+        fetch('/api/upload', { method: 'DELETE', body: JSON.stringify({ url: oldUrl }), headers: { 'Content-Type': 'application/json' } }).catch(() => {})
+      }
+      const res = await fetch('/api/upload', { method: 'POST', body: form })
+      const data = await res.json()
+      if (!res.ok) { setUploadError(data.error || 'Upload gagal'); return }
+      const newGalleryUrls = [...(order?.gallery_urls ?? [])]
+      newGalleryUrls[index] = data.url
+      const patchRes = await fetch(`/api/admin/orders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'edit_fields', gallery_urls: newGalleryUrls }),
+      })
+      const patchData = await patchRes.json()
+      if (!patchRes.ok) { setUploadError(patchData.error || 'Gagal simpan gallery'); return }
       setIframeKey(k => k + 1)
       await fetchOrder()
     } finally {
@@ -746,13 +811,26 @@ export default function OrderDetailPage() {
                 )}
               </div>
 
-              {/* Gallery */}
-              {order.gallery_urls?.map((url, i) => (
-                <div key={i}>
-                  <p style={{ fontSize: 11, color: '#78716C', marginBottom: 6 }}>Gallery {i + 1}</p>
-                  <img src={url} alt={`Gallery ${i + 1}`} style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: 6, border: '1px solid #e7e5e4' }} />
-                </div>
-              ))}
+              {/* Gallery — 6 slots */}
+              {Array.from({ length: 6 }, (_, i) => {
+                const url = order.gallery_urls?.[i]
+                const slotKey = `gallery_${i}`
+                return (
+                  <div key={i}>
+                    <p style={{ fontSize: 11, color: '#78716C', marginBottom: 6 }}>Gambar {i + 1}</p>
+                    {url
+                      ? <img src={url} alt={`Gambar ${i + 1}`} style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: 6, border: '1px solid #e7e5e4', display: 'block', marginBottom: 4 }} />
+                      : <div style={{ width: 72, height: 72, borderRadius: 6, border: '1px dashed #d6d3d1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#d6d3d1', marginBottom: 4 }}>+</div>
+                    }
+                    {isEditable && (
+                      <label style={{ fontSize: 12, color: '#2563EB', cursor: 'pointer', display: 'block' }}>
+                        {uploadingSlot === slotKey ? 'Uploading...' : url ? '↑ Ganti' : '↑ Tambah'}
+                        <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleUploadGalleryImage(i, e.target.files[0])} />
+                      </label>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
 

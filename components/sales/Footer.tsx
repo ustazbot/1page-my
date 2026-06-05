@@ -107,6 +107,23 @@ export default function Footer() {
               {label}
             </a>
           ))}
+          <a
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '60192323043'}?text=${encodeURIComponent('Hi, saya nak tanya pasal custom web development')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13,
+              color: '#25D366',
+              textDecoration: 'none',
+              transition: 'color 0.2s ease',
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#1ea952' }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#25D366' }}
+          >
+            Nak custom web?
+          </a>
         </nav>
       </div>
     </footer>
