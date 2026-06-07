@@ -18,6 +18,8 @@ const ANIMS = `
   .wh-faq summary::-webkit-details-marker { display: none; }
   .wh-faq[open] .wh-chevron { transform: rotate(180deg); }
   .wh-chevron { transition: transform 0.2s; display: inline-block; }
+  .wh-hero-section { height: 80svh; min-height: 440px; }
+  @media (max-width: 640px) { .wh-hero-section { height: 60svh; min-height: 360px; } }
 `
 
 function parseItems(raw: string): string[] {
@@ -66,7 +68,7 @@ export default function WarmHeritage({ order }: { order: BisnesOrder }) {
       <main style={{ background: '#fef3c7', color: '#78350f', fontFamily: '"Plus Jakarta Sans", "DM Sans", sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
         {/* S1: Hero */}
-        <section style={{ position: 'relative', height: '80svh', minHeight: 440 }}>
+        <section className="wh-hero-section" style={{ position: 'relative' }}>
           <img src={order.banner_atas_url} alt={order.nama_bisnes}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(120,53,15,0.3) 0%, rgba(120,53,15,0.85) 100%)' }} />

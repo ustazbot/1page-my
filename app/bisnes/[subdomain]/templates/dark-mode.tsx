@@ -20,6 +20,8 @@ const ANIMS = `
   .dm-faq summary::-webkit-details-marker { display: none; }
   .dm-faq[open] .dm-chevron { transform: rotate(180deg); }
   .dm-chevron { transition: transform 0.2s; display: inline-block; }
+  .dm-hero-section { height: 100svh; min-height: 520px; }
+  @media (max-width: 640px) { .dm-hero-section { height: 60svh; min-height: 360px; } }
 `
 
 function parseItems(raw: string): string[] {
@@ -68,7 +70,7 @@ export default function DarkMode({ order }: { order: BisnesOrder }) {
       <main style={{ background: '#0f172a', color: '#f8fafc', fontFamily: '"Plus Jakarta Sans", "DM Sans", sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
         {/* S1: Hero */}
-        <section style={{ position: 'relative', height: '100svh', minHeight: 520 }}>
+        <section className="dm-hero-section" style={{ position: 'relative' }}>
           <img src={order.banner_atas_url} alt={order.nama_bisnes}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.95) 100%)' }} />

@@ -18,6 +18,8 @@ const ANIMS = `
   }
   .bm-faq summary { list-style: none; cursor: pointer; }
   .bm-faq summary::-webkit-details-marker { display: none; }
+  .bm-hero-section { height: 100svh; min-height: 520px; }
+  @media (max-width: 640px) { .bm-hero-section { height: 60svh; min-height: 360px; } }
 `
 
 function parseItems(raw: string): string[] {
@@ -66,7 +68,7 @@ export default function BoldMinimal({ order }: { order: BisnesOrder }) {
       <main style={{ background: '#0a0a0a', color: '#fff', fontFamily: '"Plus Jakarta Sans", "DM Sans", sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
         {/* S1: Hero */}
-        <section style={{ position: 'relative', height: '100svh', minHeight: 520 }}>
+        <section className="bm-hero-section" style={{ position: 'relative' }}>
           <img src={order.banner_atas_url} alt={order.nama_bisnes}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.45 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%)' }} />

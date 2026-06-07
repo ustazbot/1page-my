@@ -14,6 +14,8 @@ const ANIMS = `
       animation-range: entry 0% entry 35%;
     }
   }
+  .fe-hero-section { height: 75svh; min-height: 400px; }
+  @media (max-width: 640px) { .fe-hero-section { height: 60svh; min-height: 340px; } }
 `
 
 function parseItems(raw: string): string[] {
@@ -62,7 +64,7 @@ export default function FreshEditorial({ order }: { order: BisnesOrder }) {
       <main style={{ background: '#ecfdf5', color: '#064e3b', fontFamily: '"Plus Jakarta Sans", "DM Sans", sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
         {/* S1: Hero */}
-        <section style={{ position: 'relative', height: '75svh', minHeight: 400 }}>
+        <section className="fe-hero-section" style={{ position: 'relative' }}>
           <img src={order.banner_atas_url} alt={order.nama_bisnes}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(6,78,59,0.7) 0%, rgba(6,78,59,0.2) 100%)' }} />
