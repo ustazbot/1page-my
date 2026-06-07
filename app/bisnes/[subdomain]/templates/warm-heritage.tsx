@@ -18,8 +18,8 @@ const ANIMS = `
   .wh-faq summary::-webkit-details-marker { display: none; }
   .wh-faq[open] .wh-chevron { transform: rotate(180deg); }
   .wh-chevron { transition: transform 0.2s; display: inline-block; }
-  .wh-hero-section { height: 80svh; min-height: 440px; }
-  @media (max-width: 640px) { .wh-hero-section { height: 60svh; min-height: 360px; } }
+  .wh-hero-section { height: 62svh; min-height: 400px; }
+  @media (max-width: 640px) { .wh-hero-section { height: 50svh; min-height: 280px; } }
 `
 
 function parseItems(raw: string): string[] {

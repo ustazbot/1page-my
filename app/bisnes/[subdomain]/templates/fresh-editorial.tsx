@@ -14,8 +14,8 @@ const ANIMS = `
       animation-range: entry 0% entry 35%;
     }
   }
-  .fe-hero-section { height: 75svh; min-height: 400px; }
-  @media (max-width: 640px) { .fe-hero-section { height: 60svh; min-height: 340px; } }
+  .fe-hero-section { height: 58svh; min-height: 360px; }
+  @media (max-width: 640px) { .fe-hero-section { height: 48svh; min-height: 260px; } }
 `
 
 function parseItems(raw: string): string[] {

@@ -18,8 +18,8 @@ const ANIMS = `
   }
   .bm-faq summary { list-style: none; cursor: pointer; }
   .bm-faq summary::-webkit-details-marker { display: none; }
-  .bm-hero-section { height: 100svh; min-height: 520px; }
-  @media (max-width: 640px) { .bm-hero-section { height: 60svh; min-height: 360px; } }
+  .bm-hero-section { height: 70svh; min-height: 460px; }
+  @media (max-width: 640px) { .bm-hero-section { height: 52svh; min-height: 300px; } }
 `
 
 function parseItems(raw: string): string[] {

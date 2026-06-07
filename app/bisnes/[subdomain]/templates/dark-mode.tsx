@@ -20,8 +20,8 @@ const ANIMS = `
   .dm-faq summary::-webkit-details-marker { display: none; }
   .dm-faq[open] .dm-chevron { transform: rotate(180deg); }
   .dm-chevron { transition: transform 0.2s; display: inline-block; }
-  .dm-hero-section { height: 100svh; min-height: 520px; }
-  @media (max-width: 640px) { .dm-hero-section { height: 60svh; min-height: 360px; } }
+  .dm-hero-section { height: 70svh; min-height: 460px; }
+  @media (max-width: 640px) { .dm-hero-section { height: 52svh; min-height: 300px; } }
 `
 
 function parseItems(raw: string): string[] {
