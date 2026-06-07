@@ -369,7 +369,7 @@
 
         .hero-title {
             font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(1.8rem, 5vw, 4rem);
             font-weight: 700;
             color: var(--color-primary);
             line-height: 1.1;
@@ -547,13 +547,13 @@
             gap: var(--space-lg);
         }
 
-        @media (min-width: 640px) {
+        @media (min-width: 900px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1074,8 +1074,22 @@
            ============================================ */
 
         @media (max-width: 640px) {
+            .hero {
+                min-height: auto;
+                padding-top: 80px;
+                padding-bottom: 2.5rem;
+            }
+
+            .hero-inner {
+                gap: 1.5rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
             .hero-image-wrapper img {
-                height: 280px;
+                height: 180px;
             }
 
             .about-stats {
@@ -1184,12 +1198,12 @@
             grid-template-columns: 1fr;
             gap: var(--space-md);
         }
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
             .testimonials-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
             .testimonials-grid {
                 grid-template-columns: repeat(3, 1fr);
             }

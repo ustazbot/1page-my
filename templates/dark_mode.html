@@ -428,7 +428,7 @@
 
         .hero-title {
             font-family: var(--font-display);
-            font-size: clamp(2.8rem, 9vw, 8rem);
+            font-size: clamp(1.8rem, 9vw, 8rem);
             font-weight: 400;
             color: var(--color-white);
             line-height: 0.9;
@@ -659,13 +659,13 @@
             gap: var(--space-lg);
         }
 
-        @media (min-width: 640px) {
+        @media (min-width: 900px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1315,12 +1315,26 @@
            ============================================ */
 
         @media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding-top: 80px;
+                padding-bottom: 2.5rem;
+            }
+
+            .hero-inner {
+                gap: 1.5rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
             .hero-title {
-                font-size: clamp(2.2rem, 8vw, 3.5rem);
+                font-size: clamp(1.8rem, 8vw, 3.5rem);
             }
 
             .hero-image-wrapper img {
-                height: 300px;
+                height: 180px;
             }
 
             .about-stats {
@@ -1428,12 +1442,12 @@
             grid-template-columns: 1fr;
             gap: var(--space-md);
         }
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
             .testimonials-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
             .testimonials-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
