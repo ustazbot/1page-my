@@ -188,9 +188,9 @@ export default function BoldMinimal({ order }: { order: BisnesOrder }) {
             <div style={{ padding: '0 24px', maxWidth: 640, margin: '0 auto' }}>
               <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#555', marginBottom: 24 }}>Gallery</p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(galleries.length, 3)}, 1fr)`, gap: 3 }}>
+            <div style={{ columns: 2, columnGap: 3 }}>
               {galleries.map((url, i) => (
-                <img key={i} src={url} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
+                <img key={i} src={url} alt="" style={{ width: '100%', height: 'auto', display: 'block', marginBottom: 3, breakInside: 'avoid' }} />
               ))}
             </div>
           </section>

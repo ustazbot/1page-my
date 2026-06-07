@@ -204,9 +204,9 @@ export default function DarkMode({ order }: { order: BisnesOrder }) {
             <div style={{ padding: '0 24px', maxWidth: 640, margin: '0 auto', marginBottom: 20 }}>
               <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#0ea5e9' }}>Gallery</p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(galleries.length, 3)}, 1fr)`, gap: 3 }}>
+            <div style={{ columns: 2, columnGap: 3 }}>
               {galleries.map((url, i) => (
-                <img key={i} src={url} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block', filter: 'brightness(0.85)' }} />
+                <img key={i} src={url} alt="" style={{ width: '100%', height: 'auto', display: 'block', marginBottom: 3, breakInside: 'avoid', filter: 'brightness(0.85)' }} />
               ))}
             </div>
           </section>

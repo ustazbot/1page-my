@@ -187,11 +187,11 @@ export default function WarmHeritage({ order }: { order: BisnesOrder }) {
             <div style={{ padding: '0 24px', maxWidth: 640, margin: '0 auto', marginBottom: 20 }}>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#b45309' }}>Gallery</p>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(galleries.length, 3)}, 1fr)`, gap: 4 }}>
+            <div style={{ columns: 2, columnGap: 4 }}>
               {galleries.map((url, i) => (
-                <div key={i} style={{ position: 'relative' }}>
-                  <img src={url} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(120,53,15,0.06)' }} />
+                <div key={i} style={{ breakInside: 'avoid', marginBottom: 4, position: 'relative' }}>
+                  <img src={url} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(120,53,15,0.06)', pointerEvents: 'none' }} />
                 </div>
               ))}
             </div>
