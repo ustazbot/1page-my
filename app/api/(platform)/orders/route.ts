@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     banner_atas_url, logo_url, gallery_urls,
     template_pilihan, domain_sendiri, domain_url,
     domain_pref_1, domain_pref_2, domain_pref_3,
-    catatan,
+    catatan, affiliate_ref_code,
     stats_bar, usp, pakej, testimoni, faq,
   } = body
 
@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
       template_pilihan, domain_sendiri: !!domain_sendiri, domain_url,
       domain_pref_1, domain_pref_2, domain_pref_3,
       catatan,
+      affiliate_ref_code: typeof affiliate_ref_code === 'string' ? affiliate_ref_code : null,
       stats_bar:  Array.isArray(stats_bar)  ? stats_bar  : [],
       usp:        Array.isArray(usp)        ? usp        : [],
       pakej:      Array.isArray(pakej)      ? pakej      : [],

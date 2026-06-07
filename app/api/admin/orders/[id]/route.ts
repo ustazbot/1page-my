@@ -172,7 +172,7 @@ export async function PATCH(
   if (body.action === 'mark_live') {
     const { data: order, error: fetchErr } = await sb
       .from('orders')
-      .select('slug, nama_bisnes')
+      .select('slug, nama_bisnes, affiliate_ref_code, commission_calculated')
       .eq('id', id)
       .single()
     if (fetchErr) {
@@ -190,6 +190,39 @@ export async function PATCH(
     }).eq('id', id)
 
     if (updateErr) return NextResponse.json({ error: 'Gagal kemaskini order' }, { status: 500 })
+
+    // Calculate affiliate commission if applicable
+    if (order.affiliate_ref_code && !order.commission_calculated) {
+      const { data: affiliate } = await sb
+        .from('affiliates')
+        .select('id, total_earned, status')
+        .eq('ref_code', order.affiliate_ref_code)
+        .single()
+
+      if (affiliate?.status === 'active') {
+        const commissionAmount = 150 * 0.40
+        const now = new Date()
+        const earnedMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
+        await sb.from('referrals').insert({
+          affiliate_id: affiliate.id,
+          order_id: id,
+          order_amount: 150,
+          commission_rate: 0.40,
+          commission_amount: commissionAmount,
+          earned_month: earnedMonth,
+          status: 'approved',
+        })
+
+        await sb.from('affiliates')
+          .update({ total_earned: Number(affiliate.total_earned) + commissionAmount })
+          .eq('id', affiliate.id)
+
+        await sb.from('orders')
+          .update({ commission_calculated: true })
+          .eq('id', id)
+      }
+    }
 
     await sendTelegramMessage(
       `✅ Live (manual)!\n${order.nama_bisnes} → ${live_url}`
